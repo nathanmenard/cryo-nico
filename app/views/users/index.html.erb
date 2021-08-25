@@ -1,0 +1,40 @@
+<div id="search">
+  <i class="fas fa-search fa-lg"></i>
+  <input type="text" placeholder="Rechercher parmi les employés.." id="search">
+  <%= render 'filter' %>
+  <button data-target="#new-user" class="blue">Nouveau employé</button>
+</div>
+
+<table>
+  <tr>
+    <th></th>
+    <th>Adresse email</th>
+    <% if current_user.superuser %>
+      <th>Centre</th>
+    <% end %>
+    <th>Rôle</th>
+    <th class="hidden-mobile">Dernière connexion</th>
+  </tr>
+  <% @users.each do |user| %>
+    <tr onclick="window.location.href='/employes/<%= user.id %>'">
+      <td><strong><span class="uppercase"><%= user.last_name %></span> <span class="capitalize"><%= user.first_name %></span></strong></td>
+      <td><%= user.email %></td>
+      <% if current_user.superuser %>
+        <td><%= user.franchise.name %></td>
+      <% end %>
+      <td><%= user.nutritionist ? 'Nutritioniste' : 'Administrateur' %></td>
+      <td class="hidden-mobile">
+        <% if user.last_logged_at %>
+          <%= l(user.last_logged_at, format: :short) %>
+          <% else %>
+            <em>Compte non validé</em>
+          <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+
+<div class="modal" id="new-user">
+  <h2>Nouveau employé</h2>
+  <%= render 'form', locals: { item: @user } %>
+</div>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="icon" type="image/png" href="/favicon.jpg">
+    <link rel="stylesheet" type="text/css" href="/login.css">
+  </head>
+  <body>
+    <img src="/logo.svg">
+    <%= form_with do |f| %>
+      <% if @error %>
+        <p>Email ou mot de passe incorrect. Veuillez réessayer.</p>
+      <% end %>
+      <p><%= f.label :email, 'Adresse email' %><%= f.text_field :email, required: true %></p>
+      <p><%= f.label :password, 'Mot de passe' %><%= f.password_field :password, required: true %></p>
+      <button>Valider</button>
+    <% end %>
+    <p class="small"><a href="/mot-de-passe-oublie">Mot de passe oublié ?</a></p>
+    <p class="small"><a href="/">Retourner sur le site</a></p>
+  </body>
+</html>

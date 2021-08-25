@@ -1,0 +1,23 @@
+<section class="center">
+  <h1>Distribution de séances</h1>
+  <table>
+    <tr>
+      <th>Prestation</th>
+      <th>Nombre de séances disponibles</th>
+      <th></th>
+    </tr>
+    <% current_franchise.products.each do |product| %>
+      <tr>
+        <td><%= product.name %></td>
+        <td><%= current_client.credits.where(product: product).count %></td>
+        <td>
+          <% if current_client.credits.where(product: product).count == 0 %>
+            <%= link_to 'Acheter', product_path(id: product.slug) %>
+          <% else %>
+            <%= link_to 'Réserver une séance', product_path(id: product.slug) %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+</section>

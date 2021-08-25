@@ -1,0 +1,24 @@
+<ul>
+  <li style="letter-spacing: 1px; font-weight: 500">
+    CRYOGICIEL 
+    <span style="font-size: 14px; font-weight: 300; letter-spacing: 0">(<%= current_user.superuser ? 'Super Admin' : current_user.franchise.name %>)</span>
+  </li>
+</ul>
+<ul>
+  <% if current_user.superuser? %>
+    <li class="<%= 'active' if controller_name == 'franchises' %>"><a href="/franchises">Franchises</a></li>
+  <% end %>
+  <% if !current_user.nutritionist? %>
+    <li class="<%= 'active' if controller_name == 'users' %>"><a href="/employes">Employés</a></li>
+  <% end %>
+  <li class="<%= 'active' if controller_name.in?(['clients', 'companies']) %>"><a href="/clients">Clients</a></li>
+  <li class="<%= 'active' if controller_name == 'reservations' %>"><a href="/reservations">Réservations</a></li>
+  <% if !current_user.nutritionist? %>
+    <li class="<%= 'active' if controller_name == 'subscriptions' %>"><a href="/subscriptions">Abonnements</a></li>
+    <li class="<%= 'active' if controller_name.in?(['products', 'rooms', 'reviews', 'external_products']) %>"><a href="/prestations">Prestations</a></li>
+    <li class="<%= 'active' if controller_name.in?(['coupons', 'campaigns', 'surveys']) %>"><a href="/codes-promo">Action Commerciale</a></li>
+    <li class="<%= 'active' if controller_name == 'stats' %>"><a href="/stats">Statistiques</a></li>
+    <li class="<%= 'active' if controller_name == 'payments' %>"><a href="/paiements">Caisse</a></li>
+  <% end %>
+  <li><a href="/logout"><i class="fas fa-power-off"></i></a></li>
+</ul>

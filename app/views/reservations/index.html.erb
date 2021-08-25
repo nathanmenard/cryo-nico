@@ -1,0 +1,421 @@
+<div id="search">
+  <%= render 'filter', include_blank: false %>
+  <button id="datepicker" style="padding-left: 1.25%"><i class="far fa-calendar-alt fa-lg"></i>&nbsp; <%= l(@date, format: :long) %></button>
+</div>
+
+<div id="reservations" style="display: none"><%= @reservations.to_json %></div>
+<div id="blockers" style="display: none"><%= @blockers.to_json %></div>
+<div id="rooms" style="display: none"><%= @rooms.to_json %></div>
+<div id="products" style="display: none"><%= @products.to_json %></div>
+
+<div class="modal" id="new-blocker">
+  <h2>Bloquer un créneau horaire</h2>
+  <ul id="tabs">
+    <li data-target="#new-reservation">Nouvelle réservation</li>
+    <li class="active">Nouvelle remarque</li>
+  </ul>
+  <%= render 'blockers/form' %>
+</div>
+
+<div class="modal" id="new-reservation">
+  <h2>Nouvelle réservation</h2>
+  <ul id="tabs">
+    <li class="active">Nouvelle réservation</li>
+    <li data-target="#new-blocker">Nouvelle remarque</li>
+  </ul>
+  <%= form_for @reservation do |f| %>
+    <% if @reservation.errors.any? %>
+      <% @reservation.errors.each do |key, value| %>
+        <span class="error"><%= key %> : <%= value %></span>
+      <% end %>
+    <% end %>
+    <p>
+    <%= f.label :client_id, 'Client' %><%= f.collection_select :client_id, current_user.franchise.clients.order(:last_name).order(first_name: :desc), :id, :full_name, { include_blank: true }, required: true %>
+    ou <a data-target="#new-client" href="#">enregistrer un nouveau client</a>
+    </p>
+    <p><%= f.label :product_id, 'Prestation' %><%= f.collection_select :product_id, current_user.franchise.products, :id, :name, { include_blank: true }, required: true %></p>
+    <p><%= f.label :start_time, 'Date & heure de rendez-vous' %><%= f.datetime_field :start_time, required: true, class: 'datetimepicker', step: 60*30 %></p>
+    <p><%= f.label :notes, 'Notes' %><%= f.text_area :notes %></p>
+    <p><%= f.check_box :email_notification %><%= f.label :email_notification, "Notifier le client par email" %></p>
+    <div>
+      <button class="cancel" type="button">Annuler</button>
+      <button class="blue">Enregistrer</button>
+    </div>
+  <% end %>
+</div>
+
+<% @reservations.each do |reservation| %>
+  <div class="modal" id="edit-reservation-<%= reservation.id %>">
+    <h2>Modifier une réservation</h2>
+    <%= form_for reservation do |f| %>
+      <% if reservation.errors.any? %>
+        <% reservation.errors.each do |key, value| %>
+          <span class="error"><%= key %> : <%= value %></span>
+        <% end %>
+      <% end %>
+      <% if reservation.first_time? && reservation.product_price.product.disclaimer.present? %>
+        <% if reservation.signature.nil? %>
+          <h3>Important</h3>
+          <p><button type="button" onclick="window.location.href='/reservations/<%= reservation.id %>/sign'">Faire signer l'attestation de 1ère séance</button></p>
+        <% else %>
+          <p><button type="button" onclick="window.location.href='/reservations/<%= reservation.id %>/sign'">Télécharger l'attestion signée par le client</button></p>
+        <% end %>
+      <% end %>
+      <p>
+      <%= f.label :client_id, 'Client' %><%= f.collection_select :client_id, current_user.franchise.clients.order(:last_name).order(first_name: :desc), :id, :full_name, { include_blank: true }, required: true %>
+      <a id="client-show-link" class="blue" style="display: block; margin-top: 1%; text-decoration: none" href="#"><i class="fas fa-external-link-alt"></i> &nbsp;Voir la fiche client</a>
+      </p>
+      <p><%= f.label :start_time, 'Date & heure de rendez-vous' %><%= f.datetime_field :start_time, required: true %></p>
+      <p><%= f.label :notes, 'Notes' %><%= f.text_area :notes %></p>
+      <div>
+        <button class="cancel" type="button">Annuler</button>
+        <button data-target="#destroy-reservation-<%= reservation.id %>" type="button" class="red2">Supprimer</button>
+        <% unless reservation.paid? %>
+          <button data-target="#edit-payment-<%= reservation.payment.id %>" class="green" type="button">Encaisser</button>
+        <% end %>
+        <button class="blue">Enregistrer</button>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<% @blockers.each do |blocker| %>
+  <div class="modal" id="edit-blocker-<%= blocker.id %>">
+    <h2>Modifier un blocage de créneau horaire</h2>
+    <%= form_for blocker do |f| %>
+      <% if blocker.errors.any? %>
+        <% blocker.errors.each do |key, value| %>
+          <span class="error"><%= key %> : <%= value %></span>
+        <% end %>
+      <% end %>
+      <p><%= f.label :start_time, 'Début' %><%= f.datetime_field :start_time, required: true %></p>
+      <p><%= f.label :end_time, 'Fin' %><%= f.datetime_field :end_time, required: true %></p>
+      <p><%= f.label :notes, 'Notes' %><%= f.text_area :notes, required: true %></p>
+      <p><%= f.check_box :blocking %><%= f.label :blocking, "Empêcher les réservations" %></p>
+      <div>
+        <button class="cancel" type="button">Annuler</button>
+        <button type="button" class="red" data-redirect-to="/reservations" data-pathname="/blockers/<%= blocker.id %>" data-message="Etes-vous sûr de vouloir supprimer ce créneau ?">Supprimer</button>
+        <button class="blue">Enregistrer</button>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="modal" id="new-client">
+  <h2>Nouveau client particulier</h2>
+  <%= render 'clients/form' %>
+</div>
+
+<% @reservations.pluck(:payment_id).each do |payment_id| %>
+  <div class="modal" id="edit-payment-<%= payment_id %>">
+    <h2>Encaissement</h2>
+    <%= render partial: 'payments/form', locals: { redirect_to: reservations_path, payment: Payment.find(payment_id) } %>
+  </div>
+<% end %>
+
+<% @reservations.each do |reservation| %>
+  <div class="modal" id="destroy-reservation-<%= reservation.id %>">
+    <h2>Supprimer une réservation</h2>
+    <%= form_for reservation do |f| %>
+      <% if reservation.errors.any? %>
+        <% reservation.errors.each do |key, value| %>
+          <span class="error"><%= key %>: <%= value %></span>
+        <% end %>
+      <% end %>
+      <p><%= f.label :cancelation_reason %><%= f.select :cancelation_reason, [['Annulation du client', 'canceled_by_client'], ['Pas venu', 'did_not_come']], required: true %></p>
+      <p><%= f.label :perform_refund, 'Rembourser le client ?' %><%= f.select :perform_refund, [['Oui (crédit)', 'credit'], ['Oui (argent)', 'money'], ['Non', 'false']], required: true %></p>
+      <div>
+        <button class="cancel" type="button">Annuler</button>
+        <button class="blue">Enregistrer</button>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<table id="calendar">
+  <thead>
+    <tr>
+      <th></th>
+      <% @rooms.each do |room| %>
+        <th><%= room.name %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% times = ['08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00'] %>
+    <% times.each do |time| %>
+      <tr>
+        <td><%= time.split(':').last == '00' ? time : '' %></td>
+        <% @rooms.each do |room| %>
+          <td data-target="#new-reservation" data-date="<%= Date.today.to_s %>" data-hour="<%= time %>" data-room-id="<%= room.id %>">
+            <% blockers = @blockers.where(room: room).by_time(time) %>
+            <% blockers.each do |blocker| %>
+              <div draggable="true" class="blocker" style="height: <%= blocker.height %>px" data-target="#edit-blocker-<%= blocker.id %>">
+                <span><%= time %> - <%= blocker.end_time.strftime('%H:%M') %></span>
+                <strong><%= blocker.notes %></strong>
+              </div>
+            <% end %>
+            <% reservations = @reservations.where(product_price_id: room.products.includes(:product_prices).pluck('product_prices.id')).by_time(time) %>
+            <% reservations.each do |reservation| %>
+              <div draggable="true" class="reservation <%= reservation.product_price.product.slug %>" style="width: <%= (100/reservations.count)-1 %>%; float: left" title="ok" data-client="<%= reservation.client.full_name %>" data-price="<%= number_to_currency reservation.payment.amount/100 %>" data-phone="<%= reservation.client.phone %>" data-user="<%= reservation.user.try(:full_name) %>" data-notes="<%= reservation.notes %>" data-target="#edit-reservation-<%= reservation.id %>" data-first-time="<%= reservation.first_time %>" data-duration="<%= reservation.product_price.product.duration %>" data-product="<%= reservation.product_price.product.name %>">
+                <span>
+                  <% if reservation.product_price.product.disclaimer.present? && (reservation.first_time && !reservation.signature) %>
+                    <i class="fas fa-signature" style="color: #000"></i>
+                    &nbsp;
+                  <% end %>
+                  <% unless reservation.paid? %>
+                    <i class="fas fa-euro-sign" style="color: #000"></i>
+                    &nbsp;
+                  <% end %>
+                  <%= time %> - <%= (reservation.start_time+reservation.product_price.product.duration.minutes).strftime('%H:%M') %>
+                </span>
+                <strong><%= reservation.client.full_name %> <%= reservation.first_time ? '- 1ère séance' : '' %></strong>
+              </div>
+            <% end %>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br><br>
+
+<style>
+table#calendar {
+  margin: 0 auto;
+  width: 96%;
+  background: #fff;
+  border-radius: 5px;
+  border-collapse: collapse;
+}
+  table#calendar th, table#calendar td {
+    padding: 0 1%;
+    font-size: 12px;
+    border: 1px solid #eee;
+  }
+  table#calendar th {
+    padding: 1%;
+    background: #fff !important;
+  }
+  table#calendar tr th:first-child {
+    width: 10%;
+  }
+  table#calendar td {
+    position: relative;
+    background: #fffff0;
+    height: 30px;
+    text-align: left;
+  }
+  table#calendar tr td:first-child {
+    background: #fff;
+    vertical-align: top;
+    font-size: 13px;
+  }
+  div.reservation, div.blocker {
+    background: #fff;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    z-index: 9;
+    height: 22px;
+  }
+  div.reservation.cryo-corps-entier {
+    background: #3788d8;
+  }
+  div.reservation.cryo-localisee {
+    background: #54a0ff;
+  }
+  div.reservation.cryolipolise {
+    background: #1dd1a1;
+  }
+  div.reservation.pressotherapie {
+    background: #ff6b6b;
+  }
+  div.reservation.nutrition {
+    background: #f368e0;
+  }
+  div.blocker {
+  top: 15%;
+  left: 1%;
+  right: 1%;
+    width: 98%;
+    position: absolute;
+    background: #aaa;
+  }
+  table#calendar td div.reservation + div.reservation {
+    margin-left: 1.5%;
+  }
+  div.reservation span, div.blocker span {
+    margin-left: 10px;
+    display: inline-block;
+    font-size: 12px;
+  }
+  div.reservation strong, div.blocker strong {
+    font-size: 12px;
+    font-weight: 400;
+    display: inline-block;
+  }
+  div.reservation.ui-draggable-dragging {
+    opacity: 0.6;
+  }
+  .ui-tooltip.tooltip { 
+    padding: 10px 14px;
+    background: #333;
+    color: #fff;
+    font-size: 13px;
+    border-radius: 10px;
+  }
+  .ui-tooltip.tooltip hr { 
+    background: #999;
+  }
+</style>
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="jquery.datetimepicker.min.css">
+<script>
+  $(document).ready(function(){
+    function getProductsByRoom(roomID) {
+      const products = JSON.parse($('div#products').text());
+      return products.filter(x => x.room_id == roomID);
+    }
+
+    function refreshProductsSelect(roomID) {
+      const select = $('select#reservation_product_id');
+      select.empty();
+      const products = JSON.parse($('div#products').text());
+      products.forEach(product => {
+        if (product.room_id == roomID) {
+          select.append(`<option value="${product.id}">${product.name}</option>`);
+        }
+      });
+    }
+
+    $('table#calendar td').on('click', function() {
+      const roomID = $(this).data('room-id');
+      refreshProductsSelect(roomID);
+      $('input#blocker_room_id').val(roomID);
+    });
+
+    jQuery.datetimepicker.setLocale('fr');
+    jQuery('input.datetimepicker').datetimepicker({
+      autoClose: true,
+      disabledWeekDays: [0],
+      allowTimes: [
+        '08:00', '08:30',
+        '09:00', '09:30',
+        '10:00', '10:30',
+        '11:00', '11:30',
+        '12:00', '12:30',
+        '13:00', '13:30',
+        '14:00', '14:30',
+        '15:00', '15:30',
+        '16:00', '16:30',
+        '17:00', '17:30',
+        '18:00', '18:30',
+        '19:00', '19:30',
+        '20:00',
+      ]
+    });
+
+    $('div.reservation').tooltip({
+      tooltipClass: 'tooltip',
+      content: function() {
+        var element = $(this);
+        const price = element.data('price');
+        const duration = element.data('duration');
+        const firstTime = element.data('first-time');
+        const product = element.data('product');
+        const client = element.data('client');
+        const phone = element.data('phone');
+        const user = element.data('user');
+        const notes = element.data('notes');
+        let content = `${price} - ${duration} minutes`;
+        if (firstTime) {
+          content += ' - 1<sup>ère</sup> séance';
+        }
+        content += `<br>${product}<br>${client}`;
+        if (phone) {
+          content += `<br><br>${phone}`;
+        }
+        if (user) {
+          content += `<hr>Ajouté par ${user}`;
+        }
+        if (notes) {
+          content += `<hr><strong>Notes :</strong><br>${notes}`;
+        }
+        return content;
+      }
+    });
+    $('div.reservation, div.blocker')
+      .resizable({ containment: 'tbody', grid: [10000, 1] })
+      .draggable({ axis: "y", containment: 'tbody' })
+
+    $('div.blocker').on('resizestop', function(event, ui) {
+      const height = ui.size.height;
+      const newDuration = getDurationFromHeight(height);
+      setTimeout(function() {
+        const startTime = $('div.modal:visible').find('input#blocker_start_time').val();
+        const startTimeMoment = moment(new Date(startTime));
+        const endTime = startTimeMoment.add(newDuration, 'minutes');
+        $('div.modal:visible').find('input#blocker_end_time').val(endTime);
+      }, 0);
+    });
+
+    $('table#calendar td')
+      .droppable({
+        drop: function(event, ui ) {
+          const target = $(event.target);
+          const hour = target.data('hour');
+          console.log(hour);
+          const type = ui.helper.attr('class').includes('blocker') ? 'blocker' : 'reservation';
+          setTimeout(function() {
+            const id = `input#${type}_start_time`;
+            const current = $('div.modal:visible').find(id).val();
+            const [date, time] = current.split('T');
+            const newTime = `${date}T${hour}`;
+            $('div.modal:visible').find(id).val(newTime);
+          },0);
+        }
+      });
+
+    const getDurationFromHeight = (height) => {
+      if (height <= 22) {
+        return 30;
+      }
+      if (height <= 50) {
+        return 60;
+      }
+      if (height <= 80) {
+        return 90;
+      }
+      if (height <= 110) {
+        return 120;
+      }
+      if (height <= 145) {
+        return 160;
+      }
+      if (height <= 175) {
+        return 180;
+      }
+    };
+  });
+</script>
+
+<script>
+  $(document).ready(function() {
+    moment.locale('fr');
+    const picker = new Pikaday({
+      field: document.getElementById('datepicker'),
+      i18n: {
+        months        : moment.localeData()._months,
+        weekdays      : moment.localeData()._weekdays,
+        weekdaysShort : moment.localeData()._weekdaysShort
+      },
+      onSelect: function(date) {
+        const formattedDate = moment(date).format('YYYY-MM-DD');
+        window.location.href = `/reservations?date=${formattedDate}`;
+      }
+    });
+  });
+</script>

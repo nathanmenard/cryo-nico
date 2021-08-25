@@ -1,0 +1,9 @@
+Bonjour <%= @user.first_name %>,
+
+Vous avez été invité à rejoindre la plateforme Cryotera.
+
+Pour créer votre compte, veuillez cliquer sur le lien ci-dessous :
+<%= admin_inscription_url(subdomain: @user.franchise.slug, key: @user.private_key) %>
+
+Cordialement,
+L'équipe Cryotera

@@ -1,0 +1,38 @@
+<div id="search">
+  <i class="fas fa-search fa-lg"></i>
+  <input type="text" placeholder="Rechercher parmi les mailings.." id="search">
+  <%= render 'filter' %>
+  <button data-target="#new-campaign" class="blue">Nouveau mailing</button>
+  <button id="fetch-templates">Actualiser la liste des templates</button>
+</div>
+
+<table>
+  <tr>
+    <th style="width: 10%"></th>
+    <% if current_user.superuser %>
+      <th>Centre</th>
+    <% end %>
+    <th>Nom</th>
+    <th>Destinataires</th>
+    <th>Date de création</th>
+  </tr>
+  <% @campaigns.each do |campaign| %>
+    <tr onclick="window.location.href='/campaigns/<%= campaign.id %>'">
+      <td>
+        <span class="status <%= campaign.draft? ? 'grey' : 'paid' %>">
+        <%= campaign.draft? ? 'Brouillon' : 'Envoyé' %>
+      </td>
+      <% if current_user.superuser %>
+        <td><%= campaign.franchise.name %></td>
+      <% end %>
+      <td><strong><%= campaign.name %></strong></td>
+      <td><%= campaign.recipients.present? ? campaign.recipients.size : 'Aucun' %></td>
+      <td><%= l(campaign.created_at, format: :short) %></td>
+    </tr>
+  <% end %>
+</table>
+
+<div class="modal" id="new-campaign">
+  <h2>Nouveau mailing</h2>
+  <%= render 'form' %>
+</div>

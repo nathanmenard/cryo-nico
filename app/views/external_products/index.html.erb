@@ -1,0 +1,32 @@
+<div id="search">
+  <i class="fas fa-search fa-lg"></i>
+  <input type="text" placeholder="Rechercher parmi les produits dérivés.." id="search">
+  <%= render 'filter' %>
+  <button data-target="#new-external_product" class="blue">Nouveau produit dérivé</button>
+</div>
+
+<table>
+  <tr>
+    <th style="width: 40%"></th>
+    <% if current_user.superuser %>
+      <th>Centre</th>
+    <% end %>
+    <th>Prix TTC</th>
+    <th>Taux TVA</th>
+  </tr>
+  <% @external_products.each do |external_product| %>
+    <tr>
+      <td><strong><%= external_product.name %></strong></td>
+      <% if current_user.superuser %>
+        <td><%= external_product.franchise.name %></td>
+      <% end %>
+      <td><%= number_to_currency(external_product.amount) %></td>
+      <td><%= external_product.tax_rate %>%</td>
+    </tr>
+  <% end %>
+</table>
+
+<div class="modal" id="new-external_product">
+  <h2>Nouveau produit dérivé</h2>
+  <%= render 'form' %>
+</div>

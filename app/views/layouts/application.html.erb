@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CRYOTERA</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <link rel="icon" type="image/png" href="/favicon.jpg">
+    <link rel="stylesheet" type="text/css" href="/admin.css">
+    <link rel="stylesheet" type="text/css" href="/jquery.multiselect.css">
+    <link rel="stylesheet" type="text/css" href="/pikaday.css">
+    <%# stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <div id="overlay"></div>
+    <div id="top">
+      <p>Besoin d'aide ? <a href="#" data-target="#help">Contacter le support technique</a>
+    </div>
+    <header>
+      <%= render 'header' %>
+    </header>
+    <nav>
+      <%= render 'nav' %>
+    </nav>
+    <%= yield %>
+    <footer>
+      <%= render 'footer' %>
+    </footer>
+
+    <div class="modal" id="help">
+      <h2>Contacter le support technique</h2>
+      <%= form_tag help_path do %>
+        <p><%= label_tag :body, 'Quel problème rencontrez-vous ?' %><%= text_area :body, nil, required: true %></p>
+        <div>
+          <button class="cancel" type="button">Annuler</button>
+          <button class="blue">Envoyer</button>
+        </div>
+      <% end %>
+    </div>
+
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+    <script src="/jquery.datetimepicker.full.min.js"></script>
+    <script src="/moment-with-locales.js"></script>
+    <script src="/pikaday.js"></script>
+  </body>
+</html>

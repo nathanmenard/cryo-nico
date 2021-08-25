@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/auth.css">
+  </head>
+  <body>
+    <header><a href="/"><img src="/logo.svg"></a></header>
+    <%= form_with url: mot_de_passe_oublie_path do |f| %>
+      <h1>Mot de passe oublié</h1>
+      <% if @success %>
+        <h2>Un lien vous permettant de génerer un nouveau mot de passe vient de vous être envoyé par email.</h2>
+        <button type="button" onclick="window.location.href='/'">Retour à l'accueil</button>
+      <% else %>
+        <h2>Renseignez votre adresse email ci-dessous pour générer un nouveau mot de passe.</h2>
+        <p><%= f.label :email, 'Votre adresse email' %><%= f.text_field :email, required: true %></p>
+        <button>Valider</button>
+      <% end %>
+    <% end %>
+  </body>
+</html>

@@ -1,0 +1,113 @@
+<div id="search">
+  <button onclick="window.location.href='/campaigns/'">Retourner à la liste</button>
+  <% if @campaign.draft? %>
+    <button data-target="#send-test">Envoyer un <%= @campaign.sms ? 'SMS' : 'email' %> de test</button>
+    <button class="blue" data-campaign-id="<%= @campaign.id %>" id="send_campaign">Envoyer la campagne</button>
+  <% end %>
+</div>
+
+<section>
+  <h2>
+    Informations 
+    <% if @campaign.draft? %>
+      (<a data-target="#edit" href="#">modifier</a>)
+    <% end %>
+  </h2>
+  <% if current_user.superuser %>
+    <p><label>Centre</label><span class="value"><%= @campaign.franchise.name %></p>
+    <% end %>
+    <p><label>Statut</label><span class="value"><%= @campaign.draft? ? 'Brouillon' : 'Envoyé' %></span></p>
+    <p><label>Type</label><span class="value"><%= @campaign.sms ? 'SMS' : 'Email' %></span></p>
+    <p><label>Nom</label><span class="value"><%= @campaign.name %></span></p>
+    <p><label>Contenu</label><span class="value"><%= @campaign.body %></span></p>
+    <p><label>Destinataires</label><span class="value"><%= @campaign.recipients ? @campaign.recipients.size : 'Aucun' %></span></p>
+  </section>
+
+  <section>
+    <h2>
+      Ciblage 
+      <% if @campaign.draft? %>
+        (<a data-target="#edit-target" href="#">modifier</a>)
+      <% end %>
+    </h2>
+    <% if @campaign.filters.nil? %>
+      <p class="center">Aucun ciblage pour le moment.</p>
+    <% else %>
+      <p><label>Genre</label><span class="value"><% if @campaign.filters['male'].empty? %>
+          Homme & Femme
+        <% else %>
+          <%= @campaign.filters['male'] == 'true' ? 'Homme' : 'Femme' %>
+        <% end %>
+    </span></p>
+    <p><label>Objectifs</label><span class="value">
+        <% if @campaign.filters['objectives'].delete_if(&:empty?).any? %>
+          <%= @campaign.filters['objectives'].flatten.join(' - ') %>
+        <% else %>
+          <%= '∅' %>
+        <% end %>
+    </span></p>
+    <p><label>Date de dernière réservation</label><span class="value"><% if @campaign.filters['last_reservation_date'].empty? %>
+        <%= '∅' %>
+      <% else %>
+        <%= l(@campaign.filters['last_reservation_date'].to_date, format: :default) %>
+      <% end %>
+  </span></p>
+  <p><label>Prestation réservée</label><span class="value"><% if @campaign.filters['product_id'].blank? %>
+      <%= '∅' %>
+    <% else %>
+      <%= Product.find_by(id: @campaign.filters['product_id']).name %>
+    <% end %>
+</span></p>
+  <% end %>
+</section>
+
+<% if @campaign.filters %>
+  <table>
+    <tr>
+      <th colspan="2">Destinataire</th>
+      <th>Adresse email</th>
+    </tr>
+    <% @campaign.recipients.each do |recipient| %>
+      <% client = Client.find_by(email: recipient) %>
+      <tr>
+        <td><span class="capitalize"><%= client.first_name %></span></td>
+        <td><span class="uppercase"><%= client.last_name %></span></td>
+        <td><%= recipient %></td>
+      </tr>
+    <% end %>
+  </table>
+  <div id="selected-objectives"><%= @campaign.filters['objectives'] %></div>
+<% end %>
+
+<div class="modal" id="edit">
+  <h2>Modifier le mailing</h2>
+  <%= render 'form' %>
+</div>
+
+<% product_display = current_user.superuser ? :name_with_franchise : :name %>
+<div class="modal" id="edit-target">
+  <h2>Modifier le ciblage</h2>
+  <%= form_for @campaign do |f| %>
+    <%= f.fields_for :filters, @campaign.filters do |ff| %>
+      <p><%= f.label :male, 'Cible' %><%= ff.select :male, [['Homme & Femme', nil], ['Homme', 'true'], ['Femme', 'false']], selected: @campaign.filters ? @campaign.filters['male'] : nil%></p>
+      <p><%= f.label :objectives, 'Objectifs' %><%= ff.select :objectives, [['Sport', 'sport'], ['Santé', 'health'], ['Bien-être', 'well-being'], ['Esthétique', 'look']], { }, { multiple: true } %>
+      <p><%= f.label :last_reservation_date, 'Date de dernière réservation' %><%= ff.date_field :last_reservation_date, value: @campaign.filters ? @campaign.filters['last_reservation_date'] : nil %></p>
+      <p><%= f.label :product_id, 'Prestation réservée' %><%= ff.collection_select :product_id, @products, :id, product_display, include_blank: true, selected: @campaign.filters ? @campaign.filters['product_id'] : nil %>
+    <% end %>
+    <div>
+      <button class="cancel" type="button">Annuler</button>
+      <button type="submit" class="blue">Enregistrer</button>
+    </div>
+  <% end %>
+</div>
+
+<div class="modal" id="send-test">
+  <h2>Envoyer un <%= @campaign.sms ? 'SMS' : 'email' %> de test</h2>
+  <%= form_for @campaign, url: send_test_campaign_path, method: :post do |f| %>
+    <p><%= f.label :email, 'Adresse email' %><%= f.email_field :email, required: true %></p>
+    <div>
+      <button class="cancel" type="button">Annuler</button>
+      <button type="submit" class="blue">Enregistrer</button>
+    </div>
+  <% end %>
+</div>

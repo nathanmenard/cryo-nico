@@ -1,0 +1,21 @@
+<div id="search">
+  <button onclick="window.location.href='/employes'">Retourner à la liste</button>
+</div>
+
+<section>
+  <h2>Informations (<a data-target="#edit-user">modifier</a>)</h2>
+  <% if current_user.superuser %>
+    <p><label>Centre</label><span class="value"><%= @user.franchise.name %></p>
+  <% end %>
+  <p><label>Rôle</label><span class="value"><%= @user.nutritionist ? 'Nutritioniste' : 'Administrateur' %></p>
+  <p><label>Nom de famille</label><span class="value uppercase"><%= @user.last_name %></p>
+  <p><label>Prénom</label><span class="value capitalize"><%= @user.first_name %></p>
+  <p><label>Adresse email</label><span class="value"><%= @user.email %></p>
+  <p><label>Date d'ajout</label><span class="value"><%= l(@user.created_at, format: :short) %></p>
+  <p><label>Dernière connexion</label><span class="value"><%= @user.last_logged_at ? l(@user.last_logged_at, format: :short) : '<em>Compte non validé</em>'.html_safe %></p>
+</section>
+
+<div class="modal" id="edit-user">
+  <h2>Modifier un employé</h2>
+  <%= render 'form' %>
+</div>

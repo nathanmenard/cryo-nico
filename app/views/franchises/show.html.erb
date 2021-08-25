@@ -1,0 +1,152 @@
+<div id="search">
+  <button onclick="window.location.href='/franchises/'">Retourner à la liste</button>
+</div>
+
+<section>
+  <h2>Informations générales (<a href="#" data-target="#edit-profile">modifier</a>)</h2>
+  <p><label>Ville</label><span class="value"><%= @franchise.name %></span></p>
+  <p><label>Adresse email</label><span class="value"><%= @franchise.email.present? ? @franchise.email : '∅' %></span></p>
+  <p><label>SIRET</label><span class="value"><%= @franchise.siret.present? ? @franchise.siret : '∅' %></span></p>
+  <p><label>N° de TVA</label><span class="value"><%= @franchise.tax_id.present? ? @franchise.tax_id : '∅' %></span></p>
+  <p><label>Adresse postale</label><span class="value"><%= @franchise.address.present? ? @franchise.address : '∅' %></span></p>
+  <p><label>Code postal</label><span class="value"><%= @franchise.zip_code.present? ? @franchise.zip_code : '∅' %></span></p>
+  <p><label>Ville</label><span class="value"><%= @franchise.city.present? ? @franchise.city : '∅' %></span></p>
+  <p><label>N° de téléphone</label><span class="value"><%= @franchise.phone.present? ? @franchise.phone : '∅' %></span></p>
+</section>
+
+<section>
+  <h2>Horaires d'ouverture (<a href="#" data-target="#edit-business-hours">modifier</a>)</h2>
+  <% @franchise.business_hours.each do |business_hour| %>
+    <p><label><%= day_in_french(business_hour.day) %></label><span class="value">
+    Matin : <%= business_hour.morning_start_time %>-<%= business_hour.morning_end_time %><br>
+      Après-midi : <%= business_hour.afternoon_start_time %>-<%= business_hour.afternoon_end_time %>
+    </span></p>
+  <% end %>
+</section>
+
+<section>
+  <h2>Informations réseaux sociaux (<a href="#" data-target="#edit-socials">modifier</a>)</h2>
+  <p><label>Nom d'utilisateur Instagram</label><span class="value"><%= @franchise.instagram_username.present? ? @franchise.instagram_username : '∅' %></span></p>
+  <p><label>Code Facebook Messenger</label><span class="value"><%= @franchise.facebook_chat_snippet.present? ? @franchise.facebook_chat_snippet : '∅' %></span></p>
+</section>
+
+<section>
+  <h2>Informations module bancaire (<a href="#" data-target="#edit-banking">modifier</a>)</h2>
+  <p><label>IBAN</label><span class="value"><%= @franchise.iban.present? ? @franchise.iban : '∅' %></span></p>
+  <p><label>Banque</label><span class="value"><%= @franchise.banking_provider.present? ? @franchise.banking_provider : '∅' %></span></p>
+  <p><label>Identifiant</label><span class="value"><%= @franchise.banking_secret_id.present? ? @franchise.banking_secret_id : '∅' %></span></p>
+  <p><label>Clé secrète</label><span class="value"><%= @franchise.banking_secret_key.present? ? @franchise.banking_secret_key : '∅' %></span></p>
+</section>
+
+<section>
+  <h2>Informations campagnes (<a href="#" data-target="#edit-sendinblue">modifier</a>)</h2>
+  <p><label>Clé API Sendinblue</label><span class="value"><%= @franchise.sendinblue_api_key.present? ? @franchise.sendinblue_api_key : '∅' %></span></p>
+</section>
+
+<div class="modal" id="edit-profile">
+  <h2>Modifier la franchise</h2>
+  <%= form_for @franchise do |f| %>
+    <% if @franchise.errors.any? %>
+      <% @franchise.errors.each do |key, value| %>
+        <span class="error"><%= key %> : <%= value %></span>
+      <% end %>
+    <% end %>
+    <p><%= f.label :name, 'Nom du centre (ville)' %><%= f.text_field :name, required: true %></p>
+    <p><%= f.label :email, 'Adresse email (pour le formulaire de contact)' %><%= f.email_field :email %></p>
+    <p><%= f.label :siret, 'SIRET' %><%= f.text_field :siret %></p>
+    <p><%= f.label :tax_id, 'N° de TVA' %><%= f.text_field :tax_id %></p>
+    <p><%= f.label :address, 'Adresse postale' %><%= f.text_area :address %></p>
+    <p><%= f.label :zip_code, 'Code postal' %><%= f.text_field :zip_code %></p>
+    <p><%= f.label :city, 'Ville' %><%= f.text_field :city %></p>
+    <p><%= f.label :phone, 'N° de téléphone' %><%= f.text_field :phone %></p>
+    <div>
+      <button class="cancel" type="button">Annuler</button>
+      <button class="blue">Enregistrer</button>
+    </div>
+  <% end %>
+</div>
+
+<div class="modal" id="edit-business-hours">
+  <h2>Modifier les horaires d'ouverture</h2>
+  <%= form_for @franchise do |f| %>
+    <% if @franchise.errors.any? %>
+      <% @franchise.errors.each do |key, value| %>
+        <span class="error"><%= key %> : <%= value %></span>
+      <% end %>
+    <% end %>
+    <table>
+      <tr>
+        <th>Jour</th>
+        <th>Ouverture Matin</th>
+        <th>Fermeture Matin</th>
+        <th>Ouverture Après-midi</th>
+        <th>Fermeture Après-midi</th>
+      </tr>
+      <%= f.fields_for :business_hours do |ff| %>
+        <tr>
+          <td><%= ff.hidden_field :id %><%= day_in_french(ff.object.day) %></td>
+          <td><%= ff.text_field :morning_start_time, value: ff.object.morning_start_time.gsub('h', ''), required: true %></td>
+          <td><%= ff.text_field :morning_end_time, value: ff.object.morning_end_time.gsub('h', ''), required: true %></td>
+          <td><%= ff.text_field :afternoon_start_time, value: ff.object.afternoon_start_time.gsub('h', ''), required: true %></td>
+          <td><%= ff.text_field :afternoon_end_time, value: ff.object.afternoon_end_time.gsub('h', ''), required: true %></td>
+        </tr>
+      <% end %>
+    </table>
+    <div>
+      <button class="cancel" type="button">Annuler</button>
+      <button class="blue">Enregistrer</button>
+    </div>
+  <% end %>
+</div>
+
+<div class="modal" id="edit-socials">
+  <h2>Modifier les informations de réseaux sociaux</h2>
+  <%= form_for @franchise do |f| %>
+    <% if @franchise.errors.any? %>
+      <% @franchise.errors.each do |key, value| %>
+        <span class="error"><%= key %> : <%= value %></span>
+      <% end %>
+    <% end %>
+    <p><%= f.label :instagram_username, "Nom d'utilisateur Instagram" %><%= f.text_field :instagram_username %></p>
+    <p><%= f.label :facebook_chat_snippet, 'Code Facebook Messenger' %><%= f.text_area :facebook_chat_snippet %></p>
+    <div>
+      <button class="cancel" type="button">Annuler</button>
+      <button class="blue">Enregistrer</button>
+    </div>
+  <% end %>
+</div>
+
+<div class="modal" id="edit-banking">
+  <h2>Modifier les informations bancaires</h2>
+  <%= form_for @franchise do |f| %>
+    <% if @franchise.errors.any? %>
+      <% @franchise.errors.each do |key, value| %>
+        <span class="error"><%= key %> : <%= value %></span>
+      <% end %>
+    <% end %>
+    <p><%= f.label :iban, 'IBAN (pour les paiements par virement)' %><%= f.text_field :iban %></p>
+    <p><%= f.label :banking_provider, 'Banque' %><%= f.select :banking_provider, [['', nil], ['Banque Populaire', 'Banque Populaire']], selected: @franchise.banking_provider %></p>
+    <p><%= f.label :banking_secret_id, 'Identifiant secret de la banque' %><%= f.text_field :banking_secret_id %></p>
+    <p><%= f.label :banking_secret_key, 'Clé secrète de la banque' %><%= f.text_field :banking_secret_key %></p>
+    <div>
+      <button class="cancel" type="button">Annuler</button>
+      <button class="blue">Enregistrer</button>
+    </div>
+  <% end %>
+</div>
+
+<div class="modal" id="edit-sendinblue">
+  <h2>Modifier les informations Sendinblue</h2>
+  <%= form_for @franchise do |f| %>
+    <% if @franchise.errors.any? %>
+      <% @franchise.errors.each do |key, value| %>
+        <span class="error"><%= key %> : <%= value %></span>
+      <% end %>
+    <% end %>
+    <p><%= f.label :sendinblue_api_key, 'Clé API Sendinblue' %><%= f.text_field :sendinblue_api_key %></p>
+    <div>
+      <button class="cancel" type="button">Annuler</button>
+      <button class="blue">Enregistrer</button>
+    </div>
+  <% end %>
+</div>

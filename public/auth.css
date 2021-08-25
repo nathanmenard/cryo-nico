@@ -1,0 +1,170 @@
+body {
+  margin: 0;
+  font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-size: 13px;
+  color: #333;
+}
+
+a {
+  color: #009fe3;
+}
+
+div#has-error, div#errors, span.error {
+  display: none;
+}
+
+header {
+  background: #1d1d1b;
+  padding: 2% 0;
+}
+
+header img {
+  width: 8%;
+  display: block;
+  margin: 0 auto;
+}
+
+form {
+  width: 50%;
+  margin: 3% auto;
+}
+
+form.small {
+  width: 45%;
+}
+
+form h1 {
+  margin: 0 auto;
+  font-size: 15px;
+  font-weight: 700;
+  width: 90%;
+}
+
+form h2 {
+  margin: 0 auto;
+  margin-top: 2%;
+  margin-bottom: 4%;
+  font-size: 13px;
+  font-weight: 300;
+  width: 90%;
+  line-height: 2;
+}
+
+form p, form div.field_with_errors {
+  width: 90%;
+  margin: 2% auto;
+  line-height: 2.2;
+}
+
+form label {
+  font-size: 10px;
+  font-weight: 500;
+}
+
+form div.field_with_errors label {
+  color: rgb(204, 0, 0);
+}
+
+form div.field_with_errors input {
+  border-color: rgb(204, 0, 0);
+}
+
+form div.field_with_errors span.error-message {
+  color: rgb(204, 0, 0);
+  font-size: 12px;
+  margin-top: 0;
+}
+
+form input, form select, form textarea {
+  display: block;
+  width: 94%;
+  border: 2px solid #e0e1e2;
+  border-radius: 3px;
+  font-size: 12px;
+  padding: 1% 2%;
+}
+
+form input[type="checkbox"] {
+  display: inline-block;
+  width: auto;
+}
+
+form select {
+  width: 99%;
+}
+
+form hr {
+  line-height: 2.2;
+  display: block;
+  margin: 6% auto;
+  margin-bottom: 2%;
+  border: 0;
+  height: 1px;
+  width: 90%;
+  background: #e0e1e2;
+}
+
+form p span {
+  margin-left: 1%;
+  font-size: 12px;
+}
+
+form button {
+  margin-top: 4%;
+  margin-bottom: 3%;
+  margin-left: 5%;
+  font-size: 13px;
+  font-weight: 600;
+  background: #009fe3;
+  border: 0;
+  color: #fff;
+  display: block;
+  padding: 1.5% 6%;
+  width: 45%;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+form button:hover {
+  background: #0086CA;
+}
+
+@media only screen
+  and (min-device-width: 375px)
+  and (max-device-width: 812px)
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: portrait) {
+    header {
+      padding: 5% 0;
+    }
+    header img {
+      width: 30%;
+    }
+    form {
+      width: 95%;
+      margin: 10% auto;
+    }
+    form p {
+      margin-bottom: 4%;
+    }
+    form h1 {
+      font-size: 16px;
+    }
+    form label {
+      font-size: 11px;
+      font-weight: 600;
+    }
+    form input, form select, form textarea {
+      width: 94%;
+      padding: 3% 2%;
+      font-size: 13px;
+    }
+    form select {
+      width: 100%;
+    }
+    form button {
+      width: 90%;
+      padding: 4% 0;
+    }
+  }
+}

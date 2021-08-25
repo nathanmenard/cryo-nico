@@ -1,0 +1,77 @@
+<div id="search">
+  <button onclick="window.location.href='/entreprises/'">Retourner à la liste</button>
+</div>
+
+<section>
+  <h2>Informations (<a data-target="#edit-profile" href="#">modifier</a>)</h2>
+  <p><label>Nom</label><span class="value"><%= @company.name %></span></p>
+  <p><label>Adresse email</label><span class="value"><%= @company.email %></span></p>
+  <p><label>N° de SIRET</label><span class="value"><%= @company.siret %></span></p>
+  <% if current_user.superuser %>
+    <p><label>Centre</label><span class="value capitalize"><%= @company.franchise.name %></span></p>
+  <% end %>
+  <p><label>N° de téléphone</label><span class="value"><%= @company.phone %></span></p>
+  <p><label>Adresse postale</label><span class="value"><%= @company.address %></span></p>
+</section>
+<section>
+  <h2>Commentaire (<a data-target="#edit-comment" href="#">modifier</a>)</h2>
+  <% if @company.comment.present? %>
+    <%= simple_format @company.comment, class: 'center' %>
+  <% else %>
+    <p class="center"><em>Aucun commentaire pour le moment.</em></p>
+  <% end %>
+</section>
+
+<table>
+  <tr>
+    <th style="width: 30%"></th>
+    <th>Poste</th>
+    <th>Email</th>
+    <th>Téléphone</th>
+    <th>Date d'ajout</th>
+  </tr>
+  <% @company.company_clients.where('created_at IS NOT NULL').each do |client| %>
+    <tr>
+      <td><strong><span class="uppercase"><%= client.last_name %></span> <span class="capitalize"><%= client.first_name %></span></strong></td>
+      <td><%= client.job.present? ? client.job : '∅' %></td>
+      <td><%= client.email %></td>
+      <td><%= client.phone.present? ? client.phone : '∅' %></td>
+      <td><%= l(client.created_at, format: :short) %></td>
+    </tr>
+  <% end %>
+  <tr>
+    <td colspan="5"><a href="#" data-target="#new-company-client">Ajouter un représentant</a></td>
+  </tr>
+</table>
+
+<div class="modal" id="edit-profile">
+  <h2>Modifier la fiche client</h2>
+  <%= render partial: 'companies/form', locals: { company: @company } %>
+  </form>
+</div>
+
+<div class="modal" id="edit-comment">
+  <h2>Modifier le commentaire</h2>
+  <%= form_for @company do |f| %>
+    <p><%= f.label :comment, 'Commentaire (invisible pour le client)' %><%= f.text_area :comment %></p>
+    <div>
+      <button class="cancel" type="button">Annuler</button>
+      <button class="blue">Enregistrer</button>
+    </div>
+  <% end %>
+</div>
+
+<div class="modal" id="new-company-client">
+  <h2>Ajouter un salarié</h2>
+  <%= form_for [@company, @company_client] do |f| %>
+    <p><%= f.label :first_name, 'Prénom' %><%= f.text_field :first_name, required: true %></p>
+    <p><%= f.label :last_name, 'Nom de famille' %><%= f.text_field :last_name, required: true %></p>
+    <p><%= f.label :email, 'Adresse email' %><%= f.email_field :email, required: true %></p>
+    <p><%= f.label :job, 'Poste occupé' %><%= f.text_field :job %></p>
+    <p><%= f.label :phone, 'N° de téléphone' %><%= f.text_field :phone %></p>
+    <div>
+      <button class="cancel" type="button">Annuler</button>
+      <button class="blue">Enregistrer</button>
+    </div>
+  <% end %>
+</div>

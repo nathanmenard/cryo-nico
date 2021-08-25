@@ -1,0 +1,25 @@
+{
+  "name": "test_app",
+  "private": true,
+  "dependencies": {
+    "@rails/actioncable": "^6.0.0",
+    "@rails/activestorage": "^6.0.0",
+    "@rails/ujs": "^6.0.0",
+    "@rails/webpacker": "4.3.0",
+    "bootstrap": "^4.5.3",
+    "bootstrap-multiselect": "^0.9.15",
+    "jquery": "^3.6.0",
+    "jquery-datetimepicker": "^2.5.21",
+    "jquery-ui": "^1.12.1",
+    "jquery-ui-bundle": "^1.12.1-migrate",
+    "jquery-ui-dist": "^1.12.1",
+    "popper.js": "^1.16.1",
+    "turbolinks": "^5.2.0",
+    "webpack-jquery-ui": "^2.0.1",
+    "yarn": "^1.22.10"
+  },
+  "version": "0.1.0",
+  "devDependencies": {
+    "webpack-dev-server": "^3.11.2"
+  }
+}

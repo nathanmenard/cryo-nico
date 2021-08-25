@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <style>
+  body {
+    font-family: 'Helvetica Neue';
+    background: #eee;
+  }
+  table {
+    margin: 0 auto;
+    width: 75%;
+    background: #fff;
+    border-collapse: collapse;
+  }
+  table th, table td {
+    padding: 0 1%;
+    font-size: 12px;
+    border: 1px solid #eee;
+  }
+  table th {
+    padding: 1%;
+  }
+  table tr th:first-child {
+    width: 10%;
+  }
+  table td {
+    height: 40px;
+    position: relative;
+  }
+  table tr td:first-child {
+    vertical-align: top;
+    font-size: 13px;
+  }
+  div.event {
+    position: absolute;
+    top: 4%;
+    left: 1%;
+    right: 1%;
+    background: #3788d8;
+    border-radius: 5px;
+    color: #fff;
+    padding: 1% 2%;
+    cursor: pointer;
+    z-index: 9;
+    height: 30px;
+  }
+  div.event span {
+    font-size: 11px;
+    display: block;
+  }
+  div.event strong {
+    font-size: 12px;
+    font-weight: 400;
+    display: block;
+  }
+</style>
+</head>
+<body>
+
+  <p>30min = 30px</p>
+  <p>1h = 70px</p>
+  <p>1h30 = 110px</p>
+  <p>2h = 140px</p>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Room A</th>
+      <th>Room B</th>
+      <th>Room C</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>8am</td>
+      <td>
+        <div draggable="true" class="event">
+          <span>8:00 - 08:30</span>
+          <strong>event one</strong>
+        </div>
+      </td>
+      <td>
+        <div draggable="true" class="event" style="height: 150px">
+          <span>08:00 - 10:00</span>
+          <strong>event one</strong>
+        </div>
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>9am</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>10am</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>11am</td>
+      <td>
+        <div draggable="true" class="event" style="height: 70px">
+          <span>11:00 - 12:00</span>
+          <strong>event one</strong>
+        </div>
+      </td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>12am</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>1pm</td>
+      <td>
+        <div draggable="true" class="event" style="height: 110px">
+          <span>13:00 - 14:30</span>
+          <strong>event one</strong>
+        </div>
+      </td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>2pm</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>3pm</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+   <script>
+     $(document).ready(function(){
+       jQuery.event.props.push('dataTransfer');
+
+  $( function() {
+    $( "div.event" ).resizable({ containment: 'tbody', grid: [10000, 1] }).draggable({ axis: "y", containment: 'tbody' });
+  } );
+     });
+  </script>
+
+</body>
+</html>
+

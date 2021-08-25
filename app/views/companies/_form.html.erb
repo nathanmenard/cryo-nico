@@ -1,0 +1,22 @@
+<%= form_for @company do |f| %>
+  <% if @company.errors.any? %>
+    <% @company.errors.each do |key, value| %>
+      <span class="error"><%= key %>: <%= value %></span>
+    <% end %>
+  <% end %>
+  <% if current_user.superuser %>
+    <p><%= f.label :franchise_id, 'Centre' %><%= f.collection_select :franchise_id, Franchise.all.order(:name), :id, :name %></p>
+  <% end %>
+  <p><%= f.label :name, 'Nom' %><%= f.text_field :name, required: true %></p>
+  <p><%= f.label :email, 'Adresse email' %><%= f.text_field :email, required: true %></p>
+  <p><%= f.label :phone, 'N° de téléphone' %><%= f.text_field :phone, required: true %></p>
+  <p><%= f.label :address, 'Adresse postale' %><%= f.text_area :address, required: true %></p>
+  <p><%= f.label :zip_code, 'Code postal' %><%= f.text_field :zip_code, required: true %></p>
+  <p><%= f.label :city, 'Ville' %><%= f.text_field :city, required: true %></p>
+  <p><%= f.label :siret, 'SIRET' %><%= f.text_field :siret, required: true %></p>
+  <p><%= f.label :comment, 'Commentaire libre (invisible pour le client)' %><%= f.text_area :comment %></p>
+  <div>
+    <button class="cancel" type="button">Annuler</button>
+    <button class="blue">Enregistrer</button>
+  </div>
+<% end %>

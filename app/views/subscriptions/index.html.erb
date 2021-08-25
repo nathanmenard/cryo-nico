@@ -1,0 +1,58 @@
+<div id="search">
+  <i class="fas fa-search fa-lg"></i>
+  <input type="text" placeholder="Rechercher parmi les abonnements.." id="search">
+  <%= render 'filter' %>
+  <button data-target="#new-subscription" class="blue">Nouvel abonnement</button>
+</div>
+
+<table>
+  <tr>
+    <th style="width: 10%"></th>
+    <% if current_user.superuser %>
+      <th>Centre</th>
+    <% end %>
+    <th>Client</th>
+    <th>Prestation</th>
+    <th>Nombre de séances</th>
+    <th>Tarif</th>
+  </tr>
+  <% @subscriptions.each do |subscription| %>
+    <tr data-target="#edit-subscription-<%= subscription.id %>">
+      <td>
+        <span class="status <%= subscription.active? ? 'paid' : 'failed' %>">
+          <%= subscription.active? ? 'En cours' : 'Annulé' %>
+        </span>
+      </td>
+      <% if current_user.superuser %>
+        <td><%= subscription.client.franchise.name %></td>
+      <% end %>
+      <td><%= subscription.client.full_name %></td>
+      <td><%= subscription.subscription_plan.product.name %></td>
+      <td><%= subscription.subscription_plan.session_count %> séance/mois</td>
+      <td><%= number_to_currency(subscription.subscription_plan.total) %>/mois</td>
+    </tr>
+  <% end %>
+</table>
+
+<% @subscriptions.each do |subscription| %>
+  <div class="modal" id="edit-subscription-<%= subscription.id %>">
+    <h2>Consulter un abonnement</h2>
+    <%= form_for subscription do |f| %>
+      <% if subscription.status == 'canceled_by_admin' %>
+        <p><label>Statut</label><span class="value">Annulé par un administrateur</span></p>
+        <p><label>Date effective d'annulation</label><span class="value"><%= subscription.to_be_canceled_at.strftime('%d %b %Y') %></span></p>
+      <% end %>
+      <div>
+        <button class="cancel" type="button">Annuler</button>
+        <% if subscription.status == 'active' %>
+          <button type="button" class="red" data-pathname="/subscriptions/<%= subscription.id %>" data-message="Etes-vous sûr de vouloir annuler cet abonnement ?">Supprimer</button>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="modal" id="new-subscription">
+  <h2>Nouvel abonnement</h2>
+  <%= render 'form' %>
+</div>

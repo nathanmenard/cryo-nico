@@ -1,0 +1,38 @@
+<div id="search">
+  <i class="fas fa-search fa-lg"></i>
+  <input type="text" placeholder="Rechercher parmi les transactions.." id="search">
+  <%= render 'filter' %>
+</div>
+
+<table>
+  <tr>
+    <th style="width: 9%"></th>
+    <th>Date</th>
+    <% if current_user.superuser %>
+      <th>Centre</th>
+    <% end %>
+    <th>Prestation</th>
+    <th>Client</th>
+    <th>Montant</th>
+    <th>Informations de paiement</th>
+  </tr>
+  <% @transactions.order(created_at: :desc).each do |transaction| %>
+    <tr>
+      <td>
+        <% if transaction.success? %>
+          <span class="status paid">Payée</span>
+        <% else %>
+          <span class="status failed">Echouée</span>
+        <% end %>
+      </td>
+      <td><%= l(transaction.created_at, format: :short) %></td>
+      <% if current_user.superuser %>
+        <td><%= transaction.reservation.client.franchise.name %></td>
+      <% end %>
+      <td><%= transaction.reservation.product_price.product.name %></td>
+      <td><%= transaction.reservation.client.full_name %></td>
+      <td><%= number_to_currency(transaction.amount / 100) %></td>
+      <td><%= transaction.bank_name %> - <%= transaction.card_brand %></td>
+    </tr>
+  <% end %>
+</table>

@@ -1,0 +1,30 @@
+<div id="search">
+  <i class="fas fa-search fa-lg"></i>
+  <input type="text" placeholder="Rechercher parmi les salles.." id="search">
+  <%= render 'filter' %>
+  <button data-target="#new-room" class="blue">Nouvelle salle</button>
+</div>
+
+<table>
+  <tr>
+    <th style="width: 40%"></th>
+    <% if current_user.superuser %>
+      <th>Centre</th>
+    <% end %>
+    <th>Capacité</th>
+  </tr>
+  <% @rooms.each do |room| %>
+    <tr onclick="window.location.href='/salles/<%= room.id %>'">
+      <td><strong><%= room.name %></strong></td>
+      <% if current_user.superuser %>
+        <td><%= room.franchise.name %></td>
+      <% end %>
+      <td><%= room.capacity %> personne<%= room.capacity > 1 ? 's' : '' %></td>
+    </tr>
+  <% end %>
+</table>
+
+<div class="modal" id="new-room">
+  <h2>Nouvelle salle</h2>
+  <%= render 'form' %>
+</div>

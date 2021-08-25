@@ -1,0 +1,32 @@
+<section class="center">
+  <h1>Mon historique de paiements</h1>
+  <table>
+    <tr>
+      <th>N°</th>
+      <th>Date</th>
+      <th>Total HT</th>
+      <th>Total TTC</th>
+      <th>Prestation</th>
+      <th>Statut</th>
+    </tr>
+    <% @payments.order(updated_at: :desc).each do |payment| %>
+      <tr>
+        <td><%= payment.date_id %></td>
+        <td><%= payment.updated_at.strftime('%H:%M') %></td>
+        <td><%= number_to_currency(payment.tax_amount/100) %></td>
+        <td><%= number_to_currency(payment.amount/100) %></td>
+        <td><%= payment.product_name %></td>
+        <td>
+          <span class="status <%= payment.successful? ? 'paid' : 'failed' %>">
+            <%= payment.successful? ? 'Encaissé' : 'En attente' %>
+          </span>
+        </td>
+        <td>
+          <% if payment.successful? %>
+            <%= link_to payment_url(subdomain: 'www', id: payment.date_id, format: :pdf), target: :_blank do %><i class="fas fa-paperclip"></i><% end %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+</section>

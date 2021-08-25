@@ -1,0 +1,62 @@
+<div id="search">
+  <i class="fas fa-search fa-lg"></i>
+  <input type="text" placeholder="Rechercher parmi les avis.." id="search">
+  <%= render 'filter' %>
+</div>
+
+<table>
+  <tr>
+    <th style="width: 15%"></th>
+    <% if current_user.superuser %>
+      <th>Centre</th>
+    <% end %>
+    <th>Date de publication</th>
+    <th>Prestation</th>
+    <th>Message</th>
+    <th>Client</th>
+  </tr>
+  <% @reviews.each do |review| %>
+    <% if review.published == true %>
+      <% status = 'paid' %>
+    <% elsif review.published.nil? %>
+      <% status = 'grey' %>
+    <% else %>
+      <% status = 'failed' %>
+    <% end %>
+    <tr data-target="#edit-<%= review.id %>">
+      <td>
+        <span class="status <%= status %>">
+          <% if review.published == true %>
+            Publié
+          <% elsif review.published.nil? %>
+            En attente de validation
+          <% else %>
+            Refusé
+          <% end %>
+        </span>
+      </td>
+      <% if current_user.superuser %>
+        <td><%= review.product.room.franchise.name %></td>
+      <% end %>
+      <td><%= l(review.created_at, format: :short) %></td>
+      <td><%= review.product.name %></td>
+      <td><%= review.body %></td>
+      <td><%= review.client ? review.client.full_name : review.company_client.full_name %></td>
+    </tr>
+  <% end %>
+</table>
+
+<% @reviews.each do |review| %>
+  <div class="modal" id="edit-<%= review.id %>">
+    <h2>Modifier un avis</h2>
+    <%= form_for review do |f| %>
+      <p><%= f.label :body, 'Avis' %><br><%= simple_format(review.body, {}, { wrapper_tag: 'span' }) %></p>
+      <p><%= f.label :published, 'Statut de publication' %><%= f.select :published, [['Publié sur le site', true], ['Ne pas publier', false]], required: true %></p>
+      <p><%= f.check_box :homepage %><%= f.label :homepage, "Afficher sur la page d'accueil" %></p>
+      <div>
+        <button class="cancel" type="button">Annuler</button>
+        <button class="blue">Enregistrer</button>
+      </div>
+    <% end %>
+  </div>
+<% end %>

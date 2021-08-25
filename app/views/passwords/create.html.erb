@@ -1,0 +1,21 @@
+<% private_key = @client ? @client.private_key : @user.private_key %>
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/auth.css">
+  </head>
+  <body>
+    <header><a href="/"><img src="/logo.svg"></a></header>
+    <%= form_with url: nouveau_mot_de_passe_path do |f| %>
+      <h1>Mot de passe oublié</h1>
+      <h2>Choisissez un nouveau mot de passe pour accéder à votre compte.</h2>
+      <%= f.hidden_field :key, value: private_key %>
+      <p><%= f.label :password, 'Nouveau mot de passe' %><%= f.password_field :password, required: true %></p>
+      <p><%= f.label :password_2, 'Confirmez le nouveau mot de passe' %><%= f.password_field :password_2, required: true %></p>
+      <button>Modifier mon mot de passe</button>
+    <% end %>
+  </body>
+</html>

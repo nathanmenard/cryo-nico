@@ -1,0 +1,8 @@
+Bonjour <%= @client.first_name %>,
+
+Merci pour votre réservation !
+
+A titre de rappel, votre rendez-vous est pris pour le <%= I18n.l(@reservation.start_time, format: :short) %>.
+
+Cordialement,
+L'équipe Cryotera

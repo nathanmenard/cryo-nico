@@ -1,0 +1,32 @@
+<div id="search">
+  <i class="fas fa-search fa-lg"></i>
+  <input type="text" placeholder="Rechercher parmi les questionnaires.." id="search">
+  <%= render 'filter' %>
+  <button data-target="#new-survey" class="blue">Nouveau questionnaire</button>
+</div>
+
+<table>
+  <tr>
+    <th style="width: 40%"></th>
+    <% if current_user.superuser %>
+      <th>Centre</th>
+    <% end %>
+    <th>Prestation</th>
+    <th>Nom</th>
+  </tr>
+  <% @surveys.each do |survey| %>
+    <tr onclick="window.location.href='/surveys/<%= survey.id %>'">
+      <td><strong><%= survey.name %></strong></td>
+      <% if current_user.superuser %>
+        <td><%= survey.product.room.franchise.name %></td>
+      <% end %>
+      <td><%= survey.product.name %></td>
+      <td><%= survey.name %></td>
+    </tr>
+  <% end %>
+</table>
+
+<div class="modal" id="new-survey">
+  <h2>Nouveau questionnaire</h2>
+  <%= render 'form' %>
+</div>

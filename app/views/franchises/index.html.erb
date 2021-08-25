@@ -1,0 +1,25 @@
+<div id="search">
+  <i class="fas fa-search fa-lg"></i>
+  <input type="text" placeholder="Rechercher parmi les franchises.." id="search">
+  <button data-target="#new-franchise" class="blue">Nouvelle franchise</button>
+</div>
+
+<table>
+  <tr>
+    <th style="width: 40%"></th>
+    <th>Numéro de SIRET</th>
+    <th>Nombre d'employés</th>
+  </tr>
+  <% @franchises.each do |franchise| %>
+    <tr onclick="window.location.href='/franchises/<%= franchise.id %>'">
+      <td><strong><%= franchise.name %></strong></td>
+      <td><%= franchise.siret.present? ? franchise.siret : '∅' %></td>
+      <td><%= franchise.users.size %></td>
+    </tr>
+  <% end %>
+</table>
+
+<div class="modal" id="new-franchise">
+  <h2>Nouvelle franchise</h2>
+  <%= render 'form' %>
+</div>

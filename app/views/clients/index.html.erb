@@ -1,0 +1,45 @@
+<div id="search">
+  <i class="fas fa-search fa-lg"></i>
+  <input type="text" placeholder="Rechercher parmi les clients.." id="clients_search" value="<%= params[:search] %>">
+  <%= render 'filter' %>
+  <button data-target="#new-client" class="blue">Nouveau client particulier</button>
+  <button onclick="window.location.href='/clients.csv'">Exporter la liste</button>
+</div>
+
+<table>
+  <tr>
+    <th style="width: 20%"></th>
+    <% if current_user.superuser %>
+      <th>Centre</th>
+    <% end %>
+    <th class="hidden-mobile">Sexe</th>
+    <th>Email</th>
+    <th>Téléphone</th>
+  </tr>
+  <% @clients.each do |client| %>
+    <tr onclick="window.location.href='/clients/<%= client.id %>'">
+      <td><strong><span class="uppercase"><%= client.last_name %></span> <span class="capitalize"><%= client.first_name %></span></strong></td>
+      <% if current_user.superuser %>
+        <td><%= client.franchise.name %></td>
+      <% end %>
+      <td class="hidden-mobile">
+        <% if client.male %>
+          <i class="blue fas fa-mars fa-lg"></i>
+          <% else %>
+            <i class="pink fas fa-venus fa-lg"></i>
+          <% end %>
+      </td>
+      <td><%= client.email.present? ? client.email : '∅' %></td>
+      <td><%= client.phone.present? ? client.phone : '∅' %></td>
+    </tr>
+  <% end %>
+</table>
+
+<br>
+
+<%= will_paginate @clients %>
+
+<div class="modal" id="new-client">
+  <h2>Nouveau client particulier</h2>
+  <%= render 'form' %>
+</div>

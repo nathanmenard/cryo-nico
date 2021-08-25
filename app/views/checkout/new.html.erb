@@ -1,0 +1,60 @@
+<section class="center" data-reservation-id="<%= @reservation.id %>" data-has-start-time="<%= @reservation.start_time.present? %>">
+  <h2>Récapitulatif de votre commande</h2>
+  <p><strong style="display: block">Prestation choisie :</strong><%= @reservation.product_price.product.name %></p>
+  <% if @reservation.product_price.session_count == 1 %>
+    <p><strong style="display: block">Votre rendez-vous est pris pour :</strong><em><%= @reservation.start_time.present? ? l(@reservation.start_time, format: :short) : 'Pas encore choisi' %></em></p>
+  <% end %>
+  <% if (credit = current_client.credits.where(product: @product_price.product).first) && @product_price.session_count == 1 %>
+    <%= form_for credit, html: { method: :delete } do |f| %>
+      <%= f.hidden_field :reservation_id, value: @reservation.id %>
+      <button id="pay">Réserver en utilisant 1 crédit</button>
+      <p><em>Il vous restera <%= pluralize (current_client.credits.where(product: @product_price.product).count - 1), 'séance' %> de <%= @product_price.product.name %>.</em></p>
+    <% end %>
+  <% else %>
+    <hr>
+    <%= form_with url: @reservation do |f| %>
+      <%= f.hidden_field :reservation_id, value: @reservation.id %>
+      <p>
+        <%= f.label :to_be_paid_online, 'Moyen de paiement' %>
+        <%= f.select :to_be_paid_online, [['Paiement au centre', 'false'], ['Paiement en ligne par CB', 'true']], selected: @reservation.to_be_paid_online %>
+      </p>
+    <% end %>
+    <% if !@reservation.to_be_paid_online? %>
+      <button onclick="window.location.href = '/merci'">Réserver</button>
+    <% else %>
+      <%= form_with url: checkout_path, html: { id: :coupon_form } do |f| %>
+        <%= f.hidden_field :id, value: @reservation.id %>
+        <% if @reservation.payment.coupon.nil? %>
+          <p><%= f.label :coupon, 'Vous avez un code promo ?' %><%= f.text_field :coupon %></p>
+          <% if params[:coupon] && params[:coupon] != 'nil' %>
+            <p style="color: red">Code promo invalide.</p>
+          <% end %>
+        <% else %>
+          <p style="text-align: center">Votre code promo vous octroie <%= number_to_currency (@reservation.payment.coupon.discount_amount(@reservation.payment)) %> de remise ! <%= link_to 'Enlever le code promo', checkout_path(id: @reservation.id, coupon: 'nil') %></p>
+        <% end %>
+      <% end %>
+      <hr>
+      <form method="post" action="https://paiement.systempay.fr/vads-payment/" id="payment_form">
+        <input type="hidden" name="signature" value="<%= @data[:signature] %>">
+        <input type="hidden" name="vads_action_mode" value="<%= @data[:vads_action_mode] %>">
+        <input type="hidden" name="vads_amount" value="<%= @data[:vads_amount] %>">
+        <input type="hidden" name="vads_ctx_mode" value="<%= @data[:vads_ctx_mode] %>">
+        <input type="hidden" name="vads_currency" value="<%= @data[:vads_currency] %>">
+        <input type="hidden" name="vads_page_action" value="<%= @data[:vads_page_action] %>">
+        <input type="hidden" name="vads_payment_config" value="<%= @data[:vads_payment_config] %>">
+        <input type="hidden" name="vads_redirect_error_message" value="<%= @data[:vads_redirect_error_message] %>">
+        <input type="hidden" name="vads_redirect_error_timeout" value="<%= @data[:vads_redirect_error_timeout] %>">
+        <input type="hidden" name="vads_redirect_success_message" value="<%= @data[:vads_redirect_success_message] %>">
+        <input type="hidden" name="vads_redirect_success_timeout" value="<%= @data[:vads_redirect_success_timeout] %>">
+        <input type="hidden" name="vads_return_mode" value="<%= @data[:vads_return_mode] %>">
+        <input type="hidden" name="vads_site_id" value="<%= @data[:vads_site_id] %>">
+        <input type="hidden" name="vads_trans_date" value="<%= @data[:vads_trans_date] %>">
+        <input type="hidden" name="vads_theme_config" value="<%= @data[:vads_theme_config] %>">
+        <input type="hidden" name="vads_trans_id" value="<%= @data[:vads_trans_id] %>">
+        <input type="hidden" name="vads_url_return" value="<%= @data[:vads_url_return] %>">
+        <input type="hidden" name="vads_version" value="<%= @data[:vads_version] %>">
+        <button id="pay">Payer & réserver <%= number_to_currency (@amount/100) %></button>
+      </form>
+    <% end %>
+  <% end %>
+</section>

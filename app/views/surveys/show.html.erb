@@ -1,0 +1,50 @@
+<div id="search">
+  <button onclick="window.location.href='/surveys/'">Retourner à la liste</button>
+</div>
+
+<section>
+  <h2>Informations (<a data-target="#edit" href="#">modifier</a>)</h2>
+  <% if current_user.superuser %>
+    <p><label>Centre</label><span class="value"><%= @survey.product.room.franchise.name %></p>
+    <% end %>
+  <p><label>Prestation</label><span class="value"><%= @survey.product.name %></span></p>
+  <p><label>Nom</label><span class="value"><%= @survey.name %></span></p>
+</section>
+
+<section>
+  <h2>Questions (<a data-target="#edit-questions" href="#">modifier</a>)</h2>
+  <% @survey.survey_questions.each do |question| %>
+    <p class="center"><%= question.body %></p>
+  <% end %>
+</section>
+
+<div class="modal" id="edit">
+  <h2>Modifier le questionnaire</h2>
+  <%= render 'form' %>
+</div>
+
+<div class="modal" id="edit-questions">
+  <h2>Modifier les questions</h2>
+  <%= form_tag survey_survey_questions_path(@survey) do %>
+    <table>
+      <tr>
+        <th></th>
+      </tr>
+      <% @survey.survey_questions.each do |question| %>
+        <tr>
+          <td>
+            <%= hidden_field_tag 'survey_questions[][id]', question.id %>
+            <%= text_area_tag 'survey_questions[][body]', question.body, required: true %>
+          </td>
+        </tr>
+      <% end %>
+      <tr>
+        <td><a class="new-line-survey" href="#">Ajouter une question</a></td>
+      </tr>
+    </table>
+    <div>
+      <button class="cancel" type="button">Annuler</button>
+      <button class="blue">Enregistrer</button>
+    </div>
+  <% end %>
+</div>

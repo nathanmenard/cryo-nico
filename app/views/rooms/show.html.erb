@@ -1,0 +1,17 @@
+<div id="search">
+  <button onclick="window.location.href='/salles/'">Retourner à la liste</button>
+</div>
+
+<section>
+  <h2>Informations (<a data-target="#edit" href="#">modifier</a>)</h2>
+  <% if current_user.superuser %>
+    <p><label>Centre</label><span class="value"><%= @room.franchise.name %></p>
+    <% end %>
+  <p><label>Nom</label><span class="value"><%= @room.name %></span></p>
+  <p><label>Capacité</label><span class="value"><%= @room.capacity %> personnes</span></p>
+</section>
+
+<div class="modal" id="edit">
+  <h2>Modifier la salle</h2>
+  <%= render 'form' %>
+</div>

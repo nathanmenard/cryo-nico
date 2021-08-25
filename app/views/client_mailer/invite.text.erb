@@ -1,0 +1,9 @@
+Bonjour,
+
+<%= @current_client.full_name %> vous invite à rejoindre le centre Cryotera de <%= @current_client.franchise.name %>.
+
+Inscrivez-vous en cliquant sur le lien ci-dessous :
+<%= signup_url(subdomain: @current_client.franchise.slug, email: @email, client_id: @current_client.id) %>
+
+Cordialement,
+L'équipe Cryotera

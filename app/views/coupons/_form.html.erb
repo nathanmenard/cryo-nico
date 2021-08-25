@@ -1,0 +1,23 @@
+<%= form_for @coupon do |f| %>
+  <% if current_user.superuser %>
+    <p>
+      <label class="block">Centre(s)</label>
+      <%= f.collection_select :franchise_ids, Franchise.all.order(:name), :id, :name, { }, { multiple: true } %>
+    </p>
+  <% end %>
+  <p><%= f.label :name, 'Nom' %><%= f.text_field :name, required: true %></p>
+  <p><%= f.label :code, 'Code utilisé par les clients' %><%= f.text_field :code, required: true %></p>
+  <p><%= f.label :percentage, 'Type de réduction' %><%= f.select :percentage, [['Pourcentage', 'true'], ['Euro', 'false']] %></p>
+  <p><%= f.label :value, 'Valeur' %><%= f.number_field :value, required: true %></p>
+  <p><%= f.label :start_date, 'Date de début' %><%= f.date_field :start_date %></p>
+  <p><%= f.label :end_date, 'Date de fin' %><%= f.date_field :end_date %></p>
+  <p><%= f.label :usage_limit, "Quota d'utilisation (laisser vide pour ilimité)" %><%= f.number_field :usage_limit %></p>
+  <p><%= f.label :usage_limit_per_person, "Quota d'utilisation par personne (laisser vide pour ilimité)" %><%= f.number_field :usage_limit_per_person %></p>
+  <div>
+    <button class="cancel" type="button">Annuler</button>
+    <% if @coupon.id %>
+      <button type="button" class="red" data-message="Etes-vous sûr de vouloir supprimer ce code promo ?">Supprimer</button>
+    <% end %>
+    <button type="submit" class="blue">Enregistrer</button>
+  </div>
+<% end %>

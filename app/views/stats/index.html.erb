@@ -1,0 +1,95 @@
+<div id="search">
+  <%= render 'filter' %>
+  <% if params[:view].nil? %>
+    <button id="datepicker" style="padding-left: 1.25%"><i class="far fa-calendar-alt fa-lg"></i>&nbsp; <%= l(@date, format: :long) %></button>
+  <% elsif params[:view] == 'month' %>
+    <select class="float-right" id="year"><option value="2021">2021</option></select>
+    <select class="float-right" id="month">
+      <% Date::MONTHNAMES.drop(1).each_with_index do |month, index| %>
+        <option <%= @date.month-1 == index ? 'selected' : '' %> value="<%= (index+1).to_s.rjust(2, '0') %>"><%= month_in_french(month) %></option>
+      <% end %>
+    </select>
+  <% else %>
+    <select class="float-right" id="year"><option value="2021">2021</option></select>
+  <% end %>
+  <button onclick="window.location.href='/stats.csv'">Exporter les stats</button>
+</div>
+
+<table>
+  <tr>
+    <th>Prestation</th>
+    <th>Nombre de clients différents</th>
+    <th>Coût moyen d'une séance</th>
+    <th>Chiffre d'affaires HT</th>
+    <th>Nombre de séances total</th>
+    <th>Nombre de séances moyen par client</th>
+  </tr>
+  <% @products.order(:name).each do |product| %>
+    <tr>
+      <td><%= product.name %></td>
+      <td><%= product.unique_clients_count %></td>
+      <td data-product="<%= product.name %>"><%= number_to_currency @average_payments_amount[product.id] %></td>
+      <% revenue = @revenue[product.id] %>
+      <td data-product="<%= product.name %>" data-revenue="<%= revenue %>"><%= number_to_currency revenue %></td>
+      <td><%= @reservations_count[product.id] %></td>
+      <td><%= @average_session_count_per_client[product.id] %>
+    </tr>
+  <% end %>
+  <% @external_products.order(:name).each do |external_product| %>
+    <tr>
+      <td><%= external_product.name %></td>
+      <td><%= external_product.unique_clients_count %></td>
+      <td>∅</td>
+      <td><%= number_to_currency external_product.revenue_without_tax %></td>
+      <td><%= external_product.payments.successful.size %></td>
+      <td>∅</td>
+    </tr>
+  <% end %>
+</table>
+
+<section style"position: relative; height: 20vh">
+  <h2>Répartition du chiffre d'affaires par prestation</h2>
+  <canvas id="chart-area" style="margin: 2% auto; width: 50%"></canvas>
+</section>
+
+<script src="/Chart.min.js"></script>
+<script>
+  $(document).ready(function() {
+    Chart.Legend.prototype.afterFit = function() {
+      this.height = this.height + 30;
+    };
+    const colors = ['rgb(54, 162, 235)', 'rgb(75, 192, 192)', 'rgb(255, 159, 64)', 'rgb(255, 205, 86)', 'rgb(255, 99, 132)']; 
+    const products = [];
+    const revenues = [];
+    $('td[data-revenue]').each(function() {
+      const product = $(this).data('product');
+      const revenue = $(this).data('revenue');
+      products.push(product);
+      revenues.push(revenue);
+    });
+
+    const config = {
+      type: 'pie',
+      data: {
+        datasets: [{
+          data: revenues,
+          backgroundColor: colors,
+          label: "Chiffre d'affaires par prestation",
+        }],
+        labels: products
+      },
+      options: {
+        responsive: false,
+        tooltips: {
+          callbacks: {
+            title: (items, data) => data['labels'][items[0]['index']],
+            label: (item, data) => data.datasets[item.datasetIndex].data[item.index] + '€',
+          }
+        }
+      }
+  };
+
+    var ctx = document.getElementById('chart-area').getContext('2d');
+    window.myPie = new Chart(ctx, config);
+  });
+</script>

@@ -1,0 +1,876 @@
+body {
+  margin: 0;
+  font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  font-size: 14px;
+  color: #202938;
+  background: #f8f9fb;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.pink {
+  color: #f783ac;
+}
+
+.blue {
+  color: #0c84d2;
+}
+
+.center {
+  text-align: center;
+}
+
+a.new-line {
+  display: block;
+}
+
+div#has-error, div#errors, div#resource-id, div#body {
+  display: none;
+}
+
+div#overlay {
+  background: #000;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 0.85;
+  z-index: 99;
+  display: none;
+}
+
+div#top {
+  background: #000;
+  font-size: 11px;
+  text-align: right;
+  padding: .6% 2%;
+  color: #fff;
+}
+
+div#top p {
+  margin: 0;
+}
+
+div#top p a {
+  color: orange;
+}
+
+header {
+  background: #1F2E5C;
+  padding: 1.5% 2%;
+  color: #fff;
+}
+
+header:after {
+  clear: both;
+  display: block;
+  content: '';
+}
+
+header ul {
+  margin: 0;
+  padding: 0;
+  width: 20%;
+}
+
+header ul:first-of-type {
+  float: left;
+}
+
+header ul:last-of-type {
+  float: right;
+  text-align: right;
+  width: 80%;
+}
+
+header ul li {
+  display: inline-block;
+}
+
+header ul li + li {
+  margin-left: 3%;
+}
+
+header ul li a {
+  color: rgba(255,255,255, .65);
+  text-decoration: none;
+}
+
+header ul li.active {
+  font-weight: 600;
+}
+
+header ul li.active a {
+  color: #fff;
+}
+
+header ul li ul.dropdown {
+  background: red !important;
+}
+
+nav {
+  padding: 0 2%;
+  border-bottom: 1px solid #dee3ea;
+  background: #fff;
+}
+
+nav:after {
+  clear: both;
+  display: block;
+  content: '';
+}
+
+nav h1 {
+  margin: 0;
+  padding: 1.5% 0;
+  font-size: 20px;
+  font-weight: 500;
+  float: left;
+  display: inline-block;
+}
+
+nav ul {
+  margin: 0;
+  padding: 0;
+  float: right;
+  width: 50%;
+  text-align: right;
+}
+
+nav ul li {
+  display: inline-block;
+  padding-top: 3.5%;
+  padding-bottom: 3%;
+}
+
+nav ul li + li {
+  margin-left: 4%;
+}
+
+nav ul li.active {
+  border-bottom: 3px solid #0c84d2;
+}
+
+nav ul li a {
+  text-decoration: none;
+  font-weight: 600;
+  color: #999;
+}
+
+nav ul li.active a {
+  color: #555;
+}
+
+div#dates {
+  text-align: center;
+}
+
+div#search {
+  margin: 2%;
+  margin-bottom: 1%;
+  position: relative;
+}
+
+div#search:after {
+  clear: both;
+  display: block;
+  content: '';
+}
+
+div#search svg:not(.fa-calendar-alt) {
+  position: absolute;
+  top: 30%;
+  left: 1%;
+  font-size: 16px;
+}
+
+div#search input {
+  padding: .75% 1.5%;
+  padding-left: 2.75%;
+  display: block;
+  font-size: 14px;
+  border: 2px solid #dee3ea;
+  border-radius: 5px;
+  outline: 0;
+  float: left;
+  width: 25%;
+}
+
+div#search select {
+  padding: .66% 1%;
+  display: block;
+  font-size: 14px;
+  border: 2px solid #dee3ea;
+  border-radius: 5px;
+  outline: 0;
+  float: left;
+}
+
+div#search select.float-right {
+  float: right;
+}
+
+div#search input + select, div#search select + select {
+  margin-left: 1%;
+}
+
+div#search button, div#dates button {
+  font-size: 13px;
+  border-radius: 3px;
+  background: #fff;
+  font-weight: 600;
+  padding: .75% 1.5%;
+  border: 2px solid #dee3ea;
+  color: #999;
+  float: right;
+  cursor: pointer;
+}
+
+div#dates button {
+  float: none;
+}
+
+div#search button:hover, div#dates button:hover {
+  background: #f0f1f2;
+  border-color: #d0d1d2;
+}
+
+div#search button.blue {
+  margin-left: .5%;
+  background: #0c84d2;
+  color: #fff;
+  border: 1px solid transparent;
+}
+
+div#search button.blue:hover {
+  background: #006BB9;
+}
+
+div#search button + button {
+  margin-right: .5%;
+}
+
+table {
+  margin: 2%;
+  margin-top: 0;
+  width: 96%;
+  background: #fff;
+  border-collapse: inherit;
+  border: 1px solid #d0d1d2;
+  border-radius: 5px;
+  border-spacing: 0;
+  table-layout: fixed;
+}
+
+table.no-margin {
+  margin: 0;
+  width: 100%;
+  border: 0;
+}
+
+table.calendar {
+  margin-top: 2%;
+}
+
+table th {
+  background: #f0f1f2;
+  padding: 1% 1.5%;
+  text-transform: uppercase;
+  border-bottom: 1px solid #d0d1d2;
+  font-size: 10px;
+  font-weight: 700;
+  text-align: center;
+}
+
+table td {
+  vertical-align: middle;
+  padding: 1% 1.5%;
+  text-align: center;
+  border-bottom: 1px solid #d0d1d2;
+  line-height: 2;
+  cursor: pointer;
+  position: relative;
+  font-size: 13px;
+}
+
+table.edit-pricing td  {
+  vertical-align: top;
+}
+
+table:not(.calendar) tr td:first-child {
+  text-align: justify;
+}
+
+table.calendar td {
+  padding: 0;
+  border: 1px solid #dee3ea;
+  border-top: 0;
+  vertical-align: top;
+}
+
+table.calendar tr td:first-child {
+  border-left: 0;
+  vertical-align: middle;
+}
+
+table.calendar tr td:last-child {
+  border-right: 0;
+}
+
+table.calendar tr:last-child td {
+  border-bottom: 0;
+}
+
+table.calendar td div.reservation {
+  float: left;
+  background: rgba(3, 155, 229, 0.2);
+  color: rgb(3, 155, 229);
+  text-align: justify;
+  font-size: 12px;
+  line-height: 2;
+}
+
+table.calendar td div.reservation.green {
+  color: rgb(51, 182, 121);
+  background: rgba(51, 182, 121, 0.2);
+}
+
+table.calendar td div.reservation.small {
+  margin-bottom: 25%;
+}
+
+table.calendar td div.reservation span.time {
+  display: block;
+  padding: 0 10%;
+  padding-top: 4%;
+  font-size: 11px;
+}
+
+table.calendar td div.reservation span.first-time {
+  display: block;
+  padding: 0 10%;
+  padding-bottom: 4%;
+  font-style: italic;
+  font-size: 11px;
+}
+
+table:not(.calendar) th:first-child, table:not(.calendar) td:first-child {
+  text-align: justify;
+}
+
+table tr:not(:first-child):hover {
+  background: #fafafa;
+}
+
+table.calendar tr:hover {
+  background: transparent;
+}
+
+table.calendar tr td:hover {
+  background: #fafafa;
+}
+
+table.calendar td strong {
+  display: block;
+}
+
+table.calendar td strong {
+  padding: 0 10%;
+}
+
+table td span.uppercase {
+  text-transform: uppercase;
+}
+
+table td span.capitalize {
+  text-transform: capitalize;
+}
+
+table td span.created-at {
+  display: block;
+  font-size: 12px;
+}
+
+table td span.status {
+  text-transform: uppercase;
+  font-weight: 600;
+  background: #ffb8b8;
+  color: rgb(204, 0, 0);
+  display: block;
+  font-size: 11px;
+  border-radius: 3px;
+  text-align: center;
+  padding: 1% 0;
+}
+
+table td span.status.paid {
+  background: #6ED9C1;
+  color: #218c74;
+}
+
+table td span.status.grey {
+  background: #c8d6e5;
+  color: #222f3e;
+}
+
+div.modal {
+  position: absolute;
+  background: #fff;
+  z-index: 999;
+  left: 30%;
+  right: 30%;
+  width: 40%;
+  top: 5%;
+  border-radius: 5px;
+  overflow: hidden;
+  display: none;
+}
+
+div.modal h2 {
+  margin: 0;
+  margin-bottom: 4%;
+  padding: 2% 0;
+  font-weight: 700;
+  font-size: 13px;
+  text-align: center;
+  background: #e8e9eb;
+}
+
+div.modal ul#tabs {
+  margin: 1% 3%;
+  margin-bottom: 3%;
+  font-size: 12px;
+  padding: 0;
+  border: 2px solid #dee3ea;
+  border-radius: 3px;
+  text-align: center;
+}
+
+div.modal ul#tabs li {
+  font-weight: 600;
+  padding: 2% 0;
+  width: 49.55%;
+  text-decoration: underline;
+  display: inline-block;
+  text-align: center;
+  cursor: pointer;
+}
+
+div.modal ul#tabs li + li {
+  border-left: 1px solid #dee3ea;
+}
+
+div.modal ul#tabs li.active {
+  background: #fafafa;
+  text-decoration: none;
+  cursor: default;
+  color: #aaa;
+}
+
+div.modal h3 {
+  margin-left: 3%;
+}
+
+div.modal p, div.modal div.field_with_errors, div.modal span.error {
+  margin-left: 3%;
+  margin-right: 3%;
+  margin-bottom: 1%;
+  margin-top: 2%;
+  line-height: 2;
+  font-size: 13px;
+}
+
+div.modal p span.value {
+  display: block;
+}
+
+div.modal span.error {
+  display: block;
+}
+
+div.modal p + p {
+  margin-top: 4%;
+}
+
+div.modal p label, div.field_with_errors label {
+  display: inline-block;
+  font-weight: 600;
+  font-size: 12px;
+  width: 80%;
+}
+
+div.modal p label.block, div.field_with_errors label.block {
+  display: block;
+}
+
+div.modal p label span.red {
+  color: rgb(204, 0, 0);
+  margin-left: .5%;
+}
+
+div.modal div.field_with_errors label {
+  color: rgb(204, 0, 0);
+}
+
+div.modal p input, div.modal p select, div.modal p textarea, div.modal table td input, div.modal table td select, div.modal div.field_with_errors input, div.modal table td textarea {
+  width: 95%;
+  padding: 1.75% 2%;
+  display: block;
+  font-size: 13px;
+  border: 2px solid #dee3ea;
+  border-radius: 5px;
+  outline: 0;
+}
+
+div.modal p input.hidden {
+  display: none;
+}
+
+div.modal table td input {
+  padding: 3%;
+}
+
+div.modal div.field_with_errors input {
+  border-color: rgb(204, 0, 0);
+}
+
+div.modal input[type="checkbox"] {
+  width: auto;
+  display: inline-block;
+  margin-right: 2%;
+}
+
+div.modal p select {
+  width: 99%;
+}
+
+div.modal table td select {
+  width: 102%;
+}
+
+div.modal p textarea {
+  height: 20vh;
+}
+
+div.modal p input:focus, div.modal table td input:focus {
+  background: #fafafa;
+}
+
+div.modal span.error {
+  display: none;
+}
+
+div.modal span.error-message {
+  color: rgb(204, 0, 0);
+  font-size: 12px;
+  margin-top: 0;
+}
+
+div.modal div:not(.field_with_errors):not(#ms-list-1):not(.ms-options):not(.ms-options-wrap) {
+  margin-top: 6%;
+  padding: 2% 3%;
+  background: #f8f9fb;
+  border-top: 1px solid #dee3ea;
+  text-align: right;
+}
+
+div.modal div button {
+  font-size: 14px;
+  border-radius: 3px;
+  background: #fff;
+  font-weight: 600;
+  padding: 1.5% 2.5%;
+  border: 2px solid #dee3ea;
+  color: #999;
+  cursor: pointer;
+}
+
+div.modal div button:hover {
+  background: #f0f1f2;
+  border-color: #d0d1d2;
+}
+
+div.modal div button.blue {
+  background: #0c84d2;
+  color: #fff;
+  border: 1px solid transparent;
+}
+
+div.modal div button.blue:hover {
+  background: #006BB9;
+}
+
+div.modal div button.red, div.modal div button.red2 {
+  background: rgb(204, 0, 0);
+  color: #fff;
+  border: 1px solid transparent;
+}
+
+div.modal div button.red:hover, div.modal div button.red2:hover {
+  background: #B30000;
+}
+
+div.modal button.green {
+  background: #10ac84;
+  color: #fff;
+  border: 1px solid transparent;
+}
+
+div.modal button.green:hover {
+  background: #00936B;
+}
+
+section {
+  margin: 2%;
+  margin-top: 0;
+  width: 96%;
+  background: #fff;
+  border-collapse: inherit;
+  border: 1px solid #d0d1d2;
+  border-radius: 5px;
+  border-spacing: 0;
+  table-layout: fixed;
+}
+
+section.left {
+  float: left;
+  margin-left: 2%;
+  margin-right: 0;
+  width: 46%;
+  clear: left;
+}
+
+section.right {
+  float: right;
+  margin-right: 2%;
+  margin-left: 0;
+  width: 46%;
+}
+
+section h2 {
+  margin: 0;
+  background: #f0f1f2;
+  padding: 1% 0;
+  border-bottom: 1px solid #d0d1d2;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+
+section h2 a {
+  color: #0c84d2;
+}
+
+section p {
+  margin: 0;
+  line-height: 2;
+  padding: 1% 1.5%;
+  font-size: 13px;
+  border-bottom: 1px dotted #d0d1d2;
+}
+
+section p.no-border-bottom {
+  border-bottom: 0;
+}
+
+section p:last-of-type {
+  border-bottom: 0;
+}
+
+section p:after {
+  clear: both;
+  display: block;
+  content: ' ';
+}
+
+section p label {
+  margin-right: 5%;
+  display: block;
+  width: 45%;
+  float: left;
+  font-weight: 600;
+  text-align: right;
+}
+
+section p span.value {
+  display: block;
+  float: right;
+  width: 50%;
+}
+
+section.left h2, section.right h2 {
+  padding-top: 2%;
+  padding-bottom: 2%;
+}
+section.left p, section.right p {
+  padding-top: 2%;
+  padding-bottom: 2%;
+}
+
+div.modal form table th, div.modal form table td {
+  padding: 2%;
+}
+
+div.modal form p img#thumbnail, div.modal form p img.thumbnail {
+  width: 100%;
+  display: block;
+}
+
+div.modal form span#reservation_product_name {
+  display: block;
+}
+
+div.ms-options-wrap > div.ms-options {
+  border-color: #dee3ea;
+  border-width: 2px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+div.ms-options-wrap.ms-active > div.ms-options {
+  margin: 0;
+  width: 100%;
+  position: relative;
+}
+
+div.ms-options-wrap button {
+  padding: 1.75% 2% !important;
+  font-size: 13px !important;
+}
+
+div.ms-options-wrap.ms-has-selections > button {
+  font-size: 13px;
+}
+
+div.modal img + a {
+  display: block;
+}
+
+table.numbers tr th {
+  text-align: center !important;
+}
+
+table.numbers tr td {
+  text-align: center !important;
+  padding: 2%;
+}
+
+table.numbers tr td strong {
+  display: block !important;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+table.numbers tr td span {
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+div.pagination {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  margin: 0;
+  padding: 1% 2%;
+  border-top: 1px solid #dee3ea;
+  text-align: center;
+}
+
+div.pagination a, div.pagination em {
+  padding: 4px 6px;
+  border: 1px solid #0c84d2;
+  color: #0c84d2;
+  text-decoration: none;
+}
+
+div.pagination em.current {
+  background: #0c84d2;
+  color: #fff;
+}
+
+div.pagination a.previous_page, div.pagination a.next_page {
+  display: none;
+}
+
+@media screen and (max-width: 1000px) {
+  .hidden-mobile {
+    display: none;
+  }
+  header ul:last-of-type {
+    display: none;
+  }
+  header {
+    padding: 3% 4%;
+  }
+  nav {
+    padding: 3% 4%;
+  }
+  nav ul {
+    display: none;
+  }
+  div#search svg {
+    top: 13%;
+    left: 4%;
+  }
+  div#search input {
+    float: none;
+    padding: 2%;
+    padding-left: 10%;
+    width: 86%;
+  }
+  div#search button {
+    margin-top: 2%;
+    float: none;
+    width: 100%;
+    padding: 2%;
+  }
+  table td {
+    word-break: break-all;
+  }
+  table td span.created-at {
+    display: none;
+  }
+  div.modal {
+    left: 0;
+    right: 0;
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 2500px) {
+  header {
+    padding: 1% 10%;
+  }
+  nav {
+    padding: 0 10%;
+  }
+  nav h1 {
+    padding: 1% 0;
+  }
+  nav ul li {
+    padding-top: 2.75%;
+    padding-bottom: 2%;
+  }
+  div#search {
+    margin-left: 10%;
+    margin-right: 10%;
+  }
+  table, section {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  section.left {
+    margin-left: 10%;
+    width: 38%;
+  }
+  section.right {
+    margin-right: 10%;
+    width: 38%;
+  }
+}

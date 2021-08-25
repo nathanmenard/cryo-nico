@@ -1,0 +1,42 @@
+<section class="center">
+  <h1>Modifier une réservation</h1>
+  <% if @reservation.start_time.present? %>
+    <p>Votre réservation est prévue pour le créneau suivant :</p>
+    <p><strong><%= I18n.l(@reservation.start_time, format: :long) %></strong></p>
+    <hr>
+  <% end %>
+  <h3>Utilisez le formulaire ci-dessous pour modifier la date et heure de votre rendez-vous</h2>
+  <br>
+      <table id="mini-calendar">
+      <thead>
+        <tr>
+          <th id="previous" style="width: 10%"><i class="fas fa-chevron-circle-left fa-2x"></i></th>
+          <% @dates.each do |date| %>
+            <th data-date="<%= date %>"><strong><%= l(date, format: '%a') %></strong><%= date.strftime('%d') %> <%= l(date, format: '%b') %></td>
+          <% end %>
+          <th id="next" style="width: 10%"><i class="fas fa-chevron-circle-right fa-2x"></i></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% hours = @reservation.product_price.product.opening_slots %>
+        <% hours.each_with_index do |hour, index| %>
+          <tr class="<%= index >= 6 ? 'hidden' : '' %>">
+            <td></td>
+            <% @dates.each do |date| %>
+              <td>
+                <% if @reservation.slots_for(date).include?(hour) %>
+                  <span data-date-time="<%= date %>T<%= hour %>" class="date"><%= hour %></span>
+                <% else %>
+                  <span class="taken">-</span>
+                <% end %>
+              </td>
+            <% end %>
+            <td></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <p><a href="/reservations">Annuler</a></p>
+</section>
+
+<aside data-reservation-id="<%= @reservation.id %>" style="display: none"></aside>

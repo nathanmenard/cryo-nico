@@ -1,0 +1,14 @@
+<%= form_for @room do |f| %>
+  <% if current_user.superuser %>
+    <p><%= f.label :franchise_id, 'Centre' %><%= f.collection_select :franchise_id, Franchise.all.order(:name), :id, :name %></p>
+  <% end %>
+  <p><%= f.label :name, 'Nom' %><%= f.text_field :name, required: true %></p>
+  <p><%= f.label :capacity, 'Capacité (nombre de personnes)' %><%= f.number_field :capacity, required: true %></p>
+  <div>
+    <button class="cancel" type="button">Annuler</button>
+    <% if @room.id %>
+      <button type="button" class="red" data-message="Etes-vous sûr de vouloir supprimer cette salle ? Tous les produits et réservations relatifs à cette salle seront également supprimés.">Supprimer</button>
+    <% end %>
+    <button class="blue">Enregistrer</button>
+  </div>
+<% end %>

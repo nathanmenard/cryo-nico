@@ -1,0 +1,60 @@
+<% h1 = case controller_name %>
+<% when 'franchises' %>
+  <% h1 = 'Franchises' %>
+<% when 'users' %>
+  <% h1 = 'Employés' %>
+<% when 'clients' %>
+  <% h1 = "Clients Particuliers" %>
+<% when 'companies' %>
+  <% h1 = 'Clients Professionnels' %>
+<% when 'rooms' %>
+  <% h1 = 'Salles' %>
+<% when 'products' %>
+  <% h1 = 'Prestations' %>
+<% when 'coupons' %>
+  <% h1 = 'Codes Promo' %>
+<% when 'reservations' %>
+  <% h1 = 'Réservations' %>
+<% when 'reviews' %>
+  <% h1 = 'Avis Clients' %>
+<% when 'stats' %>
+  <% h1 = 'Statistiques' %>
+<% when 'campaigns' %>
+  <% h1 = 'Campagnes' %>
+<% when 'payments' %>
+  <% h1 = 'Caisse' %>
+<% when 'external_products' %>
+  <% h1 = 'Produits D-LAB' %>
+<% when 'subscriptions' %>
+  <% h1 = 'Abonnements' %>
+<% when 'surveys' %>
+  <% h1 = 'Questionnaires de Satisfaction' %>
+<% end %>
+
+<h1><%= h1 %></h1>
+
+<% if !current_user.nutritionist && (controller_name == 'clients' || controller_name == 'companies') %>
+  <ul>
+    <li class="<%= 'active' if controller_name == 'clients' %>"><a href="/clients">Particuliers</a></li>
+    <li class="<%= 'active' if controller_name == 'companies' %>"><a href="/entreprises">Professionnels</a></li>
+  </ul>
+<% elsif controller_name == 'products' || controller_name == 'rooms' || controller_name == 'reviews' || controller_name == 'external_products' %>
+  <ul>
+    <li class="<%= 'active' if controller_name == 'products' %>"><a href="/prestations">Prestations</a></li>
+    <li class="<%= 'active' if controller_name == 'rooms' %>"><a href="/salles">Salles</a></li>
+    <li class="<%= 'active' if controller_name == 'reviews' %>"><a href="/avis">Avis Clients</a></li>
+    <li class="<%= 'active' if controller_name == 'external_products' %>"><a href="/external_products">Produits D-LAB</a></li>
+  </ul>
+<% elsif controller_name == 'payments' || controller_name == 'stats' %>
+  <ul>
+    <li class="<%= params[:view].nil? ? 'active' : '' %>"><a href="<%= request.path %>">Jour</a></li>
+    <li class="<%= params[:view] && params[:view] == 'month' ? 'active' : '' %>"><a href="<%= request.path %>?view=month">Mois</a></li>
+    <li class="<%= params[:view] && params[:view] == 'year' ? 'active' : '' %>"><a href="<%= request.path %>?view=year">Année</a></li>
+  </ul>
+<% elsif controller_name == 'coupons' || controller_name == 'campaigns' || controller_name == 'surveys' %>
+  <ul>
+    <li class="<%= 'active' if controller_name == 'coupons' %>"><a href="/codes-promo">Codes Promos</a></li>
+    <li class="<%= 'active' if controller_name == 'campaigns' %>"><a href="/campaigns">Campagnes</a></li>
+    <li class="<%= 'active' if controller_name == 'surveys' %>"><a href="/surveys">Questionnaires de Satisfaction</a></li>
+  </ul>
+<% end %>

@@ -1,0 +1,180 @@
+<div id="search">
+  <button onclick="window.location.href='/clients/'">Retourner à la liste</button>
+</div>
+<section class="left">
+  <h2>Données clients (<a data-target="#edit-profile" href="#">modifier</a>)</h2>
+  <% if current_user.superuser %>
+    <p><label>Centre</label><span class="value"><%= @client.franchise.name %></p>
+  <% end %>
+  <p><label>Sexe</label><span class="value"><%= @client.male ? '<i class="blue fas fa-mars fa-lg"></i>'.html_safe : '<i class="pink fas fa-venus fa-lg"></i>'.html_safe %></span></p>
+  <p><label>Nom de famille</label><span class="value uppercase"><%= @client.last_name %></span></p>
+  <p><label>Prénom</label><span class="value capitalize"><%= @client.first_name %></span></p>
+  <p><label>Date de naissance</label><span class="value"><%= @client.birth_date %></span></p>
+  <p><label>Objectifs</label><span class="value">
+  <% if @client.objectives.any? %>
+    <%= @client.objectives_french.join(' - ') %>
+    <% else %>
+      <%= '∅' %>
+    <% end %>
+  </span></p>
+  <p><label>Inscription à la newsletter ?</label><span class="value"><%= @client.newsletter ? 'Oui' : 'Non' %></span></p>
+</section>
+
+<section class="right">
+  <h2>Commentaires (<a data-target="#new-comment" href="#">ajouter</a>)</h2>
+  <% if @client.comments.any? %>
+    <% @client.comments.order(id: :desc).each do |comment| %>
+      <p style="padding: 1.5% 3%; line-height: 2.2">
+        <span style="margin-top: 1%; display: block; font-size: 11px; color: #666">
+          <i class="fas fa-clock"></i> <%= l(comment.created_at, format: :short) %>
+          <% if comment.updated_at != comment.created_at %>
+            - modifié le : <%= l(comment.updated_at, format: :short) %>
+          <% end %>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <i class="fas fa-user"></i> <%= comment.user.full_name %>&nbsp;&nbsp;&nbsp;&nbsp;
+          <i class="fas fa-edit"></i> <a href="#" style="color: inherit" data-target="#edit-comment-<%= comment.id %>">modifier</a>
+        </span>
+        <%= simple_format comment.body, {}, wrapper_tag: 'span' %>
+      </p>
+    <% end %>
+  <% else %>
+    <p class="center"><em>Aucun commentaire pour le moment.</em></p>
+  <% end %>
+</section>
+
+<section class="right">
+  <h2>Factures</h2>
+  <% if @client.payments.any? %>
+    <table class="no-margin">
+      <tr>
+        <th>Date</th>
+        <th style="width: 40%">N° de facture</th>
+        <th>Montant</th>
+        <th></th>
+      </tr>
+      <% @client.payments.order(id: :desc).each do |payment| %>
+        <tr>
+          <td><%= l(payment.created_at, format: :short) %></td>
+          <td><strong>Facture #<%= payment.date_id %></strong></td>
+          <td><%= number_to_currency(payment.amount / 100) %></td>
+          <td><%= link_to 'Télécharger PDF', nil, target: :blank %></td>
+        </tr>
+      <% end %>
+    </table>
+  <% else %>
+    <p class="center"><em>Aucune facture pour le moment.</em></p>
+  <% end %>
+</section>
+
+<section class="left">
+  <h2>Coordonnées (<a data-target="#edit-contacts" href="#">modifier</a>)</h2>
+  <p><label>Adresse email</label><span class="value"><%= @client.email %></span></p>
+  <p><label>N° de téléphone</label><span class="value"><%= @client.phone.present? ? @client.phone : '∅' %></span></p>
+  <p><label>Adresse postale</label><span class="value"><%= @client.address.present? ? @client.address : '∅' %></span></p>
+  <p><label>Code postal</label><span class="value"><%= @client.zip_code.present? ? @client.zip_code : '∅' %></span></p>
+  <p><label>Ville</label><span class="value"><%= @client.city.present? ? @client.city : '∅' %></span></p>
+</section>
+
+<section class="left">
+  <h2>Crédits prestations (<a data-target="#edit-credits" href="#">modifier</a>)</h2>
+  <% @products.each do |product| %>
+    <p><label><%= product.name %></label><span class="value"><%= @client.credits.where(product: product).count %></span></p>
+  <% end %>
+</section>
+
+<div class="modal" id="edit-profile">
+  <h2>Modifier la fiche client</h2>
+  <%= form_for @client do |f| %>
+    <% if @client.errors.any? %>
+      <% @client.errors.each do |key, value| %>
+        <span class="error"><%= key %>: <%= value %></span>
+      <% end %>
+    <% end %>
+    <% if current_user.superuser %>
+      <p><%= f.label :franchise_id, 'Centre' %><%= f.collection_select :franchise_id, Franchise.all.order(:name), :id, :name %></p>
+    <% end %>
+    <p><%= f.label :male, 'Genre' %><%= f.select :male, [['Homme', 'true'], ['Femme', 'false']], required: true %></p>
+    <p><%= f.label :first_name, 'Prénom' %><%= f.text_field :first_name, required: true %></p>
+    <p><%= f.label :last_name, 'Nom de famille' %><%= f.text_field :last_name, required: true %></p>
+    <p><%= f.label :birth_date, 'Date de naissance (DD/MM/YYYY)' %><%= f.text_field :birth_date, required: true %></p>
+    <p><%= f.label :objectives, 'Objectifs' %><%= f.select :objectives, [['Sport', 'sport'], ['Santé', 'health'], ['Bien-être', 'well-being'], ['Esthétique', 'look']], { prompt: nil }, { multiple: true } %>
+    <p><%= f.check_box :newsletter %><%= f.label :newsletter, 'Inscription à la newsletter' %></p>
+    <div>
+      <button class="cancel" type="button">Annuler</button>
+    <% if @client.id %>
+      <button type="button" class="red" data-message="Etes-vous sûr de vouloir supprimer ce client ? Tout son historique de réservations sera également supprimé.">Supprimer</button>
+    <% end %>
+      <button class="blue">Enregistrer</button>
+    </div>
+  <% end %>
+</div>
+
+<div style="clear: both"></div>
+
+
+<div class="modal" id="edit-contacts">
+  <h2>Modifier les coordonnées</h2>
+  <%= form_for @client do |f| %>
+    <% if @client.errors.any? %>
+      <% @client.errors.each do |key, value| %>
+        <span class="error"><%= key %>: <%= value %></span>
+      <% end %>
+    <% end %>
+    <p><%= f.label :email, 'Adresse email' %><%= f.email_field :email, required: true %></p>
+    <p><%= f.label :phone, 'N° de téléphone' %><%= f.text_field :phone %></p>
+    <p><%= f.label :address, 'Adresse postale' %><%= f.text_field :address %></p>
+    <p><%= f.label :zip_code, 'Code postal' %><%= f.text_field :zip_code %></p>
+    <p><%= f.label :city, 'Ville' %><%= f.text_field :city %></p>
+    <div>
+      <button class="cancel" type="button">Annuler</button>
+      <button class="blue">Enregistrer</button>
+    </div>
+  <% end %>
+</div>
+
+<div class="modal" id="new-comment">
+  <h2>Ajouter un commentaire</h2>
+  <%= form_for [@client, @client.comments.build] do |f| %>
+    <p><%= f.label :body, 'Commentaire (invisible pour le client)' %><%= f.text_area :body %></p>
+    <div>
+      <button class="cancel" type="button">Annuler</button>
+      <button class="blue">Enregistrer</button>
+    </div>
+  <% end %>
+</div>
+
+<% @client.comments.each do |comment| %>
+  <div class="modal" id="edit-comment-<%= comment.id %>">
+    <h2>Modifier un commentaire</h2>
+    <%= form_for [@client, comment] do |f| %>
+      <p><%= f.label :body, 'Commentaire (invisible pour le client)' %><%= f.text_area :body %></p>
+      <div>
+        <button class="cancel" type="button">Annuler</button>
+        <button type="button" class="red" data-pathname="/clients/<%= comment.client_id %>/comments/<%= comment.id %>" data-redirect-to="/clients/<%= comment.client_id %>" data-message="Etes-vous sûr de vouloir supprimer ce commentaire ?">Supprimer</button>
+        <button class="blue">Enregistrer</button>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="modal" id="edit-credits">
+  <h2>Modifier les crédits du client</h2>
+  <%= form_tag client_credits_path(@client), method: :put do %>
+    <table>
+      <tr>
+        <th>Prestation</th>
+        <th>Nombre de crédits</th>
+      </tr>
+      <% @products.each do |product| %>
+        <tr>
+          <td><%= product.name %></td>
+          <td><%= number_field_tag "credits[#{product.id}]", @client.credits.where(product: product).count, required: true %></td>
+        </tr>
+      <% end %>
+    </table>
+    <div>
+      <button class="cancel" type="button">Annuler</button>
+      <button class="blue">Enregistrer</button>
+    </div>
+  <% end %>
+</div>

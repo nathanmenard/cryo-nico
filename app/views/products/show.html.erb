@@ -1,0 +1,167 @@
+<div id="search">
+  <button onclick="window.location.href='/prestations'">Retourner à la liste</button>
+</div>
+
+<section>
+  <h2>Données (<a data-target="#edit-data" href="#">modifier</a>)</h2>
+  <p><label>Statut</label><%= @product.active ? 'Activée' : 'Désactivée' %></p>
+  <p><label>Nom</label><span class="value"><%= @product.name %></span></p>
+  <p><label>Description</label><span class="value"><%= @product.description %></span></p>
+  <p><label>Salle</label><span calss="value"><%= @product.room.name %></span></p>
+  <p><label>Durée</label><span class="value"><%= @product.duration %> minutes</span></p>
+</section>
+
+<section>
+  <h2>Images (<a data-target="#edit-images" href="#">ajouter</a>)</h2>
+  <% @product.images.each_with_index do |image, index| %>
+    <p><label>Image #<%= index + 1 %></label><span class="value"><%= link_to image.filename, image, target: :blank %> (<a href="#" class="purge-image" data-image-id="<%= image.id %>">supprimer</a>)</a></p>
+  <% end %>
+</section>
+
+<section>
+  <h2>Formulaire de contre-indication (<a href="#" data-target="#edit-disclaimer">modifier</a>)</h2>
+  <% if @product.disclaimer.present? %>
+    voir
+  <% else %>
+    <p class="center">Pas de formulaire de contre-indication pour le moment.</p>
+  <% end %>
+</section>
+
+<section>
+  <h2>Tarifs pour particuliers (<a data-target="#edit-pricing" href="#">modifier</a>)</h2>
+  <% @product.product_prices.where(professionnal: false).order(:session_count).each do |price| %>
+    <p>
+      <label>
+        <% if price.session_count == 1 %>
+          1 séance <%= price.first_time? ? '(découverte)' : '' %>
+        <% else %>
+          <%= price.session_count %> séances
+        <% end %>
+      </label>
+      <%= price.total %>€
+    </p>
+  <% end %>
+</section>
+
+<section>
+  <h2>Tarifs pour professionnels (<a data-target="#edit-pricing-pro" href="#">modifier</a>)</h2>
+  <% @product.product_prices.where(professionnal: true).order(:session_count).each do |price| %>
+    <p><label><%= price.session_count %> séance<%= price.session_count > 1 ? 's' : '' %></label><%= price.total %>€</p>
+  <% end %>
+</section>
+
+<section>
+  <h2>Abonnements (<a data-target="#add-subscription-plan" href="#">ajouter</a>)</h2>
+  <% @product.subscription_plans.order(:session_count).each do |subscription_plan| %>
+    <p><label><%= subscription_plan.session_count %> séance<%= subscription_plan.session_count > 1 ? 's' : '' %>/mois</label><%= number_to_currency(subscription_plan.total) %></p>
+  <% end %>
+</section>
+
+<div class="modal" id="edit-data">
+  <h2>Modifier la prestation</h2>
+  <%= render 'form' %>
+</div>
+
+<div class="modal" id="edit-images">
+  <h2>Modifier les images</h2>
+  <%= form_for @product, multipart: true do |f| %>
+    <p><%= f.label :images, 'Sélectionnez les images' %><%= f.file_field :images, accept: 'image/png,image/gif,image/jpeg,image/jpg', multiple: true %></p>
+    <div>
+      <button class="cancel" type="button">Annuler</button>
+      <button class="blue">Enregistrer</button>
+    </div>
+  <% end %>
+</div>
+
+<div class="modal" id="edit-pricing">
+  <h2>Modifier les tarifs pour particuliers</h2>
+  <%= form_tag product_product_prices_path(@product) do %>
+    <table class="edit-pricing">
+      <tr>
+        <th>Nombre de séances</th>
+        <th>Prix</th>
+        <th style="width: 10%"></th>
+      </tr>
+      <% @product.product_prices.where(professionnal: false).each do |price| %>
+        <tr>
+          <td>
+            <%= hidden_field_tag 'product_prices[][professionnal]', '0' %>
+            <%= hidden_field_tag 'product_prices[][first_time]', price.first_time %>
+            <%= number_field_tag 'product_prices[][session_count]', price.session_count, required: true %>
+            <%= '(séance découverte)' if price.first_time %>
+          </td>
+          <td><%= number_field_tag 'product_prices[][total]', price.total, required: true %></td>
+          <td><i class="fas fa-trash"></i></td>
+        </tr>
+      <% end %>
+      <tr>
+        <td colspan="3"><a class="new-line" href="#">Ajouter un tarif</a></td>
+      </tr>
+    </table>
+    <div>
+      <button class="cancel" type="button">Annuler</button>
+      <button class="blue">Enregistrer</button>
+    </div>
+  <% end %>
+</div>
+
+<div class="modal" id="edit-pricing-pro">
+  <h2>Modifier les tarifs pour professionnels</h2>
+  <%= form_tag product_product_prices_path(@product) do %>
+    <table>
+      <tr>
+        <th>Nombre de séances</th>
+        <th>Prix</th>
+        <th style="width: 10%"></th>
+      </tr>
+      <% @product.product_prices.where(professionnal: true).each do |price| %>
+        <tr>
+          <td>
+            <%= hidden_field_tag 'product_prices[][professionnal]', '1' %>
+            <%= number_field_tag 'product_prices[][session_count]', price.session_count, required: true %>
+          </td>
+          <td><%= number_field_tag 'product_prices[][total]', price.total, required: true %></td>
+          <td><i class="fas fa-trash"></i></td>
+        </tr>
+      <% end %>
+      <tr>
+        <td colspan="3"><a class="new-line" href="#">Ajouter un tarif</a></td>
+      </tr>
+    </table>
+    <div>
+      <button class="cancel" type="button">Annuler</button>
+      <button class="blue">Enregistrer</button>
+    </div>
+  <% end %>
+</div>
+
+<div class="modal" id="edit-disclaimer">
+  <h2>Modifier le formulaire de contre-indication</h2>
+  <%= form_for @product do |f| %>
+    <p>
+      <%= f.label :disclaimer, 'Formulaire de contre-indication' %>
+      <% if @product.disclaimer.attached? %>
+        <%= image_tag @product.disclaimer, id: 'disclaimer' %>
+        <a href="#" class="purge-disclaimer">Supprimer le formulaire</a>
+        <%= f.hidden_field :purge_disclaimer, value: '0' %>
+      <% end %>
+      <%= f.file_field :disclaimer, accept: 'image/png,image/gif,image/jpeg', class: @product.disclaimer.attached? ? 'hidden': '' %>
+    </p>
+    <div>
+      <button class="cancel" type="button">Annuler</button>
+      <button class="blue">Enregistrer</button>
+    </div>
+  <% end %>
+</div>
+
+<div class="modal" id="add-subscription-plan">
+  <h2>Ajouter un plan d'abonnement</h2>
+  <%= form_for [@product, @product.subscription_plans.new] do |f| %>
+    <p><%= f.label :session_count, 'Nombre de séances par mois' %><%= f.number_field :session_count, required: true %></p>
+    <p><%= f.label :total, 'Prix par mois' %><%= f.number_field :total, required: true %></p>
+    <div>
+      <button class="cancel" type="button">Annuler</button>
+      <button class="blue">Enregistrer</button>
+    </div>
+  <% end %>
+</div>

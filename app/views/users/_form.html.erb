@@ -1,0 +1,21 @@
+<%= form_for @user do |f| %>
+  <% if @user.errors.any? %>
+    <% @user.errors.each do |key, value| %>
+      <span class="error"><%= key %>: <%= value %></span>
+    <% end %>
+  <% end %>
+  <% if current_user.superuser %>
+    <p><%= f.label :franchise_id, 'Centre' %><%= f.collection_select :franchise_id, Franchise.all.order(:name), :id, :name %></p>
+  <% end %>
+  <p><%= f.label :last_name, 'Nom de famille' %><%= f.text_field :last_name, required: true %></p>
+  <p><%= f.label :first_name, 'Prénom' %><%= f.text_field :first_name, required: true %></p>
+  <p><%= f.label :email, 'Adresse email' %><%= f.text_field :email, required: true %></p>
+  <p><%= f.label :nutritionist, 'Rôle' %><%= f.select :nutritionist, [['Administrateur', false], ['Nutritioniste', true]], required: true %></p>
+  <div>
+    <button class="cancel" type="button">Annuler</button>
+    <% if @user.id && @user != current_user %>
+      <button type="button" class="red" data-message="Etes-vous sûr de vouloir supprimer cet utilisateur ?">Supprimer</button>
+    <% end %>
+    <button class="blue">Enregistrer</button>
+  </div>
+<% end %>

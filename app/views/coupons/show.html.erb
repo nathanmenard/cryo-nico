@@ -1,0 +1,69 @@
+<div id="search">
+  <button onclick="window.location.href='/codes-promo'">Retourner à la liste</button>
+</div>
+
+<section>
+  <h2>Informations (<a data-target="#edit" href="#">modifier</a>)</h2>
+  <% if current_user.superuser %>
+    <p><label>Centre(s)</label><span class="value"><%= @coupon.franchises.pluck(:name).join(' - ') %></span></p>
+  <% end %>
+  <p><label>Nom</label><span class="value"><%= @coupon.name %></span></p>
+  <p><label>Code</label><span class="value uppercase"><%= @coupon.code %></span></p>
+  <p><label>Valeur</label><span class="value"><%= @coupon.value %><%= @coupon.percentage ? '%' : '€' %></span></p>
+  <p><label>Date de début</label><span class="value">
+    <%= @coupon.start_date.present? ? l(@coupon.start_date, format: :short) : '∅' %>
+  </span></p>
+  <p><label>Date de fin</label><span class="value">
+    <%= @coupon.end_date.present? ? l(@coupon.end_date, format: :short) : '∅' %>
+  </span></p>
+  <p><label>Quota d'utilisation</label><span class="value"><%= @coupon.usage_limit ? @coupon.usage_limit : 'Illimité' %></span></p>
+  <p><label>Quota d'utilisation par personne</label><span class="value"><%= @coupon.usage_limit_per_person ? @coupon.usage_limit_per_person : 'Illimité' %></span></p>
+</section>
+
+<section>
+  <h2>Ciblage (<a data-target="#edit-target" href="#">modifier</a>)</h2>
+ <p><label>Clientèle</label><span class="value">
+   <%= @coupon.new_client ? 'Nouveaux clients uniquement' : 'Tous les clients' %>
+ </span></p>
+ <p><label>Genre</label><span class="value"><% if @coupon.male.nil? %>
+     Homme & Femme
+   <% else %>
+     <%= @coupon.male ? 'Homme' : 'Femme' %>
+   <% end %>
+ </span></p>
+ <p><label>Objectifs</label><span class="value">
+     <% if @coupon.objectives %>
+       <%= @coupon.objectives_french.join(' - ') %>
+     <% else %>
+       Tous les objectifs
+     <% end %>
+ </span></p>
+ <p><label>Prestations</label><span class="value">
+     <% if @coupon.product_ids.try(:any?) %>
+       <%= @coupon.product_names.join(' - ') %>
+     <% else %>
+       Toutes les prestations
+     <% end %>
+ </span></p>
+</section>
+
+<div class="modal" id="edit">
+  <h2>Modifier le code promo</h2>
+  <%= render 'form' %>
+</div>
+
+<% product_display = current_user.superuser ? :name_with_franchise : :name %>
+<div class="modal" id="edit-target">
+  <h2>Modifier le ciblage</h2>
+  <%= form_for @coupon do |f| %>
+    <p><%= f.label :male, 'Cible' %><%= f.select :male, [['Homme & Femme', nil], ['Homme', 'true'], ['Femme', 'false']] %></p>
+    <p><%= f.label :objectives, 'Objectifs' %><%= f.select :objectives, [['Sport', 'sport'], ['Santé', 'health'], ['Bien-être', 'well-being'], ['Esthétique', 'look']], { }, { multiple: true } %>
+    <p><%= f.label :product_ids, 'Prestations' %><%= f.collection_select :product_ids, @products, :id, product_display, { }, { multiple: true } %>
+    <p><%= f.check_box :new_client %><%= f.label :new_client, "Pour les nouveaux clients uniquement" %></p>
+    <div>
+      <button class="cancel" type="button">Annuler</button>
+      <button type="button" class="red" data-message="Etes-vous sûr de vouloir supprimer ce code promo ?">Supprimer</button>
+      <button type="submit" class="blue">Enregistrer</button>
+    </div>
+  <% end %>
+</div>

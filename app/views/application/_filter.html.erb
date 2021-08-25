@@ -1,0 +1,10 @@
+<% if current_user.superuser %>
+  <select id="filter" data-current-franchise-id="<%= current_user.franchise_id %>">
+    <% if local_assigns[:include_blank] != false %>
+      <option value="all">Filtrer par franchise</option>
+    <% end %>
+    <% @franchises.each do |franchise| %>
+      <option <%= params[:franchise_id].to_i == franchise.id ? 'selected' : '' %> value="<%= franchise.id %>"><%= franchise.name %></option>
+    <% end %>
+  </select>
+<% end %>

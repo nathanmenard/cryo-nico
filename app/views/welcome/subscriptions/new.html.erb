@@ -1,0 +1,23 @@
+<section class="center">
+  <form method="post" action="https://paiement.systempay.fr/vads-payment/" id="payment_form">
+    <input type="hidden" name="signature" value="<%= @data[:signature] %>">
+    <input type="hidden" name="vads_action_mode" value="<%= @data[:vads_action_mode] %>">
+    <input type="hidden" name="vads_amount" value="<%= @data[:vads_amount] %>">
+    <input type="hidden" name="vads_ctx_mode" value="<%= @data[:vads_ctx_mode] %>">
+    <input type="hidden" name="vads_currency" value="<%= @data[:vads_currency] %>">
+    <input type="hidden" name="vads_page_action" value="<%= @data[:vads_page_action] %>">
+    <input type="hidden" name="vads_payment_config" value="<%= @data[:vads_payment_config] %>">
+    <input type="hidden" name="vads_redirect_error_message" value="<%= @data[:vads_redirect_error_message] %>">
+    <input type="hidden" name="vads_redirect_error_timeout" value="<%= @data[:vads_redirect_error_timeout] %>">
+    <input type="hidden" name="vads_redirect_success_message" value="<%= @data[:vads_redirect_success_message] %>">
+    <input type="hidden" name="vads_redirect_success_timeout" value="<%= @data[:vads_redirect_success_timeout] %>">
+    <input type="hidden" name="vads_return_mode" value="<%= @data[:vads_return_mode] %>">
+    <input type="hidden" name="vads_site_id" value="<%= @data[:vads_site_id] %>">
+    <input type="hidden" name="vads_trans_date" value="<%= @data[:vads_trans_date] %>">
+    <input type="hidden" name="vads_theme_config" value="<%= @data[:vads_theme_config] %>">
+    <input type="hidden" name="vads_trans_id" value="<%= @data[:vads_trans_id] %>">
+    <input type="hidden" name="vads_url_return" value="<%= @data[:vads_url_return] %>">
+    <input type="hidden" name="vads_version" value="<%= @data[:vads_version] %>">
+    <button id="pay">Payer en ligne</button>
+  </form>
+</section>

@@ -1,0 +1,15 @@
+<%= form_for @blocker do |f| %>
+  <%= f.hidden_field :room_id %>
+  <p><%= f.label :start_time, 'Début' %><%= f.datetime_field :start_time, class: 'datetimepicker', required: true %></p>
+  <p><%= f.label :end_time, 'Fin' %><%= f.datetime_field :end_time, class: 'datetimepicker', required: true %></p>
+  <p><%= f.label :notes, 'Notes' %><%= f.text_area :notes, required: true %></p>
+  <p><%= f.check_box :global %><%= f.label :global, "Global à toutes les salles" %></p>
+  <p><%= f.check_box :blocking %><%= f.label :blocking, "Empêcher les réservations" %></p>
+  <div>
+    <button class="cancel" type="button">Annuler</button>
+    <% if @blocker.id %>
+      <button type="button" class="red" data-message="Etes-vous sûr de vouloir supprimer ce créneau ?">Supprimer</button>
+    <% end %>
+    <button class="blue">Enregistrer</button>
+  </div>
+<% end %>

@@ -1,0 +1,29 @@
+<section class="center">
+  <h1>Parrainage</h1>
+  <% if @clients.empty? %>
+    <p>Vous n'avez parrainé personne pour le moment.</p>
+  <% else %>
+    <table>
+      <tr>
+        <th>Prénom</th>
+        <th>Nom</th>
+        <th>Adresse email</th>
+        <th>Date d'inscription</th>
+      </tr>
+      <% @clients.each do |client| %>
+        <tr>
+          <td><%= client.first_name %></td>
+          <td><%= client.last_name %></td>
+          <td><%= client.email %></td>
+          <td><%= l(client.created_at, format: :short) %></td>
+        </tr>
+      <% end %>
+    </table>
+  <% end %>
+  <hr>
+  <h3>Inviter quelqu'un</h3>
+  <%= form_with do |f| %>
+    <p><%= f.label :email, 'Adresse email' %><%= f.email_field :email %></p>
+    <button>Envoyer l'invitation</button>
+  <% end %>
+</section>

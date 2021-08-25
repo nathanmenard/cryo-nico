@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/favicon.jpg">
+    <link rel="stylesheet" type="text/css" href="/auth.css">
+  </head>
+  <body>
+    <header><a href="/"><img src="/logo.svg"></a></header>
+    <%= form_with do |f| %>
+      <h1>Connexion</h1>
+      <h2>Complétez le formulaire ci-dessous pour vous connectez à votre compte Cryotera (<%= current_franchise.name %>).</h2>
+      <% if @error %>
+        <p>Email ou mot de passe incorrect. Veuillez réessayer.</p>
+      <% end %>
+      <p><%= f.label :email, 'Votre adresse email' %><%= f.text_field :email, required: true %></p>
+      <p><%= f.label :password, 'Votre mot de passe' %><%= f.password_field :password, required: true %></p>
+      <button>Valider</button>
+      <p><a href="/mot-de-passe-oublie">Mot de passe oublié ?</a><br>
+      Pas encore inscris ? <a href="/inscription">Inscrivez-vous gratuitement !</a></p>
+    <% end %>
+  </body>
+</html>

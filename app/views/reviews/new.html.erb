@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="icon" type="image/png" href="/favicon.jpg">
+    <link rel="stylesheet" type="text/css" href="/auth.css">
+  </head>
+  <body>
+    <header><a href="/"><img src="/logo.svg"></a></header>
+    <%= form_with do |f| %>
+      <% if @reservation %>
+        <h1>Je donne mon avis !</h1>
+        <h2>Complétez le formulaire ci-dessous pour donner votre avis concernant votre récente séance de <%= @reservation.product_price.product.name %>.</h2>
+      <% end %>
+      <% if @success == false %>
+        <p>Une erreur est survenue. Veuillez réessayer.</p>
+      <% end %>
+      <% if @success %>
+        <h2>Merci ! Votre avis sera publié d'ici peu dès lors qu'il sera verifié par un membre de l'équipe Crytoera.</h2>
+        <button type="button" onclick="window.location.href='/'">Retour à l'accueil</button>
+      <% else %>
+        <%= f.hidden_field :key, value: params[:key] %>
+        <p><%= f.label :body, 'Votre avis' %><%= f.text_area :body, required: true %></p>
+        <button>Valider</button>
+      <% end %>
+    <% end %>
+  </body>
+</html>

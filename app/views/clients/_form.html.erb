@@ -1,0 +1,24 @@
+<%= form_for @client do |f| %>
+  <%= f.hidden_field :redirect_to_reservations, value: defined?(redirect_to_reservations) %>
+  <%= f.hidden_field :redirect_to_payments, value: @client.redirect_to_payments %>
+  <% if @client.errors.any? %>
+    <% @client.errors.each do |key, value| %>
+      <span class="error"><%= key %>: <%= value %></span>
+    <% end %>
+  <% end %>
+  <% if current_user.superuser %>
+    <p><%= f.label :franchise_id, 'Centre' %><%= f.collection_select :franchise_id, Franchise.all.order(:name), :id, :name %></p>
+  <% end %>
+  <p><%= f.label :first_name, 'Prénom' %><%= f.text_field :first_name, required: true %></p>
+  <p><%= f.label :last_name, 'Nom de famille' %><%= f.text_field :last_name, required: true %></p>
+  <p><%= f.label :male, 'Genre' %><%= f.select :male, [['Homme', 'true'], ['Femme', 'false']], required: true %></p>
+  <p><%= f.label :birth_date, 'Date de naissance (DD/MM/YYYY)' %><%= f.text_field :birth_date, required: true %></p>
+  <p><%= f.label :email, 'Adresse email' %><%= f.email_field :email, required: true %></p>
+  <p><%= f.label :phone, 'N° de téléphone' %><%= f.text_field :phone %></p>
+  <p><%= f.label :objectives, 'Objectifs' %><%= f.select :objectives, [['Sport', 'sport'], ['Santé', 'health'], ['Bien-être', 'well-being'], ['Esthétique', 'look']], { prompt: nil }, { multiple: true } %>
+  <p><%= f.check_box :newsletter %><%= f.label :newsletter, 'Inscription à la newsletter' %></p>
+  <div>
+    <button class="cancel" type="button">Annuler</button>
+    <button class="blue">Enregistrer</button>
+  </div>
+<% end %>

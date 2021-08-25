@@ -1,0 +1,184 @@
+<% @title = "#{@product.name} - Cryotera" %>
+<% pro = current_client.is_a?(CompanyClient) && !current_client.can_make_reservations? %>
+
+<section style="<%= pro ? 'margin-left: 20%; margin-right: 20%; width:60%' : '' %>">
+  <h2>Informations du produit</h2>
+  <img class="thumbnail" src="https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80">
+  <div class="infos">
+    <span id="duration">Durée : <%= @product.duration %> minutes</span>
+    <h1><%= @product.name %></h1>
+    <% if @product.room.franchise.address %>
+      <p><strong>Adresse</strong><%= @product.room.franchise.address %><br><%= @product.room.franchise.zip_code %> <%= @product.room.franchise.city %></p>
+    <% end %>
+    <% if @product.room.franchise.phone %>
+      <p><strong>N° de téléphone</strong><%= @product.room.franchise.phone %></p>
+    <% end %>
+  </div>
+  <hr>
+  <table class="section">
+    <tr>
+      <td><i class="fas fa-info-circle fa-2x"></i></td>
+      <td>
+        <h3>Description</h3>
+        <p><%= @product.description %></p>
+      </td>
+    </tr>
+  </table>
+  <% if (current_client.is_a?(Client)) || (current_client.is_a?(CompanyClient) && current_client.can_make_reservations?) %>
+    <hr>
+    <table class="section">
+      <tr>
+        <td><i class="fas fa-tags fa-2x"></i></td>
+        <td>
+          <h3>Tarification pour les particuliers</h3><span>Les prix affichés sont TTC.</span>
+          <table class="pricing">
+            <tr>
+              <th>Nombre de séances</th>
+              <th>Prix total</th>
+              <th></th>
+            </tr>
+            <% ever_bought = @product.ever_bought_by?(current_client) %>
+            <% @product.product_prices.where(professionnal: false).order(:session_count).each do |product_price| %>
+              <% if product_price.session_count == 1 && product_price.first_time == ever_bought %>
+                <% next %>
+              <% end %>
+              <tr>
+                <td>
+                  <%= pluralize(product_price.session_count, 'séance') %>
+                  <%= '(découverte)' if product_price.first_time? %>
+                </td>
+                <td><%= number_to_currency(product_price.total) %></td>
+                <td>
+                  <% if product_price.session_count > 1 %>
+                    <a href="#" class="buy-multiple" data-product-price-id="<%= product_price.id %>" data-professionnal="false">Acheter</a>
+                  <% else %>
+                    <a href="#">Réserver</a>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <% if @product.subscription_plans.any? %>
+      <hr>
+      <table class="section">
+        <tr>
+          <td><i class="fas fa-tags fa-2x"></i></td>
+          <td>
+            <h3>Tarification abonnements mensuels</h3><span>Les prix affichés sont TTC.</span>
+            <table class="pricing">
+              <tr>
+                <th>Nombre de séances</th>
+                <th>Prix par mois</th>
+                <th></th>
+              </tr>
+              <% @product.subscription_plans.order(:session_count).each do |subscription_plan| %>
+                <tr>
+                  <td>
+                    <%= pluralize(subscription_plan.session_count, 'séance') %>
+                  </td>
+                  <td><%= number_to_currency(subscription_plan.total) %></td>
+                  <td>
+                    <%= link_to "S'abonner", new_subscription_path(subscription_plan_id: subscription_plan.id) %>
+                  </td>
+                </tr>
+              <% end %>
+            </table>
+          </td>
+        </tr>
+      </table>
+    <% end %>
+  <% else %>
+    <hr>
+    <table class="section">
+      <tr>
+        <td><i class="fas fa-tags fa-2x"></i></td>
+        <td>
+          <h3>Tarification pour les professionnels</h3><span>Les prix affichés sont TTC.</span>
+          <table class="pricing">
+            <tr>
+              <th>Nombre de séances</th>
+              <th>Prix total</th>
+            </tr>
+            <% @product.product_prices.where(professionnal: true).each do |product_price| %>
+              <tr>
+                <td><%= pluralize(product_price.session_count, 'séance') %></td>
+                <td><%= number_to_currency(product_price.total) %></td>
+                <td><a href="#" class="buy-multiple" data-product-price-id="<%= product_price.id %>" data-professionnal="true">Acheter</a></td>
+              </tr>
+            <% end %>
+          </table>
+        </td>
+      </tr>
+    </table>
+  <% end %>
+  <% if @product.images.any? %>
+    <hr style="margin-bottom: 0">
+  <% end %>
+  <% @product.images.each do |image| %>
+    <%= image_tag image, class: 'image' %>
+  <% end %>
+</section>
+
+<section style="<%= pro ? 'margin-left: 20%; margin-right: 20%; width:60%' : '' %>">
+  <h2>Avis Clients</h2>
+  <% if @product.reviews.published.empty? %>
+    <div class="review">
+      <p><em>Nos clients n'ont publié aucun avis sur ce produit pour le moment.</em></p>
+    </div>
+  <% end %>
+  <% @product.reviews.published.each_with_index do |review, index| %>
+    <div class="review">
+      <h3><%= review.client ? review.client.first_name : review.company_client.first_name %>, le <%= l(review.created_at, format: :short) %></h3>
+      <%= simple_format review.body %>
+    </div>
+    <% if index < @product.reviews.published.size - 1 %>
+      <hr>
+    <% end %>
+  <% end %>
+</section>
+
+
+<% if !pro %>
+  <aside data-professionnal="<%= current_client.is_a?(CompanyClient) && !current_client.can_make_reservations? %>" data-product-price-id="<%= @product_price.id %>">
+    <h2>Réserver une Séance<span>Du Lundi au Jeudi de 8h à 20h</span></h2>
+    <% if current_client.nil? %>
+      <p><a href="/login">Connectez-vous</a> à votre compte (ou <a href="/inscription">inscrivez-vous</a> gratuitement) pour voir les créneaux disponibles.</p>
+    <% else %>
+      <table id="mini-calendar">
+        <thead>
+          <tr>
+            <th id="previous" style="width: 10%"><i class="fas fa-chevron-circle-left fa-2x"></i></th>
+            <% @dates.each do |date| %>
+              <th data-date="<%= date %>"><strong><%= l(date, format: '%a') %></strong><%= date.strftime('%d') %> <%= l(date, format: '%b') %></td>
+            <% end %>
+            <th id="next" style="width: 10%"><i class="fas fa-chevron-circle-right fa-2x"></i></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% hours = @product.opening_slots %>
+          <% hours.each_with_index do |hour, index| %>
+            <tr class="<%= index >= 6 ? 'hidden' : '' %>">
+              <td></td>
+              <% @dates.each do |date| %>
+                <td>
+                  <% if @reservation.slots_for(date).include?(hour) %>
+                    <span data-date-time="<%= date %>T<%= hour %>" class="date"><%= hour %></span>
+                  <% else %>
+                    <span class="taken">-</span>
+                  <% end %>
+                </td>
+              <% end %>
+              <td></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <a href="#" id="see-more">Voir plus d'horaires</a>
+    <% end %>
+  </aside>
+<% end %>
+
+<div class="clearfix"></div>

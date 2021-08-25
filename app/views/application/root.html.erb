@@ -1,0 +1,21 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/favicon.jpg">
+    <link rel="stylesheet" type="text/css" href="/auth.css">
+  </head>
+  <body>
+    <header><a href="/"><img src="/logo.svg"></a></header>
+    <form>
+    <h1>Sélectionnez un centre Cryotera :</h1>
+    <ul>
+      <% @franchises.each do |franchise| %>
+        <li><a href="http://<%= franchise.slug %>.lvh.me:3000"><%= franchise.name %></a></li>
+      <% end %>
+    </ul>
+  </form>
+  </body>
+</html>

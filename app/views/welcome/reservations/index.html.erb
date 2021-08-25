@@ -1,0 +1,41 @@
+<section class="center">
+  <h1>Mes réservations</h1>
+  <table>
+  <tr>
+    <th style="width: 15%">Statut</th>
+    <th>Date</th>
+    <th>Montant</th>
+    <th></th>
+  </tr>
+  <% @reservations.each do |reservation| %>
+    <tr>
+      <td>
+        <span class="status <%= reservation.paid? ? 'paid' : 'failed' %>">
+          <%= reservation.paid? ? 'Payée' : 'En attente de paiement' %>
+        </span>
+      </td>
+      <td>
+        <% if reservation.start_time %>
+          <%= l(reservation.start_time, format: :short) %>
+        <% else %>
+          <em>Pas de date</em>
+        <% end %>
+      </td>
+      <td><%= number_to_currency(reservation.payment.amount / 100) %></td>
+      <td>
+        <% if reservation.paid? %>
+          <ul>
+            <% if reservation.payment %>
+              <li><%= link_to 'Télécharger la facture', reservation.invoice, target: :blank %></li>
+            <% end %>
+            <% if reservation.start_time > Date.tomorrow %>
+              <li><a href="/reservations/<%= reservation.id %>">Modifier la réservation</a></li>
+              <li><a href="#" data-reservation-id="<%= reservation.id %>" id="cancel-reservation">Annuler la réservation</a></li>
+            <% end %>
+          </ul>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+</section>

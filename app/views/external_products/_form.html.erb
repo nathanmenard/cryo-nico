@@ -1,0 +1,15 @@
+<%= form_for @external_product do |f| %>
+  <% if current_user.superuser %>
+    <p><%= f.label :franchise_id, 'Centre' %><%= f.collection_select :franchise_id, Franchise.all.order(:name), :id, :name %></p>
+  <% end %>
+  <p><%= f.label :name, 'Nom' %><%= f.text_field :name, required: true %></p>
+  <p><%= f.label :amount, 'Prix TTC' %><%= f.number_field :amount, required: true %></p>
+  <p><%= f.label :tax_rate, 'Taux de TVA' %><%= f.select :tax_rate, [['5.5%', '5.5'], ['20%', '20']], required: true %></p>
+  <div>
+    <button class="cancel" type="button">Annuler</button>
+    <% if @external_product.id %>
+      <button type="button" class="red" data-message="Etes-vous sûr de vouloir supprimer ce produit ?">Supprimer</button>
+    <% end %>
+    <button class="blue">Enregistrer</button>
+  </div>
+<% end %>

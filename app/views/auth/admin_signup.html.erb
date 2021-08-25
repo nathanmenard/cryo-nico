@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="icon" type="image/png" href="/favicon.jpg">
+    <link rel="stylesheet" type="text/css" href="/login.css">
+  </head>
+  <body>
+    <img src="/logo.svg">
+    <%= form_for @user, url: admin_inscription_path do |f| %>
+      <p class="welcome">Vous avez été invité à rejoindre le centre Cryotera de <strong><%= current_franchise.name %></strong>.</p>
+      <hr>
+      <%= f.hidden_field :key, value: @user.private_key, name: :key %>
+      <%= f.hidden_field :email %>
+      <p><%= f.label :email, 'Votre adresse email' %><%= f.email_field :email, required: true, disabled: true %></p>
+      <p><%= f.label :password, 'Choisissez un mot de passe' %><%= f.password_field :password, required: true %></p>
+      <button>Inscription</button>
+    <% end %>
+  </body>
+</html>

@@ -1,0 +1,19 @@
+<%= form_for @franchise do |f| %>
+  <% if @franchise.errors.any? %>
+    <% @franchise.errors.each do |key, value| %>
+      <span class="error"><%= key %> : <%= value %></span>
+    <% end %>
+  <% end %>
+  <p><%= f.label :name, 'Nom du centre (ville)' %><%= f.text_field :name, required: true %></p>
+  <p><%= f.label :email, 'Adresse email (pour le formulaire de contact)' %><%= f.email_field :email %></p>
+  <p><%= f.label :phone, 'N° de téléphone' %><%= f.text_field :phone %></p>
+  <p><%= f.label :siret, 'SIRET' %><%= f.text_field :siret %></p>
+  <p><%= f.label :tax_id, 'N° de TVA' %><%= f.text_field :tax_id %></p>
+  <p><%= f.label :address, 'Adresse postale' %><%= f.text_area :address %></p>
+  <p><%= f.label :zip_code, 'Code postal' %><%= f.text_field :zip_code %></p>
+  <p><%= f.label :city, 'Ville' %><%= f.text_field :city %></p>
+  <div>
+    <button class="cancel" type="button">Annuler</button>
+    <button class="blue">Enregistrer</button>
+  </div>
+<% end %>

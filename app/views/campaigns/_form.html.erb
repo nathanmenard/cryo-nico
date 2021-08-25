@@ -1,0 +1,16 @@
+<%= form_for @campaign do |f| %>
+  <% if current_user.superuser %>
+    <p><%= f.label :franchise_id, 'Centre' %><%= f.collection_select :franchise_id, Franchise.all.order(:name), :id, :name %></p>
+  <% end %>
+  <p><%= f.label :campaign_template_id, 'Sélectionnez un template' %><%= f.collection_select :campaign_template_id, current_user.franchise.campaign_templates, :id, :name %></p>
+  <p><%= f.label :name, 'Nom (utilisé en interne)' %><%= f.text_field :name, required: true %></p>
+  <p><%= f.label :body, 'Contenu du mail' %><%= f.text_area :body, required: true %></p>
+  <p><%= f.label :sms, 'Type de mailing' %><%= f.select :sms, [['Email', 'false'], ['SMS', 'true']], required: true %></p>
+  <div>
+    <button class="cancel" type="button">Annuler</button>
+    <% if @campaign.id %>
+      <button type="button" class="red" data-message="Etes-vous sûr de vouloir supprimer ce mailing ?">Supprimer</button>
+    <% end %>
+    <button class="blue">Enregistrer</button>
+  </div>
+<% end %>

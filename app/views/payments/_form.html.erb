@@ -1,0 +1,13 @@
+<%= form_for payment do |f| %>
+  <% if payment.errors.any? %>
+    <% payment.errors.each do |key, value| %>
+      <span class="error"><%= key %>: <%= value %></span>
+    <% end %>
+  <% end %>
+  <%= f.hidden_field :as_paid, value: true %>
+  <p><%= f.label :mode, 'Mode de paiement' %><%= f.select :mode, [['Espèces', 'cash'], ['Chèque', 'check'], ['CB', 'pos']] %></p>
+  <div>
+    <button class="cancel" type="button">Annuler</button>
+    <button class="blue">Enregistrer</button>
+  </div>
+<% end %>

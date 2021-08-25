@@ -1,0 +1,13 @@
+<%= form_for @subscription do |f| %>
+  <p><%= f.label :client_id, 'Sélectionnez un client' %><%= f.collection_select :client_id, current_user.franchise.clients.order(:last_name).order(first_name: :desc), :id, :full_name, {}, required: true %></p>
+  <p><%= f.label :product_id, 'Sélectionnez une prestation' %><%= f.collection_select :product_id, current_user.franchise.products.order(:name), :id, :name, { include_blank: true }, required: true %></p>
+  <p><%= f.label :session_count, 'Nombre de séances par mois' %><%= f.number_field :session_count, required: true %></p>
+  <p><%= f.label :total, 'Prix par mois' %><%= f.number_field :total, required: true %></p>
+  <div>
+    <button class="cancel" type="button">Annuler</button>
+    <% if @subscription.id %>
+      <button type="button" class="red" data-message="Etes-vous sûr de vouloir annuler cet abonnement ?">Supprimer</button>
+    <% end %>
+    <button class="blue">Enregistrer</button>
+  </div>
+<% end %>

@@ -1,0 +1,22 @@
+<% room_display = current_user.superuser ? :name_with_franchise : :name %>
+
+<%= form_for @product do |f| %>
+  <p><%= f.label :active, 'Activée ?' %><%= f.select :active, [['Oui', true], ['Non', false]], required: true %></p>
+  <p><%= f.label :name, 'Nom' %><%= f.text_field :name, required: true %></p>
+  <p><%= f.label :description, 'Description' %><%= f.text_area :description, required: true %></p>
+  <p><%= f.label :duration, 'Durée (en minutes)' %><%= f.number_field :duration, required: true %></p>
+  <p><%= f.label :room_id, 'Salle' %><%= f.collection_select :room_id, @rooms, :id, room_display %></p>
+  <p>
+    <%= f.label :thumbnail, 'Vignette' %>
+    <% if @product.thumbnail.attached? %>
+      <%= image_tag @product.thumbnail, id: 'thumbnail' %>
+      <a href="#" class="purge-thumbnail">Supprimer l'image</a>
+      <%= f.hidden_field :purge_thumbnail, value: '0' %>
+    <% end %>
+    <%= f.file_field :thumbnail, accept: 'image/png,image/gif,image/jpeg', class: @product.thumbnail.attached? ? 'hidden': '' %>
+  </p>
+  <div>
+    <button class="cancel" type="button">Annuler</button>
+    <button class="blue">Enregistrer</button>
+  </div>
+<% end %>

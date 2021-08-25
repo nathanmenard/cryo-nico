@@ -1,0 +1,13 @@
+<%= form_for business_hour do |f| %>
+  <% if business_hour.errors.any? %>
+    <% business_hour.errors.each do |key, value| %>
+      <span class="error"><%= key %> : <%= value %></span>
+    <% end %>
+  <% end %>
+  aa
+  <div>
+    <button class="cancel" type="button">Annuler</button>
+    <button class="blue">Enregistrer</button>
+  </div>
+<% end %>
+

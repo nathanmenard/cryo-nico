@@ -1,0 +1,1035 @@
+  [1m[35m (116.5ms)[0m  [1m[35mCREATE DATABASE "test_app_development" ENCODING = 'unicode'[0m
+  [1m[35m (70.9ms)[0m  [1m[35mCREATE DATABASE "test_app_test" ENCODING = 'unicode'[0m
+  [1m[35mSQL (0.7ms)[0m  [1m[35mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35mSQL (422.6ms)[0m  [1m[35mCREATE EXTENSION IF NOT EXISTS "unaccent"[0m
+  [1m[35m (1.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "active_storage_attachments" CASCADE[0m
+  [1m[35m (12.0ms)[0m  [1m[35mCREATE TABLE "active_storage_attachments" ("id" bigserial primary key, "name" character varying NOT NULL, "record_type" character varying NOT NULL, "record_id" bigint NOT NULL, "blob_id" bigint NOT NULL, "created_at" timestamp NOT NULL)[0m
+  [1m[35m (2.0ms)[0m  [1m[35mCREATE INDEX "index_active_storage_attachments_on_blob_id" ON "active_storage_attachments" ("blob_id")[0m
+  [1m[35m (3.1ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_active_storage_attachments_uniqueness" ON "active_storage_attachments" ("record_type", "record_id", "name", "blob_id")[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE IF EXISTS "active_storage_blobs" CASCADE[0m
+  [1m[35m (6.4ms)[0m  [1m[35mCREATE TABLE "active_storage_blobs" ("id" bigserial primary key, "key" character varying NOT NULL, "filename" character varying NOT NULL, "content_type" character varying, "metadata" text, "byte_size" bigint NOT NULL, "checksum" character varying NOT NULL, "created_at" timestamp NOT NULL, "service_name" character varying NOT NULL)[0m
+  [1m[35m (2.1ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_active_storage_blobs_on_key" ON "active_storage_blobs" ("key")[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE IF EXISTS "active_storage_variant_records" CASCADE[0m
+  [1m[35m (4.6ms)[0m  [1m[35mCREATE TABLE "active_storage_variant_records" ("id" bigserial primary key, "blob_id" bigint NOT NULL, "variation_digest" character varying NOT NULL)[0m
+  [1m[35m (2.0ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_active_storage_variant_records_uniqueness" ON "active_storage_variant_records" ("blob_id", "variation_digest")[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE IF EXISTS "blockers" CASCADE[0m
+  [1m[35m (5.3ms)[0m  [1m[35mCREATE TABLE "blockers" ("id" bigserial primary key, "start_time" timestamp NOT NULL, "end_time" timestamp NOT NULL, "notes" text NOT NULL, "user_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "franchise_id" bigint NOT NULL, "room_id" bigint NOT NULL, "blocking" boolean DEFAULT TRUE, "global" boolean DEFAULT FALSE, "blocker_id" bigint)[0m
+  [1m[35m (2.0ms)[0m  [1m[35mCREATE INDEX "index_blockers_on_blocker_id" ON "blockers" ("blocker_id")[0m
+  [1m[35m (1.5ms)[0m  [1m[35mCREATE INDEX "index_blockers_on_franchise_id" ON "blockers" ("franchise_id")[0m
+  [1m[35m (3.0ms)[0m  [1m[35mCREATE INDEX "index_blockers_on_room_id" ON "blockers" ("room_id")[0m
+  [1m[35m (1.9ms)[0m  [1m[35mCREATE INDEX "index_blockers_on_user_id" ON "blockers" ("user_id")[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE IF EXISTS "business_hours" CASCADE[0m
+  [1m[35m (5.1ms)[0m  [1m[35mCREATE TABLE "business_hours" ("id" bigserial primary key, "franchise_id" bigint NOT NULL, "day" character varying NOT NULL, "morning_start_time" time NOT NULL, "morning_end_time" time NOT NULL, "afternoon_start_time" time NOT NULL, "afternoon_end_time" time NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (2.0ms)[0m  [1m[35mCREATE INDEX "index_business_hours_on_franchise_id" ON "business_hours" ("franchise_id")[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE IF EXISTS "campaign_templates" CASCADE[0m
+  [1m[35m (5.5ms)[0m  [1m[35mCREATE TABLE "campaign_templates" ("id" bigserial primary key, "franchise_id" bigint NOT NULL, "external_id" integer NOT NULL, "name" text NOT NULL, "subject" text NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "html" text NOT NULL)[0m
+  [1m[35m (1.8ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_campaign_templates_on_external_id" ON "campaign_templates" ("external_id")[0m
+  [1m[35m (1.8ms)[0m  [1m[35mCREATE INDEX "index_campaign_templates_on_franchise_id" ON "campaign_templates" ("franchise_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[35mDROP TABLE IF EXISTS "campaigns" CASCADE[0m
+  [1m[35m (5.3ms)[0m  [1m[35mCREATE TABLE "campaigns" ("id" bigserial primary key, "name" character varying NOT NULL, "body" text NOT NULL, "recipients" character varying[], "sms" boolean NOT NULL, "draft" boolean DEFAULT TRUE NOT NULL, "franchise_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "filters" json, "sendinblue_list_id" integer, "sendinblue_campaign_id" integer, "campaign_template_id" bigint)[0m
+  [1m[35m (1.9ms)[0m  [1m[35mCREATE INDEX "index_campaigns_on_campaign_template_id" ON "campaigns" ("campaign_template_id")[0m
+  [1m[35m (1.8ms)[0m  [1m[35mCREATE INDEX "index_campaigns_on_franchise_id" ON "campaigns" ("franchise_id")[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE IF EXISTS "clients" CASCADE[0m
+  [1m[35m (6.2ms)[0m  [1m[35mCREATE TABLE "clients" ("id" bigserial primary key, "first_name" character varying NOT NULL, "last_name" character varying NOT NULL, "male" boolean NOT NULL, "franchise_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "email" character varying NOT NULL, "phone" character varying, "objectives" character varying[] DEFAULT '{}', "address" text, "zip_code" character varying, "city" character varying, "password_digest" character varying, "newsletter" boolean, "last_logged_at" timestamp, "client_id" bigint, "user_id" bigint, "birth_date" date)[0m
+  [1m[35m (1.9ms)[0m  [1m[35mCREATE INDEX "index_clients_on_client_id" ON "clients" ("client_id")[0m
+  [1m[35m (2.0ms)[0m  [1m[35mCREATE INDEX "index_clients_on_franchise_id" ON "clients" ("franchise_id")[0m
+  [1m[35m (1.8ms)[0m  [1m[35mCREATE INDEX "index_clients_on_user_id" ON "clients" ("user_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[35mDROP TABLE IF EXISTS "comments" CASCADE[0m
+  [1m[35m (5.2ms)[0m  [1m[35mCREATE TABLE "comments" ("id" bigserial primary key, "user_id" bigint NOT NULL, "client_id" bigint NOT NULL, "body" text NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (2.0ms)[0m  [1m[35mCREATE INDEX "index_comments_on_client_id" ON "comments" ("client_id")[0m
+  [1m[35m (1.6ms)[0m  [1m[35mCREATE INDEX "index_comments_on_user_id" ON "comments" ("user_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[35mDROP TABLE IF EXISTS "companies" CASCADE[0m
+  [1m[35m (5.9ms)[0m  [1m[35mCREATE TABLE "companies" ("id" bigserial primary key, "name" character varying NOT NULL, "email" character varying NOT NULL, "phone" character varying NOT NULL, "address" text NOT NULL, "zip_code" character varying NOT NULL, "city" character varying NOT NULL, "siret" character varying NOT NULL, "comment" text, "franchise_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (2.1ms)[0m  [1m[35mCREATE INDEX "index_companies_on_franchise_id" ON "companies" ("franchise_id")[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE IF EXISTS "company_clients" CASCADE[0m
+  [1m[35m (6.0ms)[0m  [1m[35mCREATE TABLE "company_clients" ("id" bigserial primary key, "first_name" character varying NOT NULL, "last_name" character varying NOT NULL, "email" character varying NOT NULL, "job" character varying, "phone" character varying, "company_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "password_digest" character varying, "last_logged_at" timestamp, "company_client_id" bigint, "male" boolean, "objectives" character varying[] DEFAULT '{}', "address" text, "zip_code" character varying, "city" character varying, "boolean" boolean, "birth_date" date, "newsletter" boolean)[0m
+  [1m[35m (2.0ms)[0m  [1m[35mCREATE INDEX "index_company_clients_on_company_client_id" ON "company_clients" ("company_client_id")[0m
+  [1m[35m (2.2ms)[0m  [1m[35mCREATE INDEX "index_company_clients_on_company_id" ON "company_clients" ("company_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[35mDROP TABLE IF EXISTS "coupons" CASCADE[0m
+  [1m[35m (5.6ms)[0m  [1m[35mCREATE TABLE "coupons" ("id" bigserial primary key, "name" character varying NOT NULL, "value" integer NOT NULL, "code" character varying NOT NULL, "percentage" boolean NOT NULL, "start_date" date, "end_date" date, "usage_limit" integer, "usage_limit_per_person" integer, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "male" boolean, "objectives" character varying[], "product_ids" character varying[], "new_client" boolean DEFAULT FALSE, "loyalty" boolean DEFAULT FALSE, "client_id" bigint, "company_client_id" bigint)[0m
+  [1m[35m (1.9ms)[0m  [1m[35mCREATE INDEX "index_coupons_on_client_id" ON "coupons" ("client_id")[0m
+  [1m[35m (2.1ms)[0m  [1m[35mCREATE INDEX "index_coupons_on_company_client_id" ON "coupons" ("company_client_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[35mDROP TABLE IF EXISTS "coupons_franchises" CASCADE[0m
+  [1m[35m (4.7ms)[0m  [1m[35mCREATE TABLE "coupons_franchises" ("id" bigserial primary key, "coupon_id" bigint NOT NULL, "franchise_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (2.5ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_coupons_franchises_on_coupon_id_and_franchise_id" ON "coupons_franchises" ("coupon_id", "franchise_id")[0m
+  [1m[35m (2.2ms)[0m  [1m[35mCREATE INDEX "index_coupons_franchises_on_coupon_id" ON "coupons_franchises" ("coupon_id")[0m
+  [1m[35m (2.1ms)[0m  [1m[35mCREATE INDEX "index_coupons_franchises_on_franchise_id" ON "coupons_franchises" ("franchise_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[35mDROP TABLE IF EXISTS "credits" CASCADE[0m
+  [1m[35m (4.4ms)[0m  [1m[35mCREATE TABLE "credits" ("id" bigserial primary key, "client_id" bigint, "product_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "company_client_id" bigint)[0m
+  [1m[35m (1.9ms)[0m  [1m[35mCREATE INDEX "index_credits_on_client_id" ON "credits" ("client_id")[0m
+  [1m[35m (1.7ms)[0m  [1m[35mCREATE INDEX "index_credits_on_company_client_id" ON "credits" ("company_client_id")[0m
+  [1m[35m (23.3ms)[0m  [1m[35mCREATE INDEX "index_credits_on_product_id" ON "credits" ("product_id")[0m
+  [1m[35m (0.5ms)[0m  [1m[35mDROP TABLE IF EXISTS "external_products" CASCADE[0m
+  [1m[35m (7.2ms)[0m  [1m[35mCREATE TABLE "external_products" ("id" bigserial primary key, "franchise_id" bigint NOT NULL, "name" character varying NOT NULL, "amount" integer NOT NULL, "tax_rate" float NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (1.8ms)[0m  [1m[35mCREATE INDEX "index_external_products_on_franchise_id" ON "external_products" ("franchise_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[35mDROP TABLE IF EXISTS "franchises" CASCADE[0m
+  [1m[35m (111.2ms)[0m  [1m[35mCREATE TABLE "franchises" ("id" bigserial primary key, "name" character varying NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "banking_provider" character varying, "banking_secret_key" text, "banking_secret_id" text, "email" character varying, "address" text, "zip_code" character varying, "city" character varying, "siret" character varying, "tax_id" character varying, "iban" character varying, "phone" character varying, "instagram_username" text, "facebook_chat_snippet" text, "sendinblue_api_key" text)[0m
+  [1m[35m (1.8ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_franchises_on_name" ON "franchises" ("name")[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE IF EXISTS "payments" CASCADE[0m
+  [1m[35m (64.9ms)[0m  [1m[35mCREATE TABLE "payments" ("id" bigserial primary key, "client_id" bigint, "amount" integer NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "bank_name" character varying, "transaction_id" character varying, "coupon_id" bigint, "as_paid" boolean, "product_name" character varying NOT NULL, "mode" character varying, "tax_rate" float DEFAULT 20.0, "company_client_id" bigint)[0m
+  [1m[35m (2.3ms)[0m  [1m[35mCREATE INDEX "index_payments_on_client_id" ON "payments" ("client_id")[0m
+  [1m[35m (1.7ms)[0m  [1m[35mCREATE INDEX "index_payments_on_company_client_id" ON "payments" ("company_client_id")[0m
+  [1m[35m (1.6ms)[0m  [1m[35mCREATE INDEX "index_payments_on_coupon_id" ON "payments" ("coupon_id")[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE IF EXISTS "product_prices" CASCADE[0m
+  [1m[35m (3.9ms)[0m  [1m[35mCREATE TABLE "product_prices" ("id" bigserial primary key, "session_count" integer NOT NULL, "total" float NOT NULL, "professionnal" boolean NOT NULL, "product_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "first_time" boolean DEFAULT FALSE NOT NULL)[0m
+  [1m[35m (1.8ms)[0m  [1m[35mCREATE INDEX "index_product_prices_on_product_id" ON "product_prices" ("product_id")[0m
+  [1m[35m (0.5ms)[0m  [1m[35mDROP TABLE IF EXISTS "products" CASCADE[0m
+  [1m[35m (5.4ms)[0m  [1m[35mCREATE TABLE "products" ("id" bigserial primary key, "name" character varying NOT NULL, "description" text NOT NULL, "duration" integer NOT NULL, "room_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "active" boolean DEFAULT TRUE)[0m
+  [1m[35m (1.9ms)[0m  [1m[35mCREATE INDEX "index_products_on_room_id" ON "products" ("room_id")[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE IF EXISTS "reservations" CASCADE[0m
+  [1m[35m (6.2ms)[0m  [1m[35mCREATE TABLE "reservations" ("id" bigserial primary key, "start_time" timestamp, "email_notification" boolean NOT NULL, "first_time" boolean NOT NULL, "client_id" bigint, "product_price_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "company_client_id" bigint, "payment_id" bigint, "canceled" boolean DEFAULT FALSE NOT NULL, "cancelation_reason" text, "refunded" boolean DEFAULT FALSE NOT NULL, "paid_by_credit" boolean DEFAULT FALSE NOT NULL, "notes" text, "user_id" bigint, "signature" text, "to_be_paid_online" boolean NOT NULL)[0m
+  [1m[35m (3.0ms)[0m  [1m[35mCREATE INDEX "index_reservations_on_client_id" ON "reservations" ("client_id")[0m
+  [1m[35m (1.6ms)[0m  [1m[35mCREATE INDEX "index_reservations_on_company_client_id" ON "reservations" ("company_client_id")[0m
+  [1m[35m (1.6ms)[0m  [1m[35mCREATE INDEX "index_reservations_on_payment_id" ON "reservations" ("payment_id")[0m
+  [1m[35m (2.4ms)[0m  [1m[35mCREATE INDEX "index_reservations_on_product_price_id" ON "reservations" ("product_price_id")[0m
+  [1m[35m (2.1ms)[0m  [1m[35mCREATE INDEX "index_reservations_on_user_id" ON "reservations" ("user_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[35mDROP TABLE IF EXISTS "reviews" CASCADE[0m
+  [1m[35m (6.8ms)[0m  [1m[35mCREATE TABLE "reviews" ("id" bigserial primary key, "body" text NOT NULL, "published" boolean, "product_id" bigint NOT NULL, "client_id" bigint, "company_client_id" bigint, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "homepage" boolean)[0m
+  [1m[35m (2.2ms)[0m  [1m[35mCREATE INDEX "index_reviews_on_client_id" ON "reviews" ("client_id")[0m
+  [1m[35m (1.6ms)[0m  [1m[35mCREATE INDEX "index_reviews_on_company_client_id" ON "reviews" ("company_client_id")[0m
+  [1m[35m (2.3ms)[0m  [1m[35mCREATE INDEX "index_reviews_on_product_id" ON "reviews" ("product_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[35mDROP TABLE IF EXISTS "rooms" CASCADE[0m
+  [1m[35m (6.2ms)[0m  [1m[35mCREATE TABLE "rooms" ("id" bigserial primary key, "name" character varying NOT NULL, "capacity" integer NOT NULL, "franchise_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (2.1ms)[0m  [1m[35mCREATE INDEX "index_rooms_on_franchise_id" ON "rooms" ("franchise_id")[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE IF EXISTS "subscription_plans" CASCADE[0m
+  [1m[35m (6.5ms)[0m  [1m[35mCREATE TABLE "subscription_plans" ("id" bigserial primary key, "product_id" bigint NOT NULL, "session_count" integer NOT NULL, "total" float NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (1.7ms)[0m  [1m[35mCREATE INDEX "index_subscription_plans_on_product_id" ON "subscription_plans" ("product_id")[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "subscriptions" CASCADE[0m
+  [1m[35m (7.5ms)[0m  [1m[35mCREATE TABLE "subscriptions" ("id" bigserial primary key, "subscription_plan_id" bigint NOT NULL, "client_id" bigint NOT NULL, "external_id" character varying, "status" character varying NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "to_be_canceled_at" timestamp)[0m
+  [1m[35m (1.9ms)[0m  [1m[35mCREATE INDEX "index_subscriptions_on_client_id" ON "subscriptions" ("client_id")[0m
+  [1m[35m (2.3ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_subscriptions_on_subscription_plan_id_and_client_id" ON "subscriptions" ("subscription_plan_id", "client_id")[0m
+  [1m[35m (1.4ms)[0m  [1m[35mCREATE INDEX "index_subscriptions_on_subscription_plan_id" ON "subscriptions" ("subscription_plan_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[35mDROP TABLE IF EXISTS "survey_questions" CASCADE[0m
+  [1m[35m (4.3ms)[0m  [1m[35mCREATE TABLE "survey_questions" ("id" bigserial primary key, "survey_id" bigint NOT NULL, "body" text NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (2.0ms)[0m  [1m[35mCREATE INDEX "index_survey_questions_on_survey_id" ON "survey_questions" ("survey_id")[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE IF EXISTS "surveys" CASCADE[0m
+  [1m[35m (5.3ms)[0m  [1m[35mCREATE TABLE "surveys" ("id" bigserial primary key, "product_id" bigint NOT NULL, "name" character varying NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (2.1ms)[0m  [1m[35mCREATE INDEX "index_surveys_on_product_id" ON "surveys" ("product_id")[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE IF EXISTS "users" CASCADE[0m
+  [1m[35m (5.8ms)[0m  [1m[35mCREATE TABLE "users" ("id" bigserial primary key, "email" character varying NOT NULL, "first_name" character varying NOT NULL, "last_name" character varying NOT NULL, "franchise_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "superuser" boolean DEFAULT FALSE NOT NULL, "last_logged_at" timestamp, "password_digest" character varying, "nutritionist" boolean DEFAULT FALSE NOT NULL)[0m
+  [1m[35m (1.6ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_email" ON "users" ("email")[0m
+  [1m[35m (1.0ms)[0m  [1m[35mCREATE INDEX "index_users_on_franchise_id" ON "users" ("franchise_id")[0m
+  [1m[35m (10.6ms)[0m  [1m[35mALTER TABLE "active_storage_attachments" ADD CONSTRAINT "fk_rails_c3b3935057"
+FOREIGN KEY ("blob_id")
+  REFERENCES "active_storage_blobs" ("id")
+[0m
+  [1m[35m (1.3ms)[0m  [1m[35mALTER TABLE "active_storage_variant_records" ADD CONSTRAINT "fk_rails_993965df05"
+FOREIGN KEY ("blob_id")
+  REFERENCES "active_storage_blobs" ("id")
+[0m
+  [1m[35m (1.1ms)[0m  [1m[35mALTER TABLE "blockers" ADD CONSTRAINT "fk_rails_e0849eddae"
+FOREIGN KEY ("blocker_id")
+  REFERENCES "blockers" ("id")
+[0m
+  [1m[35m (1.2ms)[0m  [1m[35mALTER TABLE "blockers" ADD CONSTRAINT "fk_rails_59c546b1e0"
+FOREIGN KEY ("franchise_id")
+  REFERENCES "franchises" ("id")
+[0m
+  [1m[35m (1.0ms)[0m  [1m[35mALTER TABLE "blockers" ADD CONSTRAINT "fk_rails_fc2fc1d405"
+FOREIGN KEY ("room_id")
+  REFERENCES "rooms" ("id")
+[0m
+  [1m[35m (1.3ms)[0m  [1m[35mALTER TABLE "blockers" ADD CONSTRAINT "fk_rails_7614b1ad87"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+[0m
+  [1m[35m (1.0ms)[0m  [1m[35mALTER TABLE "business_hours" ADD CONSTRAINT "fk_rails_07296b7035"
+FOREIGN KEY ("franchise_id")
+  REFERENCES "franchises" ("id")
+[0m
+  [1m[35m (1.0ms)[0m  [1m[35mALTER TABLE "campaign_templates" ADD CONSTRAINT "fk_rails_9c0d24ccff"
+FOREIGN KEY ("franchise_id")
+  REFERENCES "franchises" ("id")
+[0m
+  [1m[35m (1.2ms)[0m  [1m[35mALTER TABLE "campaigns" ADD CONSTRAINT "fk_rails_649cc82f45"
+FOREIGN KEY ("campaign_template_id")
+  REFERENCES "campaign_templates" ("id")
+[0m
+  [1m[35m (1.3ms)[0m  [1m[35mALTER TABLE "campaigns" ADD CONSTRAINT "fk_rails_80a802b165"
+FOREIGN KEY ("franchise_id")
+  REFERENCES "franchises" ("id")
+[0m
+  [1m[35m (1.3ms)[0m  [1m[35mALTER TABLE "clients" ADD CONSTRAINT "fk_rails_d80a12f36a"
+FOREIGN KEY ("client_id")
+  REFERENCES "clients" ("id")
+[0m
+  [1m[35m (9.4ms)[0m  [1m[35mALTER TABLE "clients" ADD CONSTRAINT "fk_rails_2cc4be869c"
+FOREIGN KEY ("franchise_id")
+  REFERENCES "franchises" ("id")
+[0m
+  [1m[35m (2.3ms)[0m  [1m[35mALTER TABLE "clients" ADD CONSTRAINT "fk_rails_21c421fd41"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+[0m
+  [1m[35m (1.9ms)[0m  [1m[35mALTER TABLE "comments" ADD CONSTRAINT "fk_rails_b7673bd1d8"
+FOREIGN KEY ("client_id")
+  REFERENCES "clients" ("id")
+[0m
+  [1m[35m (1.8ms)[0m  [1m[35mALTER TABLE "comments" ADD CONSTRAINT "fk_rails_03de2dc08c"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+[0m
+  [1m[35m (2.5ms)[0m  [1m[35mALTER TABLE "companies" ADD CONSTRAINT "fk_rails_3eefe7b64c"
+FOREIGN KEY ("franchise_id")
+  REFERENCES "franchises" ("id")
+[0m
+  [1m[35m (2.1ms)[0m  [1m[35mALTER TABLE "company_clients" ADD CONSTRAINT "fk_rails_c014da4d2a"
+FOREIGN KEY ("company_id")
+  REFERENCES "companies" ("id")
+[0m
+  [1m[35m (1.7ms)[0m  [1m[35mALTER TABLE "company_clients" ADD CONSTRAINT "fk_rails_3a46874aaf"
+FOREIGN KEY ("company_client_id")
+  REFERENCES "company_clients" ("id")
+[0m
+  [1m[35m (2.6ms)[0m  [1m[35mALTER TABLE "coupons" ADD CONSTRAINT "fk_rails_58e636839e"
+FOREIGN KEY ("client_id")
+  REFERENCES "clients" ("id")
+[0m
+  [1m[35m (2.8ms)[0m  [1m[35mALTER TABLE "coupons" ADD CONSTRAINT "fk_rails_9a0bfe084f"
+FOREIGN KEY ("company_client_id")
+  REFERENCES "company_clients" ("id")
+[0m
+  [1m[35m (2.3ms)[0m  [1m[35mALTER TABLE "coupons_franchises" ADD CONSTRAINT "fk_rails_cdbd738627"
+FOREIGN KEY ("coupon_id")
+  REFERENCES "coupons" ("id")
+[0m
+  [1m[35m (2.1ms)[0m  [1m[35mALTER TABLE "coupons_franchises" ADD CONSTRAINT "fk_rails_09b1528f6c"
+FOREIGN KEY ("franchise_id")
+  REFERENCES "franchises" ("id")
+[0m
+  [1m[35m (19.0ms)[0m  [1m[35mALTER TABLE "credits" ADD CONSTRAINT "fk_rails_deafe42183"
+FOREIGN KEY ("client_id")
+  REFERENCES "clients" ("id")
+[0m
+  [1m[35m (2.0ms)[0m  [1m[35mALTER TABLE "credits" ADD CONSTRAINT "fk_rails_e446f4a120"
+FOREIGN KEY ("company_client_id")
+  REFERENCES "company_clients" ("id")
+[0m
+  [1m[35m (2.6ms)[0m  [1m[35mALTER TABLE "credits" ADD CONSTRAINT "fk_rails_d7bdca2159"
+FOREIGN KEY ("product_id")
+  REFERENCES "products" ("id")
+[0m
+  [1m[35m (2.0ms)[0m  [1m[35mALTER TABLE "payments" ADD CONSTRAINT "fk_rails_66d0485df7"
+FOREIGN KEY ("client_id")
+  REFERENCES "clients" ("id")
+[0m
+  [1m[35m (23.3ms)[0m  [1m[35mALTER TABLE "payments" ADD CONSTRAINT "fk_rails_94c15b6260"
+FOREIGN KEY ("company_client_id")
+  REFERENCES "company_clients" ("id")
+[0m
+  [1m[35m (2.6ms)[0m  [1m[35mALTER TABLE "payments" ADD CONSTRAINT "fk_rails_a7af64837e"
+FOREIGN KEY ("coupon_id")
+  REFERENCES "coupons" ("id")
+[0m
+  [1m[35m (1.9ms)[0m  [1m[35mALTER TABLE "product_prices" ADD CONSTRAINT "fk_rails_e7ec0c97a3"
+FOREIGN KEY ("product_id")
+  REFERENCES "products" ("id")
+[0m
+  [1m[35m (22.9ms)[0m  [1m[35mALTER TABLE "products" ADD CONSTRAINT "fk_rails_71119d0f74"
+FOREIGN KEY ("room_id")
+  REFERENCES "rooms" ("id")
+[0m
+  [1m[35m (3.4ms)[0m  [1m[35mALTER TABLE "reservations" ADD CONSTRAINT "fk_rails_9c963d6879"
+FOREIGN KEY ("client_id")
+  REFERENCES "clients" ("id")
+[0m
+  [1m[35m (2.0ms)[0m  [1m[35mALTER TABLE "reservations" ADD CONSTRAINT "fk_rails_9089ec93d0"
+FOREIGN KEY ("company_client_id")
+  REFERENCES "company_clients" ("id")
+[0m
+  [1m[35m (1.7ms)[0m  [1m[35mALTER TABLE "reservations" ADD CONSTRAINT "fk_rails_653e025ae0"
+FOREIGN KEY ("payment_id")
+  REFERENCES "payments" ("id")
+[0m
+  [1m[35m (3.5ms)[0m  [1m[35mALTER TABLE "reservations" ADD CONSTRAINT "fk_rails_57d12ba9a0"
+FOREIGN KEY ("product_price_id")
+  REFERENCES "product_prices" ("id")
+[0m
+  [1m[35m (2.1ms)[0m  [1m[35mALTER TABLE "reservations" ADD CONSTRAINT "fk_rails_48a92fce51"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+[0m
+  [1m[35m (2.4ms)[0m  [1m[35mALTER TABLE "reviews" ADD CONSTRAINT "fk_rails_09c661230e"
+FOREIGN KEY ("client_id")
+  REFERENCES "clients" ("id")
+[0m
+  [1m[35m (1.8ms)[0m  [1m[35mALTER TABLE "reviews" ADD CONSTRAINT "fk_rails_9d0eb81ddb"
+FOREIGN KEY ("company_client_id")
+  REFERENCES "company_clients" ("id")
+[0m
+  [1m[35m (2.0ms)[0m  [1m[35mALTER TABLE "reviews" ADD CONSTRAINT "fk_rails_bedd9094d4"
+FOREIGN KEY ("product_id")
+  REFERENCES "products" ("id")
+[0m
+  [1m[35m (2.3ms)[0m  [1m[35mALTER TABLE "rooms" ADD CONSTRAINT "fk_rails_f0b4b4dbb2"
+FOREIGN KEY ("franchise_id")
+  REFERENCES "franchises" ("id")
+[0m
+  [1m[35m (2.5ms)[0m  [1m[35mALTER TABLE "subscription_plans" ADD CONSTRAINT "fk_rails_b112070c01"
+FOREIGN KEY ("product_id")
+  REFERENCES "products" ("id")
+[0m
+  [1m[35m (2.6ms)[0m  [1m[35mALTER TABLE "subscriptions" ADD CONSTRAINT "fk_rails_19fca7085f"
+FOREIGN KEY ("client_id")
+  REFERENCES "clients" ("id")
+[0m
+  [1m[35m (2.1ms)[0m  [1m[35mALTER TABLE "subscriptions" ADD CONSTRAINT "fk_rails_355348f174"
+FOREIGN KEY ("subscription_plan_id")
+  REFERENCES "subscription_plans" ("id")
+[0m
+  [1m[35m (2.5ms)[0m  [1m[35mALTER TABLE "survey_questions" ADD CONSTRAINT "fk_rails_d0558bfd89"
+FOREIGN KEY ("survey_id")
+  REFERENCES "surveys" ("id")
+[0m
+  [1m[35m (2.4ms)[0m  [1m[35mALTER TABLE "surveys" ADD CONSTRAINT "fk_rails_c90d5f8eac"
+FOREIGN KEY ("product_id")
+  REFERENCES "products" ("id")
+[0m
+  [1m[35m (2.1ms)[0m  [1m[35mALTER TABLE "users" ADD CONSTRAINT "fk_rails_59dbdb3a6d"
+FOREIGN KEY ("franchise_id")
+  REFERENCES "franchises" ("id")
+[0m
+  [1m[35m (3.7ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (1.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20210403144414)[0m
+  [1m[35m (1.7ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES
+(20201210113651),
+(20201210120740),
+(20201210160543),
+(20201210160628),
+(20201210210158),
+(20201210215009),
+(20201211062827),
+(20201211071117),
+(20201211073907),
+(20201211082755),
+(20201211084146),
+(20201211091237),
+(20201211104343),
+(20201211201257),
+(20201211210401),
+(20201213110125),
+(20201213124045),
+(20201213211714),
+(20201214100626),
+(20201214194631),
+(20201215060316),
+(20201215155629),
+(20201216092326),
+(20201216112432),
+(20201217061511),
+(20201217084127),
+(20201217101314),
+(20201217104734),
+(20201217191427),
+(20201218080658),
+(20201218102920),
+(20201218154722),
+(20201218210010),
+(20201218215523),
+(20201218232014),
+(20201219122750),
+(20201219152716),
+(20201219161208),
+(20201219171959),
+(20201222164447),
+(20201222164831),
+(20210105113409),
+(20210105115440),
+(20210108060758),
+(20210108070854),
+(20210111153606),
+(20210112124102),
+(20210113081649),
+(20210113091434),
+(20210113094818),
+(20210113101431),
+(20210113114637),
+(20210113114649),
+(20210114092643),
+(20210126104824),
+(20210126105327),
+(20210212100055),
+(20210212100718),
+(20210212101427),
+(20210212190840),
+(20210212191736),
+(20210213100135),
+(20210214151228),
+(20210214152044),
+(20210214170041),
+(20210215111109),
+(20210216172240),
+(20210216173810),
+(20210219135420),
+(20210219210219),
+(20210220105848),
+(20210220111027),
+(20210224111801),
+(20210225113019),
+(20210226061808),
+(20210228190400),
+(20210301100937),
+(20210301102742),
+(20210301102940),
+(20210301163420),
+(20210316164127),
+(20210316164128),
+(20210317080650),
+(20210317103606),
+(20210317104614),
+(20210322173449),
+(20210322183705),
+(20210323080952),
+(20210323082530),
+(20210323200507),
+(20210323201751),
+(20210323202824),
+(20210323203358),
+(20210323220946),
+(20210324174744),
+(20210324182901),
+(20210324201928),
+(20210324211535),
+(20210328202118),
+(20210329120535),
+(20210330085255),
+(20210402105927),
+(20210402112754),
+(20210403102920);
+
+[0m
+  [1m[35m (3.1ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.4ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (7.3ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "environment"], ["value", "development"], ["created_at", "2021-08-23 10:07:01.511410"], ["updated_at", "2021-08-23 10:07:01.511410"]]
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.5ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "schema_sha1"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.3ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "schema_sha1"], ["value", "75ecc48a7c5ef8e8c2ff1c88434cba543d701699"], ["created_at", "2021-08-23 10:07:01.525482"], ["updated_at", "2021-08-23 10:07:01.525482"]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35mSQL (0.4ms)[0m  [1m[35mCREATE EXTENSION IF NOT EXISTS "plpgsql"[0m
+  [1m[35mSQL (4.6ms)[0m  [1m[35mCREATE EXTENSION IF NOT EXISTS "unaccent"[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE IF EXISTS "active_storage_attachments" CASCADE[0m
+  [1m[35m (3.5ms)[0m  [1m[35mCREATE TABLE "active_storage_attachments" ("id" bigserial primary key, "name" character varying NOT NULL, "record_type" character varying NOT NULL, "record_id" bigint NOT NULL, "blob_id" bigint NOT NULL, "created_at" timestamp NOT NULL)[0m
+  [1m[35m (0.6ms)[0m  [1m[35mCREATE INDEX "index_active_storage_attachments_on_blob_id" ON "active_storage_attachments" ("blob_id")[0m
+  [1m[35m (0.7ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_active_storage_attachments_uniqueness" ON "active_storage_attachments" ("record_type", "record_id", "name", "blob_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "active_storage_blobs" CASCADE[0m
+  [1m[35m (6.0ms)[0m  [1m[35mCREATE TABLE "active_storage_blobs" ("id" bigserial primary key, "key" character varying NOT NULL, "filename" character varying NOT NULL, "content_type" character varying, "metadata" text, "byte_size" bigint NOT NULL, "checksum" character varying NOT NULL, "created_at" timestamp NOT NULL, "service_name" character varying NOT NULL)[0m
+  [1m[35m (1.6ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_active_storage_blobs_on_key" ON "active_storage_blobs" ("key")[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "active_storage_variant_records" CASCADE[0m
+  [1m[35m (4.1ms)[0m  [1m[35mCREATE TABLE "active_storage_variant_records" ("id" bigserial primary key, "blob_id" bigint NOT NULL, "variation_digest" character varying NOT NULL)[0m
+  [1m[35m (1.7ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_active_storage_variant_records_uniqueness" ON "active_storage_variant_records" ("blob_id", "variation_digest")[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE IF EXISTS "blockers" CASCADE[0m
+  [1m[35m (4.4ms)[0m  [1m[35mCREATE TABLE "blockers" ("id" bigserial primary key, "start_time" timestamp NOT NULL, "end_time" timestamp NOT NULL, "notes" text NOT NULL, "user_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "franchise_id" bigint NOT NULL, "room_id" bigint NOT NULL, "blocking" boolean DEFAULT TRUE, "global" boolean DEFAULT FALSE, "blocker_id" bigint)[0m
+  [1m[35m (0.8ms)[0m  [1m[35mCREATE INDEX "index_blockers_on_blocker_id" ON "blockers" ("blocker_id")[0m
+  [1m[35m (0.6ms)[0m  [1m[35mCREATE INDEX "index_blockers_on_franchise_id" ON "blockers" ("franchise_id")[0m
+  [1m[35m (1.4ms)[0m  [1m[35mCREATE INDEX "index_blockers_on_room_id" ON "blockers" ("room_id")[0m
+  [1m[35m (1.5ms)[0m  [1m[35mCREATE INDEX "index_blockers_on_user_id" ON "blockers" ("user_id")[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "business_hours" CASCADE[0m
+  [1m[35m (4.9ms)[0m  [1m[35mCREATE TABLE "business_hours" ("id" bigserial primary key, "franchise_id" bigint NOT NULL, "day" character varying NOT NULL, "morning_start_time" time NOT NULL, "morning_end_time" time NOT NULL, "afternoon_start_time" time NOT NULL, "afternoon_end_time" time NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (0.6ms)[0m  [1m[35mCREATE INDEX "index_business_hours_on_franchise_id" ON "business_hours" ("franchise_id")[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "campaign_templates" CASCADE[0m
+  [1m[35m (2.3ms)[0m  [1m[35mCREATE TABLE "campaign_templates" ("id" bigserial primary key, "franchise_id" bigint NOT NULL, "external_id" integer NOT NULL, "name" text NOT NULL, "subject" text NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "html" text NOT NULL)[0m
+  [1m[35m (0.9ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_campaign_templates_on_external_id" ON "campaign_templates" ("external_id")[0m
+  [1m[35m (1.0ms)[0m  [1m[35mCREATE INDEX "index_campaign_templates_on_franchise_id" ON "campaign_templates" ("franchise_id")[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "campaigns" CASCADE[0m
+  [1m[35m (2.2ms)[0m  [1m[35mCREATE TABLE "campaigns" ("id" bigserial primary key, "name" character varying NOT NULL, "body" text NOT NULL, "recipients" character varying[], "sms" boolean NOT NULL, "draft" boolean DEFAULT TRUE NOT NULL, "franchise_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "filters" json, "sendinblue_list_id" integer, "sendinblue_campaign_id" integer, "campaign_template_id" bigint)[0m
+  [1m[35m (0.6ms)[0m  [1m[35mCREATE INDEX "index_campaigns_on_campaign_template_id" ON "campaigns" ("campaign_template_id")[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE INDEX "index_campaigns_on_franchise_id" ON "campaigns" ("franchise_id")[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "clients" CASCADE[0m
+  [1m[35m (1.7ms)[0m  [1m[35mCREATE TABLE "clients" ("id" bigserial primary key, "first_name" character varying NOT NULL, "last_name" character varying NOT NULL, "male" boolean NOT NULL, "franchise_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "email" character varying NOT NULL, "phone" character varying, "objectives" character varying[] DEFAULT '{}', "address" text, "zip_code" character varying, "city" character varying, "password_digest" character varying, "newsletter" boolean, "last_logged_at" timestamp, "client_id" bigint, "user_id" bigint, "birth_date" date)[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE INDEX "index_clients_on_client_id" ON "clients" ("client_id")[0m
+  [1m[35m (0.6ms)[0m  [1m[35mCREATE INDEX "index_clients_on_franchise_id" ON "clients" ("franchise_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "index_clients_on_user_id" ON "clients" ("user_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "comments" CASCADE[0m
+  [1m[35m (1.5ms)[0m  [1m[35mCREATE TABLE "comments" ("id" bigserial primary key, "user_id" bigint NOT NULL, "client_id" bigint NOT NULL, "body" text NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (0.6ms)[0m  [1m[35mCREATE INDEX "index_comments_on_client_id" ON "comments" ("client_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "index_comments_on_user_id" ON "comments" ("user_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "companies" CASCADE[0m
+  [1m[35m (1.5ms)[0m  [1m[35mCREATE TABLE "companies" ("id" bigserial primary key, "name" character varying NOT NULL, "email" character varying NOT NULL, "phone" character varying NOT NULL, "address" text NOT NULL, "zip_code" character varying NOT NULL, "city" character varying NOT NULL, "siret" character varying NOT NULL, "comment" text, "franchise_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "index_companies_on_franchise_id" ON "companies" ("franchise_id")[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "company_clients" CASCADE[0m
+  [1m[35m (1.5ms)[0m  [1m[35mCREATE TABLE "company_clients" ("id" bigserial primary key, "first_name" character varying NOT NULL, "last_name" character varying NOT NULL, "email" character varying NOT NULL, "job" character varying, "phone" character varying, "company_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "password_digest" character varying, "last_logged_at" timestamp, "company_client_id" bigint, "male" boolean, "objectives" character varying[] DEFAULT '{}', "address" text, "zip_code" character varying, "city" character varying, "boolean" boolean, "birth_date" date, "newsletter" boolean)[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "index_company_clients_on_company_client_id" ON "company_clients" ("company_client_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "index_company_clients_on_company_id" ON "company_clients" ("company_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "coupons" CASCADE[0m
+  [1m[35m (1.6ms)[0m  [1m[35mCREATE TABLE "coupons" ("id" bigserial primary key, "name" character varying NOT NULL, "value" integer NOT NULL, "code" character varying NOT NULL, "percentage" boolean NOT NULL, "start_date" date, "end_date" date, "usage_limit" integer, "usage_limit_per_person" integer, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "male" boolean, "objectives" character varying[], "product_ids" character varying[], "new_client" boolean DEFAULT FALSE, "loyalty" boolean DEFAULT FALSE, "client_id" bigint, "company_client_id" bigint)[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "index_coupons_on_client_id" ON "coupons" ("client_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "index_coupons_on_company_client_id" ON "coupons" ("company_client_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "coupons_franchises" CASCADE[0m
+  [1m[35m (0.8ms)[0m  [1m[35mCREATE TABLE "coupons_franchises" ("id" bigserial primary key, "coupon_id" bigint NOT NULL, "franchise_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (0.6ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_coupons_franchises_on_coupon_id_and_franchise_id" ON "coupons_franchises" ("coupon_id", "franchise_id")[0m
+  [1m[35m (0.6ms)[0m  [1m[35mCREATE INDEX "index_coupons_franchises_on_coupon_id" ON "coupons_franchises" ("coupon_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "index_coupons_franchises_on_franchise_id" ON "coupons_franchises" ("franchise_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "credits" CASCADE[0m
+  [1m[35m (1.0ms)[0m  [1m[35mCREATE TABLE "credits" ("id" bigserial primary key, "client_id" bigint, "product_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "company_client_id" bigint)[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "index_credits_on_client_id" ON "credits" ("client_id")[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE INDEX "index_credits_on_company_client_id" ON "credits" ("company_client_id")[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE INDEX "index_credits_on_product_id" ON "credits" ("product_id")[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "external_products" CASCADE[0m
+  [1m[35m (1.5ms)[0m  [1m[35mCREATE TABLE "external_products" ("id" bigserial primary key, "franchise_id" bigint NOT NULL, "name" character varying NOT NULL, "amount" integer NOT NULL, "tax_rate" float NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (0.9ms)[0m  [1m[35mCREATE INDEX "index_external_products_on_franchise_id" ON "external_products" ("franchise_id")[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "franchises" CASCADE[0m
+  [1m[35m (1.4ms)[0m  [1m[35mCREATE TABLE "franchises" ("id" bigserial primary key, "name" character varying NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "banking_provider" character varying, "banking_secret_key" text, "banking_secret_id" text, "email" character varying, "address" text, "zip_code" character varying, "city" character varying, "siret" character varying, "tax_id" character varying, "iban" character varying, "phone" character varying, "instagram_username" text, "facebook_chat_snippet" text, "sendinblue_api_key" text)[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_franchises_on_name" ON "franchises" ("name")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "payments" CASCADE[0m
+  [1m[35m (1.7ms)[0m  [1m[35mCREATE TABLE "payments" ("id" bigserial primary key, "client_id" bigint, "amount" integer NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "bank_name" character varying, "transaction_id" character varying, "coupon_id" bigint, "as_paid" boolean, "product_name" character varying NOT NULL, "mode" character varying, "tax_rate" float DEFAULT 20.0, "company_client_id" bigint)[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE INDEX "index_payments_on_client_id" ON "payments" ("client_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "index_payments_on_company_client_id" ON "payments" ("company_client_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "index_payments_on_coupon_id" ON "payments" ("coupon_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE IF EXISTS "product_prices" CASCADE[0m
+  [1m[35m (1.0ms)[0m  [1m[35mCREATE TABLE "product_prices" ("id" bigserial primary key, "session_count" integer NOT NULL, "total" float NOT NULL, "professionnal" boolean NOT NULL, "product_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "first_time" boolean DEFAULT FALSE NOT NULL)[0m
+  [1m[35m (0.7ms)[0m  [1m[35mCREATE INDEX "index_product_prices_on_product_id" ON "product_prices" ("product_id")[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "products" CASCADE[0m
+  [1m[35m (4.1ms)[0m  [1m[35mCREATE TABLE "products" ("id" bigserial primary key, "name" character varying NOT NULL, "description" text NOT NULL, "duration" integer NOT NULL, "room_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "active" boolean DEFAULT TRUE)[0m
+  [1m[35m (1.6ms)[0m  [1m[35mCREATE INDEX "index_products_on_room_id" ON "products" ("room_id")[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE IF EXISTS "reservations" CASCADE[0m
+  [1m[35m (4.1ms)[0m  [1m[35mCREATE TABLE "reservations" ("id" bigserial primary key, "start_time" timestamp, "email_notification" boolean NOT NULL, "first_time" boolean NOT NULL, "client_id" bigint, "product_price_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "company_client_id" bigint, "payment_id" bigint, "canceled" boolean DEFAULT FALSE NOT NULL, "cancelation_reason" text, "refunded" boolean DEFAULT FALSE NOT NULL, "paid_by_credit" boolean DEFAULT FALSE NOT NULL, "notes" text, "user_id" bigint, "signature" text, "to_be_paid_online" boolean NOT NULL)[0m
+  [1m[35m (0.7ms)[0m  [1m[35mCREATE INDEX "index_reservations_on_client_id" ON "reservations" ("client_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "index_reservations_on_company_client_id" ON "reservations" ("company_client_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "index_reservations_on_payment_id" ON "reservations" ("payment_id")[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "index_reservations_on_product_price_id" ON "reservations" ("product_price_id")[0m
+  [1m[35m (1.2ms)[0m  [1m[35mCREATE INDEX "index_reservations_on_user_id" ON "reservations" ("user_id")[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "reviews" CASCADE[0m
+  [1m[35m (4.0ms)[0m  [1m[35mCREATE TABLE "reviews" ("id" bigserial primary key, "body" text NOT NULL, "published" boolean, "product_id" bigint NOT NULL, "client_id" bigint, "company_client_id" bigint, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "homepage" boolean)[0m
+  [1m[35m (1.3ms)[0m  [1m[35mCREATE INDEX "index_reviews_on_client_id" ON "reviews" ("client_id")[0m
+  [1m[35m (1.1ms)[0m  [1m[35mCREATE INDEX "index_reviews_on_company_client_id" ON "reviews" ("company_client_id")[0m
+  [1m[35m (1.2ms)[0m  [1m[35mCREATE INDEX "index_reviews_on_product_id" ON "reviews" ("product_id")[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "rooms" CASCADE[0m
+  [1m[35m (5.2ms)[0m  [1m[35mCREATE TABLE "rooms" ("id" bigserial primary key, "name" character varying NOT NULL, "capacity" integer NOT NULL, "franchise_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (1.9ms)[0m  [1m[35mCREATE INDEX "index_rooms_on_franchise_id" ON "rooms" ("franchise_id")[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE IF EXISTS "subscription_plans" CASCADE[0m
+  [1m[35m (3.1ms)[0m  [1m[35mCREATE TABLE "subscription_plans" ("id" bigserial primary key, "product_id" bigint NOT NULL, "session_count" integer NOT NULL, "total" float NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (1.5ms)[0m  [1m[35mCREATE INDEX "index_subscription_plans_on_product_id" ON "subscription_plans" ("product_id")[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE IF EXISTS "subscriptions" CASCADE[0m
+  [1m[35m (5.7ms)[0m  [1m[35mCREATE TABLE "subscriptions" ("id" bigserial primary key, "subscription_plan_id" bigint NOT NULL, "client_id" bigint NOT NULL, "external_id" character varying, "status" character varying NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "to_be_canceled_at" timestamp)[0m
+  [1m[35m (1.5ms)[0m  [1m[35mCREATE INDEX "index_subscriptions_on_client_id" ON "subscriptions" ("client_id")[0m
+  [1m[35m (2.4ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_subscriptions_on_subscription_plan_id_and_client_id" ON "subscriptions" ("subscription_plan_id", "client_id")[0m
+  [1m[35m (2.3ms)[0m  [1m[35mCREATE INDEX "index_subscriptions_on_subscription_plan_id" ON "subscriptions" ("subscription_plan_id")[0m
+  [1m[35m (0.5ms)[0m  [1m[35mDROP TABLE IF EXISTS "survey_questions" CASCADE[0m
+  [1m[35m (6.5ms)[0m  [1m[35mCREATE TABLE "survey_questions" ("id" bigserial primary key, "survey_id" bigint NOT NULL, "body" text NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (1.4ms)[0m  [1m[35mCREATE INDEX "index_survey_questions_on_survey_id" ON "survey_questions" ("survey_id")[0m
+  [1m[35m (0.7ms)[0m  [1m[35mDROP TABLE IF EXISTS "surveys" CASCADE[0m
+  [1m[35m (4.4ms)[0m  [1m[35mCREATE TABLE "surveys" ("id" bigserial primary key, "product_id" bigint NOT NULL, "name" character varying NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (3.1ms)[0m  [1m[35mCREATE INDEX "index_surveys_on_product_id" ON "surveys" ("product_id")[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "users" CASCADE[0m
+  [1m[35m (4.6ms)[0m  [1m[35mCREATE TABLE "users" ("id" bigserial primary key, "email" character varying NOT NULL, "first_name" character varying NOT NULL, "last_name" character varying NOT NULL, "franchise_id" bigint NOT NULL, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL, "superuser" boolean DEFAULT FALSE NOT NULL, "last_logged_at" timestamp, "password_digest" character varying, "nutritionist" boolean DEFAULT FALSE NOT NULL)[0m
+  [1m[35m (1.3ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_email" ON "users" ("email")[0m
+  [1m[35m (1.5ms)[0m  [1m[35mCREATE INDEX "index_users_on_franchise_id" ON "users" ("franchise_id")[0m
+  [1m[35m (4.4ms)[0m  [1m[35mALTER TABLE "active_storage_attachments" ADD CONSTRAINT "fk_rails_c3b3935057"
+FOREIGN KEY ("blob_id")
+  REFERENCES "active_storage_blobs" ("id")
+[0m
+  [1m[35m (1.9ms)[0m  [1m[35mALTER TABLE "active_storage_variant_records" ADD CONSTRAINT "fk_rails_993965df05"
+FOREIGN KEY ("blob_id")
+  REFERENCES "active_storage_blobs" ("id")
+[0m
+  [1m[35m (2.1ms)[0m  [1m[35mALTER TABLE "blockers" ADD CONSTRAINT "fk_rails_e0849eddae"
+FOREIGN KEY ("blocker_id")
+  REFERENCES "blockers" ("id")
+[0m
+  [1m[35m (2.1ms)[0m  [1m[35mALTER TABLE "blockers" ADD CONSTRAINT "fk_rails_59c546b1e0"
+FOREIGN KEY ("franchise_id")
+  REFERENCES "franchises" ("id")
+[0m
+  [1m[35m (1.8ms)[0m  [1m[35mALTER TABLE "blockers" ADD CONSTRAINT "fk_rails_fc2fc1d405"
+FOREIGN KEY ("room_id")
+  REFERENCES "rooms" ("id")
+[0m
+  [1m[35m (2.2ms)[0m  [1m[35mALTER TABLE "blockers" ADD CONSTRAINT "fk_rails_7614b1ad87"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+[0m
+  [1m[35m (1.1ms)[0m  [1m[35mALTER TABLE "business_hours" ADD CONSTRAINT "fk_rails_07296b7035"
+FOREIGN KEY ("franchise_id")
+  REFERENCES "franchises" ("id")
+[0m
+  [1m[35m (1.1ms)[0m  [1m[35mALTER TABLE "campaign_templates" ADD CONSTRAINT "fk_rails_9c0d24ccff"
+FOREIGN KEY ("franchise_id")
+  REFERENCES "franchises" ("id")
+[0m
+  [1m[35m (1.4ms)[0m  [1m[35mALTER TABLE "campaigns" ADD CONSTRAINT "fk_rails_649cc82f45"
+FOREIGN KEY ("campaign_template_id")
+  REFERENCES "campaign_templates" ("id")
+[0m
+  [1m[35m (1.1ms)[0m  [1m[35mALTER TABLE "campaigns" ADD CONSTRAINT "fk_rails_80a802b165"
+FOREIGN KEY ("franchise_id")
+  REFERENCES "franchises" ("id")
+[0m
+  [1m[35m (2.2ms)[0m  [1m[35mALTER TABLE "clients" ADD CONSTRAINT "fk_rails_d80a12f36a"
+FOREIGN KEY ("client_id")
+  REFERENCES "clients" ("id")
+[0m
+  [1m[35m (2.2ms)[0m  [1m[35mALTER TABLE "clients" ADD CONSTRAINT "fk_rails_2cc4be869c"
+FOREIGN KEY ("franchise_id")
+  REFERENCES "franchises" ("id")
+[0m
+  [1m[35m (1.9ms)[0m  [1m[35mALTER TABLE "clients" ADD CONSTRAINT "fk_rails_21c421fd41"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+[0m
+  [1m[35m (2.2ms)[0m  [1m[35mALTER TABLE "comments" ADD CONSTRAINT "fk_rails_b7673bd1d8"
+FOREIGN KEY ("client_id")
+  REFERENCES "clients" ("id")
+[0m
+  [1m[35m (2.3ms)[0m  [1m[35mALTER TABLE "comments" ADD CONSTRAINT "fk_rails_03de2dc08c"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+[0m
+  [1m[35m (2.4ms)[0m  [1m[35mALTER TABLE "companies" ADD CONSTRAINT "fk_rails_3eefe7b64c"
+FOREIGN KEY ("franchise_id")
+  REFERENCES "franchises" ("id")
+[0m
+  [1m[35m (3.0ms)[0m  [1m[35mALTER TABLE "company_clients" ADD CONSTRAINT "fk_rails_c014da4d2a"
+FOREIGN KEY ("company_id")
+  REFERENCES "companies" ("id")
+[0m
+  [1m[35m (2.4ms)[0m  [1m[35mALTER TABLE "company_clients" ADD CONSTRAINT "fk_rails_3a46874aaf"
+FOREIGN KEY ("company_client_id")
+  REFERENCES "company_clients" ("id")
+[0m
+  [1m[35m (2.5ms)[0m  [1m[35mALTER TABLE "coupons" ADD CONSTRAINT "fk_rails_58e636839e"
+FOREIGN KEY ("client_id")
+  REFERENCES "clients" ("id")
+[0m
+  [1m[35m (2.4ms)[0m  [1m[35mALTER TABLE "coupons" ADD CONSTRAINT "fk_rails_9a0bfe084f"
+FOREIGN KEY ("company_client_id")
+  REFERENCES "company_clients" ("id")
+[0m
+  [1m[35m (4.0ms)[0m  [1m[35mALTER TABLE "coupons_franchises" ADD CONSTRAINT "fk_rails_cdbd738627"
+FOREIGN KEY ("coupon_id")
+  REFERENCES "coupons" ("id")
+[0m
+  [1m[35m (2.5ms)[0m  [1m[35mALTER TABLE "coupons_franchises" ADD CONSTRAINT "fk_rails_09b1528f6c"
+FOREIGN KEY ("franchise_id")
+  REFERENCES "franchises" ("id")
+[0m
+  [1m[35m (2.9ms)[0m  [1m[35mALTER TABLE "credits" ADD CONSTRAINT "fk_rails_deafe42183"
+FOREIGN KEY ("client_id")
+  REFERENCES "clients" ("id")
+[0m
+  [1m[35m (2.4ms)[0m  [1m[35mALTER TABLE "credits" ADD CONSTRAINT "fk_rails_e446f4a120"
+FOREIGN KEY ("company_client_id")
+  REFERENCES "company_clients" ("id")
+[0m
+  [1m[35m (2.6ms)[0m  [1m[35mALTER TABLE "credits" ADD CONSTRAINT "fk_rails_d7bdca2159"
+FOREIGN KEY ("product_id")
+  REFERENCES "products" ("id")
+[0m
+  [1m[35m (2.7ms)[0m  [1m[35mALTER TABLE "payments" ADD CONSTRAINT "fk_rails_66d0485df7"
+FOREIGN KEY ("client_id")
+  REFERENCES "clients" ("id")
+[0m
+  [1m[35m (2.6ms)[0m  [1m[35mALTER TABLE "payments" ADD CONSTRAINT "fk_rails_94c15b6260"
+FOREIGN KEY ("company_client_id")
+  REFERENCES "company_clients" ("id")
+[0m
+  [1m[35m (2.0ms)[0m  [1m[35mALTER TABLE "payments" ADD CONSTRAINT "fk_rails_a7af64837e"
+FOREIGN KEY ("coupon_id")
+  REFERENCES "coupons" ("id")
+[0m
+  [1m[35m (2.9ms)[0m  [1m[35mALTER TABLE "product_prices" ADD CONSTRAINT "fk_rails_e7ec0c97a3"
+FOREIGN KEY ("product_id")
+  REFERENCES "products" ("id")
+[0m
+  [1m[35m (2.6ms)[0m  [1m[35mALTER TABLE "products" ADD CONSTRAINT "fk_rails_71119d0f74"
+FOREIGN KEY ("room_id")
+  REFERENCES "rooms" ("id")
+[0m
+  [1m[35m (2.9ms)[0m  [1m[35mALTER TABLE "reservations" ADD CONSTRAINT "fk_rails_9c963d6879"
+FOREIGN KEY ("client_id")
+  REFERENCES "clients" ("id")
+[0m
+  [1m[35m (3.5ms)[0m  [1m[35mALTER TABLE "reservations" ADD CONSTRAINT "fk_rails_9089ec93d0"
+FOREIGN KEY ("company_client_id")
+  REFERENCES "company_clients" ("id")
+[0m
+  [1m[35m (2.2ms)[0m  [1m[35mALTER TABLE "reservations" ADD CONSTRAINT "fk_rails_653e025ae0"
+FOREIGN KEY ("payment_id")
+  REFERENCES "payments" ("id")
+[0m
+  [1m[35m (2.6ms)[0m  [1m[35mALTER TABLE "reservations" ADD CONSTRAINT "fk_rails_57d12ba9a0"
+FOREIGN KEY ("product_price_id")
+  REFERENCES "product_prices" ("id")
+[0m
+  [1m[35m (2.5ms)[0m  [1m[35mALTER TABLE "reservations" ADD CONSTRAINT "fk_rails_48a92fce51"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+[0m
+  [1m[35m (3.7ms)[0m  [1m[35mALTER TABLE "reviews" ADD CONSTRAINT "fk_rails_09c661230e"
+FOREIGN KEY ("client_id")
+  REFERENCES "clients" ("id")
+[0m
+  [1m[35m (2.5ms)[0m  [1m[35mALTER TABLE "reviews" ADD CONSTRAINT "fk_rails_9d0eb81ddb"
+FOREIGN KEY ("company_client_id")
+  REFERENCES "company_clients" ("id")
+[0m
+  [1m[35m (2.2ms)[0m  [1m[35mALTER TABLE "reviews" ADD CONSTRAINT "fk_rails_bedd9094d4"
+FOREIGN KEY ("product_id")
+  REFERENCES "products" ("id")
+[0m
+  [1m[35m (2.5ms)[0m  [1m[35mALTER TABLE "rooms" ADD CONSTRAINT "fk_rails_f0b4b4dbb2"
+FOREIGN KEY ("franchise_id")
+  REFERENCES "franchises" ("id")
+[0m
+  [1m[35m (2.8ms)[0m  [1m[35mALTER TABLE "subscription_plans" ADD CONSTRAINT "fk_rails_b112070c01"
+FOREIGN KEY ("product_id")
+  REFERENCES "products" ("id")
+[0m
+  [1m[35m (3.3ms)[0m  [1m[35mALTER TABLE "subscriptions" ADD CONSTRAINT "fk_rails_19fca7085f"
+FOREIGN KEY ("client_id")
+  REFERENCES "clients" ("id")
+[0m
+  [1m[35m (2.8ms)[0m  [1m[35mALTER TABLE "subscriptions" ADD CONSTRAINT "fk_rails_355348f174"
+FOREIGN KEY ("subscription_plan_id")
+  REFERENCES "subscription_plans" ("id")
+[0m
+  [1m[35m (3.6ms)[0m  [1m[35mALTER TABLE "survey_questions" ADD CONSTRAINT "fk_rails_d0558bfd89"
+FOREIGN KEY ("survey_id")
+  REFERENCES "surveys" ("id")
+[0m
+  [1m[35m (2.2ms)[0m  [1m[35mALTER TABLE "surveys" ADD CONSTRAINT "fk_rails_c90d5f8eac"
+FOREIGN KEY ("product_id")
+  REFERENCES "products" ("id")
+[0m
+  [1m[35m (2.9ms)[0m  [1m[35mALTER TABLE "users" ADD CONSTRAINT "fk_rails_59dbdb3a6d"
+FOREIGN KEY ("franchise_id")
+  REFERENCES "franchises" ("id")
+[0m
+  [1m[35m (4.9ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[35m (1.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (1.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20210403144414)[0m
+  [1m[35m (2.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES
+(20201210113651),
+(20201210120740),
+(20201210160543),
+(20201210160628),
+(20201210210158),
+(20201210215009),
+(20201211062827),
+(20201211071117),
+(20201211073907),
+(20201211082755),
+(20201211084146),
+(20201211091237),
+(20201211104343),
+(20201211201257),
+(20201211210401),
+(20201213110125),
+(20201213124045),
+(20201213211714),
+(20201214100626),
+(20201214194631),
+(20201215060316),
+(20201215155629),
+(20201216092326),
+(20201216112432),
+(20201217061511),
+(20201217084127),
+(20201217101314),
+(20201217104734),
+(20201217191427),
+(20201218080658),
+(20201218102920),
+(20201218154722),
+(20201218210010),
+(20201218215523),
+(20201218232014),
+(20201219122750),
+(20201219152716),
+(20201219161208),
+(20201219171959),
+(20201222164447),
+(20201222164831),
+(20210105113409),
+(20210105115440),
+(20210108060758),
+(20210108070854),
+(20210111153606),
+(20210112124102),
+(20210113081649),
+(20210113091434),
+(20210113094818),
+(20210113101431),
+(20210113114637),
+(20210113114649),
+(20210114092643),
+(20210126104824),
+(20210126105327),
+(20210212100055),
+(20210212100718),
+(20210212101427),
+(20210212190840),
+(20210212191736),
+(20210213100135),
+(20210214151228),
+(20210214152044),
+(20210214170041),
+(20210215111109),
+(20210216172240),
+(20210216173810),
+(20210219135420),
+(20210219210219),
+(20210220105848),
+(20210220111027),
+(20210224111801),
+(20210225113019),
+(20210226061808),
+(20210228190400),
+(20210301100937),
+(20210301102742),
+(20210301102940),
+(20210301163420),
+(20210316164127),
+(20210316164128),
+(20210317080650),
+(20210317103606),
+(20210317104614),
+(20210322173449),
+(20210322183705),
+(20210323080952),
+(20210323082530),
+(20210323200507),
+(20210323201751),
+(20210323202824),
+(20210323203358),
+(20210323220946),
+(20210324174744),
+(20210324182901),
+(20210324201928),
+(20210324211535),
+(20210328202118),
+(20210329120535),
+(20210330085255),
+(20210402105927),
+(20210402112754),
+(20210403102920);
+
+[0m
+  [1m[35m (4.2ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.7ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.9ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "environment"], ["value", "development"], ["created_at", "2021-08-23 10:07:02.055827"], ["updated_at", "2021-08-23 10:07:02.055827"]]
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.6ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Update (1.0ms)[0m  [1m[33mUPDATE "ar_internal_metadata" SET "value" = $1, "updated_at" = $2 WHERE "ar_internal_metadata"."key" = $3[0m  [["value", "test"], ["updated_at", "2021-08-23 10:07:02.066876"], ["key", "environment"]]
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.5ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "schema_sha1"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.5ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "key"[0m  [["key", "schema_sha1"], ["value", "75ecc48a7c5ef8e8c2ff1c88434cba543d701699"], ["created_at", "2021-08-23 10:07:02.075567"], ["updated_at", "2021-08-23 10:07:02.075567"]]
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mFranchise Exists? (0.7ms)[0m  [1m[34mSELECT 1 AS one FROM "franchises" WHERE "franchises"."name" = $1 LIMIT $2[0m  [["name", "Reims"], ["LIMIT", 1]]
+  [1m[36mFranchise Create (1.7ms)[0m  [1m[32mINSERT INTO "franchises" ("name", "created_at", "updated_at", "email", "address", "zip_code", "city", "siret", "tax_id", "phone") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING "id"[0m  [["name", "Reims"], ["created_at", "2021-08-23 10:07:02.232656"], ["updated_at", "2021-08-23 10:07:02.232656"], ["email", "contact@cryotera.fr"], ["address", "2 rue Jules Méline"], ["zip_code", "51430"], ["city", "Bezannes"], ["siret", "81501516900015"], ["tax_id", "FR81815015169"], ["phone", "0326779750"]]
+  [1m[36mBusinessHour Create (2.0ms)[0m  [1m[32mINSERT INTO "business_hours" ("franchise_id", "day", "morning_start_time", "morning_end_time", "afternoon_start_time", "afternoon_end_time", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["franchise_id", 1], ["day", "Monday"], ["morning_start_time", "09:00:00"], ["morning_end_time", "12:00:00"], ["afternoon_start_time", "14:00:00"], ["afternoon_end_time", "20:00:00"], ["created_at", "2021-08-23 10:07:02.265561"], ["updated_at", "2021-08-23 10:07:02.265561"]]
+  ↳ app/models/franchise.rb:57:in `block in create_business_hours'
+  [1m[36mBusinessHour Create (1.2ms)[0m  [1m[32mINSERT INTO "business_hours" ("franchise_id", "day", "morning_start_time", "morning_end_time", "afternoon_start_time", "afternoon_end_time", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["franchise_id", 1], ["day", "Tuesday"], ["morning_start_time", "09:00:00"], ["morning_end_time", "12:00:00"], ["afternoon_start_time", "14:00:00"], ["afternoon_end_time", "20:00:00"], ["created_at", "2021-08-23 10:07:02.269193"], ["updated_at", "2021-08-23 10:07:02.269193"]]
+  ↳ app/models/franchise.rb:57:in `block in create_business_hours'
+  [1m[36mBusinessHour Create (0.6ms)[0m  [1m[32mINSERT INTO "business_hours" ("franchise_id", "day", "morning_start_time", "morning_end_time", "afternoon_start_time", "afternoon_end_time", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["franchise_id", 1], ["day", "Wednesday"], ["morning_start_time", "09:00:00"], ["morning_end_time", "12:00:00"], ["afternoon_start_time", "14:00:00"], ["afternoon_end_time", "20:00:00"], ["created_at", "2021-08-23 10:07:02.271640"], ["updated_at", "2021-08-23 10:07:02.271640"]]
+  ↳ app/models/franchise.rb:57:in `block in create_business_hours'
+  [1m[36mBusinessHour Create (0.8ms)[0m  [1m[32mINSERT INTO "business_hours" ("franchise_id", "day", "morning_start_time", "morning_end_time", "afternoon_start_time", "afternoon_end_time", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["franchise_id", 1], ["day", "Thursday"], ["morning_start_time", "09:00:00"], ["morning_end_time", "12:00:00"], ["afternoon_start_time", "14:00:00"], ["afternoon_end_time", "20:00:00"], ["created_at", "2021-08-23 10:07:02.273552"], ["updated_at", "2021-08-23 10:07:02.273552"]]
+  ↳ app/models/franchise.rb:57:in `block in create_business_hours'
+  [1m[36mBusinessHour Create (0.6ms)[0m  [1m[32mINSERT INTO "business_hours" ("franchise_id", "day", "morning_start_time", "morning_end_time", "afternoon_start_time", "afternoon_end_time", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["franchise_id", 1], ["day", "Friday"], ["morning_start_time", "09:00:00"], ["morning_end_time", "12:00:00"], ["afternoon_start_time", "14:00:00"], ["afternoon_end_time", "20:00:00"], ["created_at", "2021-08-23 10:07:02.275609"], ["updated_at", "2021-08-23 10:07:02.275609"]]
+  ↳ app/models/franchise.rb:57:in `block in create_business_hours'
+  [1m[36mBusinessHour Create (0.7ms)[0m  [1m[32mINSERT INTO "business_hours" ("franchise_id", "day", "morning_start_time", "morning_end_time", "afternoon_start_time", "afternoon_end_time", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["franchise_id", 1], ["day", "Saturday"], ["morning_start_time", "09:00:00"], ["morning_end_time", "12:00:00"], ["afternoon_start_time", "14:00:00"], ["afternoon_end_time", "20:00:00"], ["created_at", "2021-08-23 10:07:02.277471"], ["updated_at", "2021-08-23 10:07:02.277471"]]
+  ↳ app/models/franchise.rb:57:in `block in create_business_hours'
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mFranchise Load (0.3ms)[0m  [1m[34mSELECT "franchises".* FROM "franchises" WHERE "franchises"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mUser Exists? (1.4ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "sayid.mimouni@gmail.com"], ["LIMIT", 1]]
+  [1m[36mUser Create (3.3ms)[0m  [1m[32mINSERT INTO "users" ("email", "first_name", "last_name", "franchise_id", "created_at", "updated_at", "superuser", "password_digest") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"[0m  [["email", "sayid.mimouni@gmail.com"], ["first_name", "Saïd"], ["last_name", "Mimouni"], ["franchise_id", 1], ["created_at", "2021-08-23 10:07:02.584276"], ["updated_at", "2021-08-23 10:07:02.584276"], ["superuser", true], ["password_digest", "$2a$12$I6Rp.4k9gxr4ohY2/8Z3EuwgqAK1/7dfsSnuL2JfIZMiYWn4eR8Ji"]]
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mFranchise Load (0.5ms)[0m  [1m[34mSELECT "franchises".* FROM "franchises" WHERE "franchises"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mClient Create (1.7ms)[0m  [1m[32mINSERT INTO "clients" ("first_name", "last_name", "male", "franchise_id", "created_at", "updated_at", "email", "password_digest", "birth_date") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING "id"[0m  [["first_name", "John"], ["last_name", "Doe"], ["male", true], ["franchise_id", 1], ["created_at", "2021-08-23 10:07:02.882932"], ["updated_at", "2021-08-23 10:07:02.882932"], ["email", "client@gmail.com"], ["password_digest", "$2a$12$yS6hD4TA0G479GHBqzCs3.OwxPfrFYFf43p6vMoRr/AUfNC7YxYUy"], ["birth_date", "1990-01-01"]]
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mFranchise Load (0.5ms)[0m  [1m[34mSELECT "franchises".* FROM "franchises" WHERE "franchises"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mCompany Create (1.2ms)[0m  [1m[32mINSERT INTO "companies" ("name", "email", "phone", "address", "zip_code", "city", "siret", "franchise_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING "id"[0m  [["name", "Apple"], ["email", "contact@apple.com"], ["phone", "0620853909"], ["address", "60 rue des Gobelins"], ["zip_code", "51100"], ["city", "Reims"], ["siret", "81214811200012"], ["franchise_id", 1], ["created_at", "2021-08-23 10:07:02.904049"], ["updated_at", "2021-08-23 10:07:02.904049"]]
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mFranchise Load (0.5ms)[0m  [1m[34mSELECT "franchises".* FROM "franchises" WHERE "franchises"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mRoom Create (2.0ms)[0m  [1m[32mINSERT INTO "rooms" ("name", "capacity", "franchise_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"[0m  [["name", "Salle de Cryothérapie"], ["capacity", 2], ["franchise_id", 1], ["created_at", "2021-08-23 10:07:02.920777"], ["updated_at", "2021-08-23 10:07:02.920777"]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mRoom Load (0.3ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms" WHERE "rooms"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mProduct Create (1.9ms)[0m  [1m[32mINSERT INTO "products" ("name", "description", "duration", "room_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["name", "Cryo Localisée"], ["description", "La cryothérapie localisée consiste à exposer une partie du corps à de l’air froid pulsé à -150 degrés. De par ses vertus anti-inflammatoire, antalgique et anti-âge, elle permet la diminution des douleurs localisées ainsi que la prévention du vieillissement cutané."], ["duration", 30], ["room_id", 1], ["created_at", "2021-08-23 10:07:02.945715"], ["updated_at", "2021-08-23 10:07:02.945715"]]
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Load (0.4ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mProductPrice Create (1.6ms)[0m  [1m[32mINSERT INTO "product_prices" ("session_count", "total", "professionnal", "product_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["session_count", 1], ["total", 45.0], ["professionnal", false], ["product_id", 1], ["created_at", "2021-08-23 10:07:02.963994"], ["updated_at", "2021-08-23 10:07:02.963994"]]
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Load (0.3ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mProductPrice Create (0.7ms)[0m  [1m[32mINSERT INTO "product_prices" ("session_count", "total", "professionnal", "product_id", "created_at", "updated_at", "first_time") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["session_count", 1], ["total", 35.0], ["professionnal", false], ["product_id", 1], ["created_at", "2021-08-23 10:07:02.969312"], ["updated_at", "2021-08-23 10:07:02.969312"], ["first_time", true]]
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Load (0.3ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mProductPrice Create (0.7ms)[0m  [1m[32mINSERT INTO "product_prices" ("session_count", "total", "professionnal", "product_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["session_count", 5], ["total", 195.0], ["professionnal", false], ["product_id", 1], ["created_at", "2021-08-23 10:07:02.973601"], ["updated_at", "2021-08-23 10:07:02.973601"]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Load (0.3ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mProductPrice Create (0.7ms)[0m  [1m[32mINSERT INTO "product_prices" ("session_count", "total", "professionnal", "product_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["session_count", 10], ["total", 350.0], ["professionnal", false], ["product_id", 1], ["created_at", "2021-08-23 10:07:02.977417"], ["updated_at", "2021-08-23 10:07:02.977417"]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Load (0.3ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mProductPrice Create (0.7ms)[0m  [1m[32mINSERT INTO "product_prices" ("session_count", "total", "professionnal", "product_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["session_count", 10], ["total", 300.0], ["professionnal", true], ["product_id", 1], ["created_at", "2021-08-23 10:07:02.981471"], ["updated_at", "2021-08-23 10:07:02.981471"]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Load (0.5ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mProductPrice Create (0.7ms)[0m  [1m[32mINSERT INTO "product_prices" ("session_count", "total", "professionnal", "product_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["session_count", 20], ["total", 500.0], ["professionnal", true], ["product_id", 1], ["created_at", "2021-08-23 10:07:02.986007"], ["updated_at", "2021-08-23 10:07:02.986007"]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mRoom Load (0.3ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms" WHERE "rooms"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mProduct Create (0.6ms)[0m  [1m[32mINSERT INTO "products" ("name", "description", "duration", "room_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["name", "Cryothérapie Corps Entier"], ["description", "La chambre de cryothérapie corps entier est un outil utilisant le froid à des fins thérapeutiques. Le procédé est fondé sur des séries d’expositions du corps entier à basses températures (entre -85°C et -110°C) sur une période de 3 à 4 minutes. L’exposition à ces températures permet à l’individu de mettre en place des réflexes de protection contre le froid et de développer des effets bénéfiques durables."], ["duration", 30], ["room_id", 1], ["created_at", "2021-08-23 10:07:02.990227"], ["updated_at", "2021-08-23 10:07:02.990227"]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Load (0.3ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[36mProductPrice Create (0.4ms)[0m  [1m[32mINSERT INTO "product_prices" ("session_count", "total", "professionnal", "product_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["session_count", 1], ["total", 45.0], ["professionnal", false], ["product_id", 2], ["created_at", "2021-08-23 10:07:02.994440"], ["updated_at", "2021-08-23 10:07:02.994440"]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Load (0.2ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[36mProductPrice Create (0.5ms)[0m  [1m[32mINSERT INTO "product_prices" ("session_count", "total", "professionnal", "product_id", "created_at", "updated_at", "first_time") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["session_count", 1], ["total", 35.0], ["professionnal", false], ["product_id", 2], ["created_at", "2021-08-23 10:07:02.998192"], ["updated_at", "2021-08-23 10:07:02.998192"], ["first_time", true]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Load (0.3ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[36mProductPrice Create (0.7ms)[0m  [1m[32mINSERT INTO "product_prices" ("session_count", "total", "professionnal", "product_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["session_count", 5], ["total", 195.0], ["professionnal", false], ["product_id", 2], ["created_at", "2021-08-23 10:07:03.002096"], ["updated_at", "2021-08-23 10:07:03.002096"]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Load (0.2ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[36mProductPrice Create (0.6ms)[0m  [1m[32mINSERT INTO "product_prices" ("session_count", "total", "professionnal", "product_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["session_count", 10], ["total", 350.0], ["professionnal", false], ["product_id", 2], ["created_at", "2021-08-23 10:07:03.006266"], ["updated_at", "2021-08-23 10:07:03.006266"]]
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Load (0.2ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[36mProductPrice Create (0.5ms)[0m  [1m[32mINSERT INTO "product_prices" ("session_count", "total", "professionnal", "product_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["session_count", 10], ["total", 300.0], ["professionnal", true], ["product_id", 2], ["created_at", "2021-08-23 10:07:03.010321"], ["updated_at", "2021-08-23 10:07:03.010321"]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Load (0.2ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."id" = $1 LIMIT $2[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[36mProductPrice Create (0.6ms)[0m  [1m[32mINSERT INTO "product_prices" ("session_count", "total", "professionnal", "product_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["session_count", 20], ["total", 500.0], ["professionnal", true], ["product_id", 2], ["created_at", "2021-08-23 10:07:03.014179"], ["updated_at", "2021-08-23 10:07:03.014179"]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mRoom Load (0.6ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms" WHERE "rooms"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mProduct Create (0.7ms)[0m  [1m[32mINSERT INTO "products" ("name", "description", "duration", "room_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["name", "Cryolipolise"], ["description", "Le terme cryolipolyse signifie littéralement “destruction des graisses par le froid“. Il s’agit d’un traitement efficace et non invasif permettant d’éliminer les amas graisseux de manière définitive et indolore."], ["duration", 30], ["room_id", 1], ["created_at", "2021-08-23 10:07:03.030016"], ["updated_at", "2021-08-23 10:07:03.030016"]]
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Load (0.2ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mProductPrice Create (0.7ms)[0m  [1m[32mINSERT INTO "product_prices" ("session_count", "total", "professionnal", "product_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["session_count", 1], ["total", 45.0], ["professionnal", false], ["product_id", 3], ["created_at", "2021-08-23 10:07:03.034448"], ["updated_at", "2021-08-23 10:07:03.034448"]]
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Load (0.2ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mProductPrice Create (0.7ms)[0m  [1m[32mINSERT INTO "product_prices" ("session_count", "total", "professionnal", "product_id", "created_at", "updated_at", "first_time") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["session_count", 1], ["total", 35.0], ["professionnal", false], ["product_id", 3], ["created_at", "2021-08-23 10:07:03.038470"], ["updated_at", "2021-08-23 10:07:03.038470"], ["first_time", true]]
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Load (0.2ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mProductPrice Create (0.7ms)[0m  [1m[32mINSERT INTO "product_prices" ("session_count", "total", "professionnal", "product_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["session_count", 5], ["total", 195.0], ["professionnal", false], ["product_id", 3], ["created_at", "2021-08-23 10:07:03.042353"], ["updated_at", "2021-08-23 10:07:03.042353"]]
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Load (0.2ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mProductPrice Create (0.6ms)[0m  [1m[32mINSERT INTO "product_prices" ("session_count", "total", "professionnal", "product_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["session_count", 10], ["total", 350.0], ["professionnal", false], ["product_id", 3], ["created_at", "2021-08-23 10:07:03.046273"], ["updated_at", "2021-08-23 10:07:03.046273"]]
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Load (0.3ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mProductPrice Create (0.9ms)[0m  [1m[32mINSERT INTO "product_prices" ("session_count", "total", "professionnal", "product_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["session_count", 10], ["total", 300.0], ["professionnal", true], ["product_id", 3], ["created_at", "2021-08-23 10:07:03.050237"], ["updated_at", "2021-08-23 10:07:03.050237"]]
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Load (0.2ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."id" = $1 LIMIT $2[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mProductPrice Create (0.6ms)[0m  [1m[32mINSERT INTO "product_prices" ("session_count", "total", "professionnal", "product_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["session_count", 20], ["total", 500.0], ["professionnal", true], ["product_id", 3], ["created_at", "2021-08-23 10:07:03.054526"], ["updated_at", "2021-08-23 10:07:03.054526"]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mRoom Load (0.4ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms" WHERE "rooms"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mProduct Create (0.9ms)[0m  [1m[32mINSERT INTO "products" ("name", "description", "duration", "room_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["name", "Pressothérapie"], ["description", "La pressothérapie est une méthode thérapeutique provoquant l’activation de la circulation veineuse et lymphatique par un système de compression et de décompression des pneumatiques."], ["duration", 30], ["room_id", 1], ["created_at", "2021-08-23 10:07:03.058695"], ["updated_at", "2021-08-23 10:07:03.058695"]]
+  [1m[36mTRANSACTION (1.6ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Load (0.2ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  [1m[36mProductPrice Create (0.5ms)[0m  [1m[32mINSERT INTO "product_prices" ("session_count", "total", "professionnal", "product_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["session_count", 1], ["total", 45.0], ["professionnal", false], ["product_id", 4], ["created_at", "2021-08-23 10:07:03.064252"], ["updated_at", "2021-08-23 10:07:03.064252"]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Load (0.2ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  [1m[36mProductPrice Create (0.8ms)[0m  [1m[32mINSERT INTO "product_prices" ("session_count", "total", "professionnal", "product_id", "created_at", "updated_at", "first_time") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["session_count", 1], ["total", 35.0], ["professionnal", false], ["product_id", 4], ["created_at", "2021-08-23 10:07:03.071189"], ["updated_at", "2021-08-23 10:07:03.071189"], ["first_time", true]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Load (0.3ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  [1m[36mProductPrice Create (10.1ms)[0m  [1m[32mINSERT INTO "product_prices" ("session_count", "total", "professionnal", "product_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["session_count", 5], ["total", 195.0], ["professionnal", false], ["product_id", 4], ["created_at", "2021-08-23 10:07:03.093465"], ["updated_at", "2021-08-23 10:07:03.093465"]]
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Load (0.2ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  [1m[36mProductPrice Create (0.5ms)[0m  [1m[32mINSERT INTO "product_prices" ("session_count", "total", "professionnal", "product_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["session_count", 10], ["total", 350.0], ["professionnal", false], ["product_id", 4], ["created_at", "2021-08-23 10:07:03.108063"], ["updated_at", "2021-08-23 10:07:03.108063"]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Load (0.2ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  [1m[36mProductPrice Create (0.4ms)[0m  [1m[32mINSERT INTO "product_prices" ("session_count", "total", "professionnal", "product_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["session_count", 10], ["total", 300.0], ["professionnal", true], ["product_id", 4], ["created_at", "2021-08-23 10:07:03.111854"], ["updated_at", "2021-08-23 10:07:03.111854"]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Load (0.2ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."id" = $1 LIMIT $2[0m  [["id", 4], ["LIMIT", 1]]
+  [1m[36mProductPrice Create (0.8ms)[0m  [1m[32mINSERT INTO "product_prices" ("session_count", "total", "professionnal", "product_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["session_count", 20], ["total", 500.0], ["professionnal", true], ["product_id", 4], ["created_at", "2021-08-23 10:07:03.115523"], ["updated_at", "2021-08-23 10:07:03.115523"]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mRoom Load (0.4ms)[0m  [1m[34mSELECT "rooms".* FROM "rooms" WHERE "rooms"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mProduct Create (0.8ms)[0m  [1m[32mINSERT INTO "products" ("name", "description", "duration", "room_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["name", "Nutrition"], ["description", "Avoir une alimentation saine, équilibrée et adaptée est un véritable pilier de la santé. Nos partenaires en micronutrition accompagnent nos clients dans l’élaboration de protocoles nutritionnels sur-mesure en fonction de leurs besoins."], ["duration", 30], ["room_id", 1], ["created_at", "2021-08-23 10:07:03.119692"], ["updated_at", "2021-08-23 10:07:03.119692"]]
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Load (0.2ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  [1m[36mProductPrice Create (0.6ms)[0m  [1m[32mINSERT INTO "product_prices" ("session_count", "total", "professionnal", "product_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["session_count", 1], ["total", 45.0], ["professionnal", false], ["product_id", 5], ["created_at", "2021-08-23 10:07:03.123582"], ["updated_at", "2021-08-23 10:07:03.123582"]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Load (0.2ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  [1m[36mProductPrice Create (0.5ms)[0m  [1m[32mINSERT INTO "product_prices" ("session_count", "total", "professionnal", "product_id", "created_at", "updated_at", "first_time") VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING "id"[0m  [["session_count", 1], ["total", 35.0], ["professionnal", false], ["product_id", 5], ["created_at", "2021-08-23 10:07:03.126910"], ["updated_at", "2021-08-23 10:07:03.126910"], ["first_time", true]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Load (0.2ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  [1m[36mProductPrice Create (0.6ms)[0m  [1m[32mINSERT INTO "product_prices" ("session_count", "total", "professionnal", "product_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["session_count", 5], ["total", 195.0], ["professionnal", false], ["product_id", 5], ["created_at", "2021-08-23 10:07:03.130149"], ["updated_at", "2021-08-23 10:07:03.130149"]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Load (0.2ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  [1m[36mProductPrice Create (0.5ms)[0m  [1m[32mINSERT INTO "product_prices" ("session_count", "total", "professionnal", "product_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["session_count", 10], ["total", 350.0], ["professionnal", false], ["product_id", 5], ["created_at", "2021-08-23 10:07:03.133567"], ["updated_at", "2021-08-23 10:07:03.133567"]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Load (0.2ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  [1m[36mProductPrice Create (0.4ms)[0m  [1m[32mINSERT INTO "product_prices" ("session_count", "total", "professionnal", "product_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["session_count", 10], ["total", 300.0], ["professionnal", true], ["product_id", 5], ["created_at", "2021-08-23 10:07:03.136820"], ["updated_at", "2021-08-23 10:07:03.136820"]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mProduct Load (0.2ms)[0m  [1m[34mSELECT "products".* FROM "products" WHERE "products"."id" = $1 LIMIT $2[0m  [["id", 5], ["LIMIT", 1]]
+  [1m[36mProductPrice Create (0.6ms)[0m  [1m[32mINSERT INTO "product_prices" ("session_count", "total", "professionnal", "product_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["session_count", 20], ["total", 500.0], ["professionnal", true], ["product_id", 5], ["created_at", "2021-08-23 10:07:03.140020"], ["updated_at", "2021-08-23 10:07:03.140020"]]
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT pg_try_advisory_lock(7992348028875656775)[0m
+  [1m[35m (1.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.6ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT pg_advisory_unlock(7992348028875656775)[0m
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.9ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mFranchise Exists? (1.2ms)[0m  [1m[34mSELECT 1 AS one FROM "franchises" WHERE "franchises"."name" = $1 LIMIT $2[0m  [["name", "Reims"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+[Rollbar] Scheduling item
+[Rollbar] Sending item
+[Rollbar] Sending json
+[Rollbar] Success
+[Rollbar] Details: https://rollbar.com/instance/uuid?uuid=e3efc5ba-0ae5-43a9-b2e1-c505f284b9bb (only available if report was successful)
+Started GET "/" for ::1 at 2021-08-23 10:08:28 +0200
+  [1m[35m (1.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by Rails::WelcomeController#index as HTML
+  Rendering /Users/nathanmenard/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/railties-6.1.3/lib/rails/templates/rails/welcome/index.html.erb
+  Rendered /Users/nathanmenard/.rbenv/versions/2.6.6/lib/ruby/gems/2.6.0/gems/railties-6.1.3/lib/rails/templates/rails/welcome/index.html.erb (Duration: 5.3ms | Allocations: 482)
+Completed 200 OK in 19ms (Views: 8.4ms | ActiveRecord: 0.0ms | Allocations: 4727)
+
+
+Started GET "/reservations" for ::1 at 2021-08-23 10:08:53 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/reservations"):
+  
+Started GET "/login" for ::1 at 2021-08-23 10:09:05 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/login"):
+  
+Started GET "/admin" for ::1 at 2021-08-23 10:09:24 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/admin"):
+  
+Started GET "/admin" for ::1 at 2021-08-23 10:09:26 +0200
+  
+ActionController::RoutingError (No route matches [GET] "/admin"):
+  

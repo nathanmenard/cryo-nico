@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <style>
+      body {
+        background: #aaa;
+      }
+      img {
+        width: 60%;
+        display: block;
+        margin: 2% auto;
+      }
+    </style>
+  </head>
+  <body data-signature="<%= @reservation.signature %>">
+    <img src="<%= url_for(@reservation.product_price.product.disclaimer) %>" onclick="showMarkerArea(this);">
+
+    <script src="/jquery.min.js"></script>
+    <script src="https://unpkg.com/markerjs2/markerjs2.js"></script>
+    <script>
+      function showMarkerArea(target) {
+        const markerArea = new markerjs2.MarkerArea(target);
+        markerArea.availableMarkerTypes = ['FreehandMarker'];
+        markerArea.addRenderEventListener((imgURL, state) => {
+          target.crossOrigin="anonymous";
+          target.src = imgURL;
+          $.ajax({
+            beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+            type: 'POST',
+            url: window.location.href,
+            data: { signature: JSON.stringify(state) },
+            success: function() {
+              window.location.href = '/reservations';
+            },
+            fail: function(xhr, textStatus, errorThrown) {
+              alert('request failed');
+              console.log(xhr, textStatus, errorThrown);
+            }
+          });
+        });
+        markerArea.show();
+        const customState = $('body').data('signature');
+        if (customState) {
+          console.log(customState);
+          markerArea.restoreState(customState);
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,925 @@
+@import url('https://rsms.me/inter/inter.css');
+html { font-family: 'Inter', sans-serif; }
+@supports (font-variation-settings: normal) {
+  html { font-family: 'Inter var', sans-serif; }
+}
+
+a {
+  color: #009fe3;
+}
+
+body {
+  margin: 0;
+  font-size: 13px;
+  background: #f5f8fa;
+  color: #1d1d1b;
+}
+
+header {
+  padding: 1.75% 10%;
+  background: #1d1d1b;
+}
+
+header:after {
+  clear: both;
+  display: block;
+  content: '';
+}
+
+header div#logo {
+  display: block;
+  width: 20%;
+  float: left;
+}
+
+header div#logo img {
+  display: block;
+  width: 30%;
+  float: left;
+}
+
+header div#logo strong {
+  margin-top: 2.5%;
+  margin-left: 5%;
+  display: block;
+  float: left;
+  font-size: 18px;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #fff;
+}
+
+header div#logo strong span {
+  margin-top: 2%;
+  letter-spacing: 0.5px;
+  display: block;
+  font-size: 10px;
+  font-weight: 300;
+}
+
+header ul {
+  margin: 0;
+  padding: 0;
+  float: right;
+  text-align: right;
+  width: 70%;
+}
+
+header ul li {
+  display: inline-block;
+  margin-left: 4%;
+  margin-top: 1.25%;
+  position: relative;
+}
+
+header ul li a {
+  text-decoration: none;
+  font-weight: 500;
+  color: #9f9d9e;
+  font-size: 15px;
+}
+
+header ul li a:hover {
+  color: #fff;
+}
+
+header ul li a svg {
+  margin-right: 4px;
+}
+
+header ul li ul {
+  z-index: 99;
+  display: none;
+  position: absolute;
+  background: #fff;
+  background: #1d1d1b;
+  color: #fff;
+  border: 1px solid #1d1d1b;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  top: 200%;
+  left: -10%;
+  width: 130%;
+  right: 0%;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+header ul li ul li {
+  line-height: 3;
+  font-size: 14px;
+}
+
+nav {
+  padding: 1.5% 10%;
+  background: #fff;
+  box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
+}
+
+nav ul {
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li {
+  margin-right: 1%;
+  display: inline-block;
+  font-weight: 500;
+}
+
+nav ul li svg {
+  color: #333;
+}
+
+nav ul li a {
+  color: inherit;
+  text-decoration: none;
+}
+
+nav ul li.active a {
+}
+
+section {
+  float: left;
+  margin-top: 3%;
+  margin-left: 8%;
+  width: 52%;
+  background: #fff;
+  border-radius: 5px;
+  border: 1px solid #e1e8ed;
+  padding-bottom: .5%;
+  box-shadow: 0 4px 10px rgb(67 95 113 / 8%);
+}
+
+section:last-of-type {
+  margin-bottom: 6%;
+}
+
+section.no-margin-bottom {
+  margin-bottom: -1%;
+}
+
+section.center {
+  float: none;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 3%;
+}
+
+section h2 {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  margin-top: 0;
+  margin-bottom: 3%;
+  padding: 2.5%;
+  font-size: 15px;
+  font-weight: 500;
+  color: #fff;
+  background: #009fe3;
+}
+
+section img.thumbnail {
+  float: left;
+  margin-left: 2.5%;
+  display: block;
+  width: 40%;
+  border-radius: 3px;
+  margin-bottom: 6%;
+}
+
+section div.infos {
+  float: left;
+  padding-left: 5%;
+  margin-right: 2.5%;
+  width: 40%;
+}
+
+section div.infos span#duration {
+  color: #999;
+  font-weight: 700;
+  font-size: 11px;
+  display: block;
+  text-transform: uppercase;
+  margin-bottom: 2%;
+}
+
+section div.infos h1 {
+  margin-top: 0;
+  margin-bottom: 10%;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+section div.infos p {
+  line-height: 1.8;
+  font-size: 13px;
+}
+
+section div.infos p strong {
+  display: block;
+}
+
+section hr {
+  background: #e1e8ed;
+  width: 100%;
+  height: 1px;
+  border: 0;
+  margin: 4% 0;
+  clear: both;
+}
+
+section h3 {
+  margin: 2.5%;
+  margin-right: 2.5%;
+}
+
+section table.section {
+  width: 95%;
+  margin-left: 2.5%;
+  margin-right: 2.5%;
+}
+
+section table.section tr td {
+  vertical-align: top;
+}
+
+section table.section tr td:first-child {
+  text-align: center;
+  width: 15%;
+  color: #009fe3;
+}
+
+section table.section tr td:last-child h3 {
+  margin-top: 0;
+  margin-bottom: 1%;
+  margin-left: 0;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+section table.section tr td:last-child h3 + span {
+  color: #999;
+  font-size: 13px;
+  display: block;
+  margin-bottom: 4%;
+}
+
+section table.section tr td:last-child p {
+  margin-left: 0;
+  margin-right: 5%;
+  line-height: 2;
+}
+
+table.pricing {
+  margin-top: 4%;
+  margin-right: 5%;
+  width: 95%;
+  border-collapse: collapse;
+}
+
+table.pricing tr td,
+table.pricing tr th {
+  padding: 2%;
+  width: 33%;
+  text-align: left;
+  border: 1px solid #dadada;
+}
+
+table.pricing tr:nth-child(even) {
+  background: #eaeaea;
+}
+
+section table.section tr td:last-child table.pricing tr td {
+  color: inherit;
+}
+
+section.center h3 {
+  margin-left: 4%;
+  margin-right: 4%;
+}
+
+section.center table.pricing {
+  margin-left: 4%;
+  margin-right: 4%;
+  width: 92%;
+}
+
+section.center h1 {
+  margin: 0;
+  padding: 3% 4%;
+  background: #009fe3;
+  color: #fff;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  margin-bottom: 4%;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+section.center p {
+  margin-left: 4%;
+  margin-right: 4%;
+}
+
+section.center p label {
+  display: block;
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 1%;
+}
+
+section.center p input, section.center p textarea, aside p input, section.center p select {
+  margin-bottom: 4%;
+  display: block;
+  width: 94%;
+  border: 2px solid #e6e6e6;
+  border-radius: 3px;
+  font-size: 12px;
+  padding: 1% 2%;
+}
+
+section.center p textarea {
+  height: 25vh;
+}
+
+section.center p select {
+  width: 98.5%;
+}
+
+section.center p input[type=checkbox] {
+  display: inline-block;
+  width: auto;
+}
+
+section.center p input[type="checkbox"] + label {
+  display: inline-block;
+}
+
+section div.review p {
+  margin-left: 2.5%;
+  margin-right: 2.5%;
+}
+
+aside p label + em {
+  display: block;
+}
+
+aside p input {
+  padding: 2%;
+  font-size: 13px;
+}
+
+section button {
+  margin: 4% 0;
+  display: block;
+  background: #009fe3;
+  color: #fff;
+  border-radius: 50px;
+  margin-left: 4%;
+  font-size: 14px;
+  font-weight: 600;
+  border: 0;
+  padding: 1.5% 6%;
+  cursor: pointer;
+}
+
+section.center button:hover {
+  background: #0086CA;
+}
+
+aside {
+  position: absolute;
+  float: right;
+  margin-top: 3%;
+  right: 8%;
+  width: 29%;
+  background: #fff;
+  border-radius: 5px;
+  border: 1px solid #e1e8ed;
+  box-shadow: 0 4px 10px rgb(67 95 113 / 8%);
+}
+
+aside h2 {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  background: #1d1d1b;
+  margin-top: 0;
+  margin-bottom: 5%;
+  padding: 5% 10%;
+  font-size: 20px;
+  color: #fff;
+  background: #009fe3;
+  line-height: 1.8;
+}
+
+aside h2 span {
+  display: block;
+  font-weight: 300;
+  font-size: 13px;
+}
+
+aside p {
+  margin-left: 10%;
+  margin-right: 10%;
+  line-height: 2;
+}
+
+aside p label {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+aside p select {
+  display: block;
+  width: 100%;
+  border: 2px solid #e0e1e2;
+  border-radius: 3px;
+  font-size: 12px;
+  padding: 1% 2%;
+}
+
+aside hr {
+  background: #e1e8ed;
+  width: 100%;
+  height: 1px;
+  border: 0;
+  margin: 8% 0;
+  clear: both;
+}
+
+aside button {
+  margin-bottom: 8%;
+  display: block;
+  background: #009fe3;
+  color: #fff;
+  border-radius: 50px;
+  margin-left: 10%;
+  margin-right: 10%;
+  width: 80%;
+  font-size: 15px;
+  font-weight: 700;
+  border: 0;
+  padding: 4% 0;
+  cursor: pointer;
+}
+
+aside button:hover {
+  background: #0086CA;
+}
+
+aside button#apply_coupon {
+  background: #00B9BA;
+  color: #fff;
+}
+
+aside button#apply_coupon:hover {
+  background: #009FA0;
+}
+
+aside button#pay:disabled {
+  background: #8395a7;
+  cursor: not-allowed;
+}
+
+aside span.hint {
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-bottom: 6%;
+  font-style: italic;
+  display: block;
+  text-align: center;
+}
+
+table#mini-calendar {
+  width: 100%;
+  text-align: center;
+}
+
+table#mini-calendar th {
+  font-weight: 300;
+  padding-bottom: 2%;
+}
+
+table#mini-calendar th#previous {
+  text-align: right;
+}
+
+table#mini-calendar th#next {
+  text-align: left;
+}
+
+table#mini-calendar th#previous svg,
+table#mini-calendar th#next svg {
+  cursor: pointer;
+  color: #fdcb6e;
+}
+
+table#mini-calendar th#previous svg:hover,
+table#mini-calendar th#next svg:hover {
+  color: #ff9f43;
+}
+
+table#mini-calendar th strong {
+  display: block;
+}
+
+table#mini-calendar td {
+  padding: 2.4% 0;
+}
+
+table#mini-calendar tr.hidden {
+  display: none;
+}
+
+table#mini-calendar td span.taken {
+  background: #eee;
+  color: #eee;
+  height: 8px;
+  width: 30%;
+  display: block;
+  margin: 0 auto;
+}
+
+table#mini-calendar td span.date {
+  margin: 0 auto;
+  padding: 6% 0;
+  width: 70%;
+  display: block;
+  font-weight: 600;
+  border-radius: 5px;
+  background: #ccecfa;
+  color: #435f71;
+  cursor: pointer;
+}
+
+table#mini-calendar td span.date:hover {
+  background: #ffe500;
+}
+
+table#mini-calendar + a#see-more {
+  display: block;
+  text-align: center;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-decoration: none;
+  margin: 3% auto;
+}
+
+div.clearfix {
+  clear: both;
+}
+
+div#thanks {
+  line-height: 1.8;
+  margin: 6% auto;
+  width: 50%;
+  text-align: center;
+}
+
+div#thanks svg {
+  margin-bottom: 2%;
+  font-size: 60px;
+  color: #28a745;
+}
+
+img.image {
+  display: block;
+  width: 100%;
+}
+
+div.calendar {
+  margin: 2.5%;
+  float: left;
+}
+
+div.calendar div.datepicker-inline {
+  width: 100%;
+}
+
+section table.pricing.hours {
+  width: 45%;
+  float: right;
+}
+
+section.center table:not(#mini-calendar) {
+  margin: 0 2%;
+  margin-bottom: 1%;
+  width: 96%;
+  border-collapse: collapse;
+}
+
+section.center table:not(#mini-calendar) th, section.center table:not(#mini-calendar) td {
+  text-align: left;
+  padding: 2%;
+  border: 1px solid #e1e8ed;
+}
+
+footer {
+  padding: 3% 12.5%;
+  background: #1d1d1b;
+  color: #aaa;
+}
+
+footer table {
+  width: 100%;
+}
+
+footer table tr td {
+  width: 22.5%;
+  vertical-align: top;
+  text-align: left;
+}
+
+footer table tr td:first-child {
+  width: 32.5%;
+}
+
+footer table tr td img {
+  width: 50%;
+  display: block;
+  margin-top: 5%;
+}
+
+footer table tr td h4 {
+  text-transform: uppercase;
+  color: #999;
+}
+
+footer table tr td ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+footer table tr td ul li a {
+  line-height: 2.4;
+  text-decoration: none;
+  color: inherit;
+}
+
+footer table tr td ul li svg {
+  margin-right: 5%;
+}
+
+.mobile-only {
+  display: none;
+}
+
+div#products {
+  margin: 2% 12.5%;
+}
+
+div#products div.product {
+  width: 32%;
+  background: #fff;
+  float: left;
+  border-radius: 5px;
+  border: 1px solid #e1e8ed;
+}
+
+div#products div.product + div.product {
+  margin-left: 1%;
+}
+
+div#products div.product img {
+  display: block;
+  margin: 5%;
+  width: 90%;
+}
+
+div#products div.product button {
+  margin: 4% 0;
+  display: block;
+  background: #009fe3;
+  color: #fff;
+  border-radius: 50px;
+  margin-left: 4%;
+  font-size: 14px;
+  font-weight: 600;
+  border: 0;
+  padding: 1.5% 6%;
+  cursor: pointer;
+}
+
+div#products div.product button:hover {
+  background: #0086CA;
+}
+
+div#products div.product hr {
+  background: #e1e8ed;
+  width: 100%;
+  height: 1px;
+  border: 0;
+  margin: 4% 0;
+  clear: both;
+}
+
+div#products div.product span.duration {
+  margin-left: 5%;
+  color: #999;
+  font-weight: 700;
+  font-size: 11px;
+  display: block;
+  text-transform: uppercase;
+  margin-bottom: -1%;
+}
+
+div#products div.product p {
+  margin-left: 5%;
+  margin-right: 5%;
+  line-height: 2;
+}
+
+div#products div.product p strong {
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 2%;
+}
+
+body > h2 {
+  text-transform: uppercase;
+  margin: 6% auto;
+  margin-bottom: 0;
+  text-align: center;
+  font-weight: 300;
+  font-size: 28px;
+}
+
+body > h2 span {
+  font-weight: 800;
+}
+
+body > h2 + p {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 300;
+  color: #666;
+  margin-bottom: 4%;
+}
+
+div#instagram-feed {
+  margin: 2% 12.5%;
+}
+
+div#hero {
+  background: url(https://cryotera.fr/wp-content/uploads/2019/05/slide1-1568x882.jpg);
+  background-size: cover;
+  background-position: center;
+  height: 90vh;
+  position: relative;
+}
+
+div#hero div.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #1d1d1b;
+  opacity: .4;
+}
+
+div#hero h1 {
+  position: relative;
+  margin: 0;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 50px;
+  color: #fff;
+  font-weight: 300;
+  padding-top: 17.5%;
+}
+
+div#hero h1 span {
+  font-weight: 700;
+}
+
+div#hero h1 + p {
+  text-transform: uppercase;
+  font-weight: 400;
+  font-size: 20px;
+  color: #fff;
+  text-align: center;
+  position: relative;
+}
+
+iframe {
+  width: 100%;
+}
+
+form#coupon_form {
+  display: none;
+}
+
+@media only screen
+  and (min-device-width: 375px)
+  and (max-device-width: 812px)
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: portrait) {
+    header {
+      padding: 5%;
+    }
+    header div#logo img {
+      width: 75%;
+    }
+    nav {
+      padding: 5%;
+    }
+    header ul li {
+      display: none;
+    }
+    header ul li.mobile-only {
+      margin-top: 5%;
+    }
+    footer {
+      padding: 5%;
+    }
+    footer table tr td {
+      display: block;
+      width: 100%;
+    }
+    footer table tr td img {
+      display: none;
+    }
+    section {
+      margin-top: 5%;
+      margin-left: 5%;
+      width: 90%;
+      float: none;
+    }
+    section h2 {
+      padding: 5%;
+    }
+    section.center {
+      width: 90%;
+    }
+    section.center p {
+      line-height: 2;
+    }
+    section img.thumbnail {
+      float: none;
+      width: 90%;
+    }
+    section div.infos {
+      float: none;
+      width: 90%;
+    }
+    section div.infos h1 {
+      margin-top: 4%;
+    }
+    section table.section {
+      width: 90%;
+      margin-left: 5%;
+      margin-right: 5%;
+    }
+    section table.section tr td:first-child {
+      display: none;
+    }
+    section table.section table.pricing tr td:first-child {
+      display: table-cell;
+    }
+    table.pricing {
+      width: 100%;
+      margin-right: 0;
+    }
+    section table.section tr td:last-child h3 {
+      margin: 5% 0;
+      font-size: 16px;
+    }
+    section table.section tr td:last-child h3 + span {
+      font-size: 12px;
+      margin-top: -2%;
+      margin-bottom: 10%;
+    }
+    section div.review p {
+      line-height: 2;
+      margin-left: 5%;
+      margin-right: 5%;
+    }
+    aside {
+      position: relative;
+      float: none;
+      width: 90%;
+      margin-left: 5%;
+      right: 0;
+      margin-bottom: 5%;
+    }
+    aside h2 {
+      padding: 5%;
+    }
+    aside p {
+      margin-left: 5%;
+      margin-right: 5%;
+    }
+    aside button {
+      margin-left: 5%;
+      margin-right: 5%;
+      width: 90%;
+    }
+    .mobile-only {
+      display: block;
+    }
+  }
+}

@@ -1,0 +1,19 @@
+<section class="center">
+  <h1>Distribution de tickets</h1>
+  <p>A qui souhaitez-vous distributer un ticket de <strong><%= @product.name %></strong> ?</p>
+  <%= form_with url: ticket_distributions_path do |f| %>
+    <%= f.hidden_field :product_id, value: @product.id %>
+    <% if @company_clients.any? %>
+      <p><%= f.label :company_client_id, 'Salarié' %><%= f.collection_select :company_client_id, @company_clients.order(:last_name, :first_name), :id, :full_name, include_blank: true %></p>
+      <hr>
+      <p> ou bien invitez un nouveau salarié..</p>
+    <% end %>
+    <p><%= f.label :last_name, 'Nom du salarié' %><%= f.text_field :last_name %></p>
+    <p><%= f.label :first_name, 'Prénom du salarié' %><%= f.text_field :first_name %></p>
+    <p><%= f.label :email, 'Adresse email du salarié' %><%= f.email_field :email %></p>
+    <hr>
+    <p><%= f.label :first_name, 'Combien de tickets voulez-vous attribuer au salarié ?' %><%= f.number_field :quantity, required: true %></p>
+    <p><em>Rappel : vous avez <%= current_client.credits.where(product: @product).count %> crédit(s).</p>
+    <button>Distribuer</button>
+  <% end %>
+</section>

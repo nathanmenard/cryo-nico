@@ -1,0 +1,19 @@
+<% h1 = (params[:type].present? && params[:type] == 'nutrition') ? 'Demande de prise en charge nutrition' : 'Formulaire de contact' %>
+
+<section class="center">
+  <h1><%= h1 %></h1>
+  <% if @success %>
+    <p>Votre message a été envoyé avec succès.</p>
+    <p><%= link_to "Retourner à l'accueil", root_path %></p>
+  <% else %>
+    <%= form_with do |f| %>
+      <%= f.hidden_field :type, value: 'Nutrition' %>
+      <p><%= f.label :last_name, 'Votre nom' %><%= f.text_field :last_name, value: current_client.try(:last_name), required: true %></p>
+      <p><%= f.label :first_name, 'Votre prénom' %><%= f.text_field :first_name, value: current_client.try(:first_name), required: true %></p>
+      <p><%= f.label :email, 'Votre adresse email' %><%= f.email_field :email, value: current_client.try(:email), required: true %></p>
+      <p><%= f.label :subject, 'Sujet' %><%= f.text_field :subject, required: true, value: 'Demande de prise en charge nutrition', disabled: true %></p>
+      <p><%= f.label :message, 'Message' %><%= f.text_area :message, required: true %></p>
+      <button>Envoyer</button>
+    <% end %>
+  <% end %>
+</section>

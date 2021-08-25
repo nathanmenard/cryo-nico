@@ -1,0 +1,38 @@
+<div id="search">
+  <i class="fas fa-search fa-lg"></i>
+  <input type="text" placeholder="Rechercher parmi les prestations.." id="search">
+  <%= render 'filter' %>
+  <button data-target="#new-product" class="blue">Nouvelle prestation</button>
+</div>
+
+<table>
+  <tr>
+    <th style="width: 10%"></th>
+    <% if current_user.superuser %>
+      <th>Centre</th>
+    <% end %>
+    <th>Prestation</th>
+    <th>Salle</th>
+    <th>Durée</th>
+  </tr>
+  <% @products.each do |product| %>
+    <tr onclick="window.location.href='/prestations/<%= product.id %>'">
+      <td>
+        <span class="status <%= product.active ? 'paid' : 'failed' %>">
+          <%= product.active ? 'Activée' : 'Désactivée' %>
+        </span>
+      </td>
+      <% if current_user.superuser %>
+        <td><%= product.room.franchise.name %></td>
+      <% end %>
+      <td><strong><%= product.name %></strong></td>
+      <td><%= product.room.name %></td>
+      <td><%= product.duration %> minutes</td>
+    </tr>
+  <% end %>
+</table>
+
+<div class="modal" id="new-product">
+  <h2>Nouvelle prestation</h2>
+  <%= render 'form' %>
+</div>

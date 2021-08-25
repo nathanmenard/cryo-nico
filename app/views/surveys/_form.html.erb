@@ -1,0 +1,13 @@
+<%= form_for @survey do |f| %>
+  <% if current_user.superuser %>
+  <% end %>
+  <p><%= f.label :product_id, 'Sélectionnez une prestation' %><%= f.collection_select :product_id, current_user.franchise.products.order(:name), :id, :name, { include_blank: true }, required: true %></p>
+  <p><%= f.label :name, 'Nom' %><%= f.text_field :name, required: true %></p>
+  <div>
+    <button class="cancel" type="button">Annuler</button>
+    <% if @survey.id %>
+      <button type="button" class="red" data-message="Etes-vous sûr de vouloir supprimer ce questionnaire ? Toutes les questions & réponses seront également supprimés.">Supprimer</button>
+    <% end %>
+    <button class="blue">Enregistrer</button>
+  </div>
+<% end %>

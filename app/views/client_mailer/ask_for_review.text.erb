@@ -1,0 +1,9 @@
+Bonjour <%= @client.first_name %>,
+
+Qu'avez-vous pensé de votre centre Cryotera ?
+
+Donnez votre avis en cliquant sur le lien ci-dessous :
+<%= new_review_url(subdomain: @reservation.product_price.product.room.franchise.slug, key: @reservation.private_key) %>
+
+Cordialement,
+L'équipe Cryotera

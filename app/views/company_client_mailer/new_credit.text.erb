@@ -1,0 +1,10 @@
+Bonjour <%= @company_client.first_name %>,
+
+Vous venez de recevoir un crédit pour une séance de <%= @company_client.credits.last.product.name %>
+
+Choisissez un créneau de rendez-vous dès maintenant en cliquant sur le lien ci-dessous :
+
+<%= signup_url(subdomain: @company_client.company.franchise.slug, key: @company_client.private_key, company_id: @company_client.company_id) %>
+
+Cordialement,
+L'équipe Cryotera

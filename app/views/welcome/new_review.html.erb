@@ -1,0 +1,12 @@
+<section class="center">
+  <h1>Donnez votre avis</h1>
+  <% if @success %>
+    <p>Merci, votre avis a été enregistré avec succès ! Il sera publié d'ici peu.</p>
+    <p><%= link_to "Retourner à l'accueil", root_path %></p>
+  <% else %>
+    <%= form_with do |f| %>
+      <p><%= f.label :body, 'Votre avis' %><%= f.text_area :body, required: true %></p>
+      <button>Envoyer</button>
+    <% end %>
+  <% end %>
+</section>
