@@ -9,12 +9,13 @@ class ApplicationController < ActionController::Base
   end
 
   def current_franchise
-    Franchise.all.each do |franchise|
-      if request.subdomain.gsub(/www./, '') == franchise.slug
-        return franchise
-      end
-    end
-    return nil
+    Franchise.last
+    # Franchise.all.each do |franchise|
+    #   if request.subdomain.gsub(/www./, '') == franchise.slug
+    #     return franchise
+    #   end
+    # end
+    # return nil
   end
 
   def current_user
@@ -27,7 +28,8 @@ class ApplicationController < ActionController::Base
   end
 
   def current_client
-    Client.find_by(id: session[:client_id]) || CompanyClient.find_by(id: session[:company_client_id])
+    Client.last
+    # Client.find_by(id: session[:client_id]) || CompanyClient.find_by(id: session[:company_client_id])
   end
 
   def authenticate_client

@@ -1,6 +1,6 @@
 franchise = Franchise.create!(name: 'Reims', email: 'contact@cryotera.fr', address: '2 rue Jules Méline', zip_code: '51430', city: 'Bezannes', phone: '0326779750', siret: '81501516900015', tax_id: 'FR81815015169')
 
-user = User.create!(franchise_id: franchise.id, email: 'sayid.mimouni@gmail.com', password: 'said', first_name: 'Saïd', last_name: 'Mimouni', superuser: true)
+user = User.create!(franchise_id: franchise.id, email: 'contact@drakkr.com', password: 'secret', first_name: 'Nathan', last_name: 'Menard', superuser: true)
 client = Client.create!(franchise_id: franchise.id, first_name: 'John', last_name: 'Doe', email: 'client@gmail.com', password: 'client', birth_date: '01/01/1990', male: true)
 
 company = Company.create!(franchise_id: franchise.id, name: 'Apple', email: 'contact@apple.com', phone: '0620853909', address: '60 rue des Gobelins', zip_code: 51100, city: 'Reims', siret: '81214811200012')
@@ -18,7 +18,7 @@ descriptions = {
 
 ['Cryo Localisée', 'Cryothérapie Corps Entier', 'Cryolipolise', 'Pressothérapie', 'Nutrition'].each do |product_name|
   description = descriptions[product_name]
-  product = Product.create!(room_id: room.id, name: product_name, description: description, duration: 30)
+  product = Product.create!(room_id: room.id, name: product_name, description: description, duration: 30, franchise: franchise)
   ProductPrice.create!(product_id: product.id, session_count: 1, total: 45, professionnal: false)
   ProductPrice.create!(product_id: product.id, session_count: 1, total: 35, professionnal: false, first_time: true)
   ProductPrice.create!(product_id: product.id, session_count: 5, total: 195, professionnal: false)
