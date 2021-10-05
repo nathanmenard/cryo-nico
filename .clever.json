@@ -1,0 +1,11 @@
+{
+  "apps": [
+    {
+      "app_id": "app_f52e179b-9b1e-4178-8f13-487a53a4c07b",
+      "org_id": "orga_ca864875-fc12-4427-9989-7396a4c86442",
+      "deploy_url": "https://push-n2-par-clevercloud-customers.services.clever-cloud.com/app_f52e179b-9b1e-4178-8f13-487a53a4c07b.git",
+      "name": "cryotera",
+      "alias": "cryotera"
+    }
+  ]
+}
