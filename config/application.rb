@@ -26,8 +26,6 @@ module TestApp
 
     config.i18n.default_locale = :fr
 
-    config.web_console.whitelisted_ips = '10.2.153.124'
-
     config.time_zone = 'Europe/Paris'
     config.active_record.default_timezone = :local
 
