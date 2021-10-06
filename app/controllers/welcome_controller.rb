@@ -4,7 +4,7 @@ class WelcomeController < ApplicationController
   before_action :authenticate_client, only: [:product, :sponsorship, :edit_reservation, :cancel_reservation, :thanks]
 
   def home
-    @products = current_franchise.products.includes([:thumbnail_attachment]).active
+    @products = current_franchise&.products&.includes([:thumbnail_attachment])&.active
     render layout: false
   end
 
