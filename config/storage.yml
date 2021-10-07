@@ -6,12 +6,8 @@ local:
   service: Disk
   root: <%= Rails.root.join("storage") %>
 
-amazon:
-  service: S3
-  access_key_id: <%= Rails.application.credentials.dig(:aws, :access_key_id) %>
-  secret_access_key: <%= Rails.application.credentials.dig(:aws, :secret_access_key) %>
-  region: eu-west-3
-  bucket: cryotera
+cloudinary:
+  service: Cloudinary
 
 # Remember not to checkin your GCS keyfile to a repository
 # google:

@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   match '/mot-de-passe-oublie', to: 'passwords#new', via: [:get, :post]
   match '/nouveau-mot-de-passe', to: 'passwords#create', via: [:get, :post]
 
-  #constraints Subdomain do
+  # constraints Subdomain do
     get '/', to: 'welcome#home'
     match '/login', to: 'auth#login', via: [:get, :post]
     match '/inscription', as: :signup, to: 'auth#signup', via: [:get, :post]
@@ -63,9 +63,9 @@ Rails.application.routes.draw do
 
     get '/merci', to: 'welcome#thanks'
     # get '/admin' => redirect('http://www.cryotera.xyz/admin')
-  #end
+  # end
 
-  #constraints RootSubdomain do
+  # constraints RootSubdomain do
     match '/admin', to: 'auth#admin', via: [:get, :post]
     match '/admin/inscription', to: 'auth#admin_signup', via: [:get, :patch]
     get '/logout', to: 'auth#logout'
@@ -115,5 +115,5 @@ Rails.application.routes.draw do
     post '/help', to: 'application#help'
 
     root 'application#root'
-  #end
+  # end
 end

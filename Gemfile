@@ -29,6 +29,7 @@ gem 'jbuilder', '~> 2.7'
 gem 'bootsnap', '>= 1.4.2', require: false
 
 gem 'bcrypt', '~> 3.1.7'
+gem 'cloudinary', '~> 1.16.0'
 gem 'rails-i18n', '~> 6.0.0'
 gem 'rollbar'
 gem 'csv'
@@ -55,10 +56,6 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'bullet'
-end
-
-group :production do
-  gem 'aws-sdk-s3'
 end
 
 group :test do
