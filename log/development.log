@@ -6833,3 +6833,33 @@ puma (4.3.8) lib/puma/server.rb:718:in `handle_request'
 puma (4.3.8) lib/puma/server.rb:472:in `process_client'
 puma (4.3.8) lib/puma/server.rb:328:in `block in run'
 puma (4.3.8) lib/puma/thread_pool.rb:134:in `block in spawn_thread'
+Started GET "/" for ::1 at 2021-10-07 14:47:43 +0200
+  [1m[35m (1.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by WelcomeController#home as HTML
+  [1m[36mFranchise Load (1.4ms)[0m  [1m[34mSELECT "franchises".* FROM "franchises" ORDER BY "franchises"."id" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:12:in `current_franchise'
+  [1m[36mProduct Load (6.8ms)[0m  [1m[34mSELECT "products".* FROM "products" INNER JOIN "rooms" ON "products"."room_id" = "rooms"."id" WHERE "rooms"."franchise_id" = $1[0m  [["franchise_id", 2]]
+  ↳ app/models/product.rb:41:in `active'
+  Rendering welcome/home.html.erb
+  [1m[36mCACHE Franchise Load (0.0ms)[0m  [1m[34mSELECT "franchises".* FROM "franchises" ORDER BY "franchises"."id" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:12:in `current_franchise'
+  [1m[36mCACHE Franchise Load (0.0ms)[0m  [1m[34mSELECT "franchises".* FROM "franchises" ORDER BY "franchises"."id" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:12:in `current_franchise'
+  [1m[36mCACHE Franchise Load (0.0ms)[0m  [1m[34mSELECT "franchises".* FROM "franchises" ORDER BY "franchises"."id" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:12:in `current_franchise'
+  [1m[36mCACHE Franchise Load (0.0ms)[0m  [1m[34mSELECT "franchises".* FROM "franchises" ORDER BY "franchises"."id" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:12:in `current_franchise'
+  [1m[36mCACHE Franchise Load (0.0ms)[0m  [1m[34mSELECT "franchises".* FROM "franchises" ORDER BY "franchises"."id" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:12:in `current_franchise'
+  [1m[36mCACHE Franchise Load (0.0ms)[0m  [1m[34mSELECT "franchises".* FROM "franchises" ORDER BY "franchises"."id" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:12:in `current_franchise'
+  [1m[36mBusinessHour Load (0.9ms)[0m  [1m[34mSELECT "business_hours".* FROM "business_hours" WHERE "business_hours"."franchise_id" = $1 AND "business_hours"."day" = $2 LIMIT $3[0m  [["franchise_id", 2], ["day", "Monday"], ["LIMIT", 1]]
+  ↳ app/views/welcome/home.html.erb:187
+  [1m[36mCACHE Franchise Load (0.0ms)[0m  [1m[34mSELECT "franchises".* FROM "franchises" ORDER BY "franchises"."id" DESC LIMIT $1[0m  [["LIMIT", 1]]
+  ↳ app/controllers/application_controller.rb:12:in `current_franchise'
+  [1m[36mBusinessHour Load (0.4ms)[0m  [1m[34mSELECT "business_hours".* FROM "business_hours" WHERE "business_hours"."franchise_id" = $1 AND "business_hours"."day" = $2 LIMIT $3[0m  [["franchise_id", 2], ["day", "Saturday"], ["LIMIT", 1]]
+  ↳ app/views/welcome/home.html.erb:189
+  Rendered welcome/home.html.erb (Duration: 31.3ms | Allocations: 12563)
+Completed 200 OK in 85ms (Views: 24.8ms | ActiveRecord: 37.8ms | Allocations: 29103)
+
+
